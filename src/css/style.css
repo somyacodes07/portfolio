@@ -200,9 +200,10 @@ a:hover {
 #bar-1 {
   height: clamp(32px, 3vw, 36px);
   background-color: var(--border);
-  color: var(--bg);
+  color: var(--bar-title-color, var(--bg));
   line-height: clamp(32px, 3vw, 36px);
   padding-left: 10px;
+  font-weight: 500;
 }
 
 #bar-2 {
@@ -256,6 +257,7 @@ a:hover {
   height: auto;
   min-height: 0;
   padding-bottom: 5px;
+  padding-right: 4px;
   min-width: 0;
 
   scrollbar-width: thin;
@@ -414,7 +416,10 @@ a:focus-visible {
 /* Mobile Responsive */
 @media (max-width: 600px) {
   body {
-    padding: 10px;
+    padding-top: max(10px, env(safe-area-inset-top));
+    padding-right: max(10px, env(safe-area-inset-right));
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+    padding-left: max(10px, env(safe-area-inset-left));
     font-weight: 300;
   }
 
@@ -434,6 +439,13 @@ a:focus-visible {
     animation: none;
   }
 
+  #terminal,
+  #terminal p,
+  #terminal div {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
   pre {
     line-height: 0.78rem !important;
     font-size: 0.56rem;
@@ -446,6 +458,10 @@ a:focus-visible {
   #terminal,
   #input-line {
     margin-left: 8px;
+  }
+
+  #input-line {
+    padding-bottom: max(4px, env(safe-area-inset-bottom));
   }
 
   #terminal-layout {
@@ -473,6 +489,11 @@ a:focus-visible {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 8px;
+    position: sticky;
+    bottom: 0;
+    z-index: 12;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
   }
 
   #sidebar > .sidebar-spacer {

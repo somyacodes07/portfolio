@@ -28,40 +28,40 @@ export interface ThemeColors {
 export const builtInThemes: Record<string, ThemeColors> = {
     default: command.colors as ThemeColors,
     matrix: {
-        background: "#0D0208",
-        foreground: "#00FF41",
-        banner: "#00FF41",
-        border: { visible: true, color: "#003B00" },
-        prompt: { default: "#008F11", user: "#00FF41", host: "#003B00", input: "#00FF41" },
-        link: { text: "#00FF41", highlightColor: "#003B00", highlightText: "#00FF41" },
-        commands: { textColor: "#008F11" }
+        background: "#050b06",
+        foreground: "#c8fdd8",
+        banner: "#5bff98",
+        border: { visible: true, color: "#1f3e2a" },
+        prompt: { default: "#7bc595", user: "#8ef9ad", host: "#73d8ff", input: "#dbffe6" },
+        link: { text: "#63ee98", highlightColor: "#1f3e2a", highlightText: "#f0fff5" },
+        commands: { textColor: "#8fffb0" }
     },
     dracula: {
-        background: "#282a36",
-        foreground: "#f8f8f2",
-        banner: "#bd93f9",
-        border: { visible: true, color: "#44475a" },
-        prompt: { default: "#ffb86c", user: "#ff79c6", host: "#8be9fd", input: "#f8f8f2" },
-        link: { text: "#8be9fd", highlightColor: "#44475a", highlightText: "#f8f8f2" },
-        commands: { textColor: "#ff79c6" }
+        background: "#1f2230",
+        foreground: "#f4f5f7",
+        banner: "#c5a3ff",
+        border: { visible: true, color: "#4a4f67" },
+        prompt: { default: "#a7adc2", user: "#ff7eb6", host: "#8be9fd", input: "#f8f8f2" },
+        link: { text: "#7ad7ff", highlightColor: "#38405d", highlightText: "#f4f7ff" },
+        commands: { textColor: "#ffb86c" }
     },
     gruvbox: {
-        background: "#282828",
-        foreground: "#ebdbb2",
-        banner: "#d79921",
-        border: { visible: true, color: "#504945" },
-        prompt: { default: "#a89984", user: "#fb4934", host: "#b8bb26", input: "#ebdbb2" },
-        link: { text: "#83a598", highlightColor: "#504945", highlightText: "#ebdbb2" },
+        background: "#1f1b16",
+        foreground: "#f2e5bc",
+        banner: "#fabd2f",
+        border: { visible: true, color: "#5a4b3b" },
+        prompt: { default: "#bda98b", user: "#fb6f52", host: "#8ec07c", input: "#f2e5bc" },
+        link: { text: "#83a598", highlightColor: "#4a3f34", highlightText: "#fff1c1" },
         commands: { textColor: "#d3869b" }
     },
     nord: {
-        background: "#2E3440",
-        foreground: "#D8DEE9",
-        banner: "#88C0D0",
-        border: { visible: true, color: "#4C566A" },
-        prompt: { default: "#81A1C1", user: "#88C0D0", host: "#81A1C1", input: "#ECEFF4" },
-        link: { text: "#8FBCBB", highlightColor: "#434C5E", highlightText: "#ECEFF4" },
-        commands: { textColor: "#88C0D0" }
+        background: "#242933",
+        foreground: "#E5E9F0",
+        banner: "#0F6FA8",
+        border: { visible: true, color: "#566074" },
+        prompt: { default: "#A3B1C9", user: "#A3BE8C", host: "#88C0D0", input: "#ECEFF4" },
+        link: { text: "#81A1C1", highlightColor: "#3B4252", highlightText: "#ECEFF4" },
+        commands: { textColor: "#B48EAD" }
     }
 };
 

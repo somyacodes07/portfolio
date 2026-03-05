@@ -24,9 +24,6 @@ let isSudo = false;
 let passwordCounter = 0;
 let bareMode = false;
 
-// We need to keep a copy of the initial write-lines element for the clear command
-const WRITELINESCOPY = mutWriteLines ? mutWriteLines.cloneNode(true) as HTMLElement : null;
-
 // --- DOM Elements ---
 const TERMINAL = document.getElementById("terminal");
 const PASSWORD = document.getElementById("password-input");
@@ -73,6 +70,17 @@ const buildPromptMarkup = () => {
   return `<span class="prompt"><span class="prompt-user">${safeUser}</span>@<span class="prompt-host">${safeHost}</span>:$ ~ </span>`;
 }
 
+const isInteractiveTarget = (target: HTMLElement | null) => {
+  if (!target) return false;
+
+  // Don't steal focus when user interacts with windows/media/links/buttons/forms.
+  if (target.closest('#window-container')) return true;
+  if (target.closest('a, button, input, textarea, select, [role="button"], [contenteditable="true"]')) return true;
+  if (target.closest('.clickable')) return true;
+
+  return false;
+}
+
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const openInNewTab = (rawUrl: string, allowRelative = false) => {
@@ -101,6 +109,22 @@ const checkResourceExists = async (rawUrl: string) => {
   }
 
   return null;
+}
+
+const createResumeViewerContent = (safeResumeUrl: string): HTMLElement => {
+  const shell = document.createElement('div');
+  shell.className = 'pdf-viewer-shell';
+
+  const frame = document.createElement('iframe');
+  frame.className = 'pdf-viewer-frame';
+  frame.title = 'Resume PDF Viewer';
+  frame.loading = 'lazy';
+  // Keep native PDF rendering but request fit-to-width so content is not clipped.
+  frame.src = `${safeResumeUrl}#toolbar=0&navpanes=0&zoom=page-width`;
+  frame.setAttribute('allow', 'fullscreen');
+
+  shell.appendChild(frame);
+  return shell;
 }
 
 const applyWallpaperFromConfig = () => {
@@ -332,13 +356,11 @@ const registerCommands = () => {
           return;
         }
 
-        const safeResumeHref = escapeHTML(safeResumeUrl);
-        const downloadBtn = `<a href="${safeResumeHref}" download class="command" style="text-decoration: underline; margin-left: 10px;">[Download PDF]</a>`;
-        writeLines(["Launching Resume Viewer..." + downloadBtn, "<br>"]);
+        writeLines(["Opening resume viewer...", "<br>"]);
 
         setTimeout(() => {
-          const content = `<iframe src="${safeResumeHref}" style="width:100%; height:100%; border:none;"></iframe>`;
-          windowManager.open('resume', 'Resume.pdf', content, 600, 800);
+          const content = createResumeViewerContent(safeResumeUrl);
+          windowManager.open('resume', 'Resume.pdf', content, 600, 780);
         }, 500);
       })
       .catch(() => {
@@ -379,10 +401,9 @@ const registerCommands = () => {
         if (args.includes("src") && !bareMode) {
           bareMode = true;
           setTimeout(() => {
-            if (!TERMINAL || !WRITELINESCOPY) return;
+            if (!TERMINAL) return;
             TERMINAL.innerHTML = "";
             // Restore initial state (empty)
-            // Actually, WRITELINESCOPY was the element itself, so we clone it back
             const newWriteLines = document.createElement("div");
             newWriteLines.id = "write-lines";
             TERMINAL.appendChild(newWriteLines);
@@ -524,39 +545,32 @@ const initEventListeners = () => {
         // Call dispatcher directly for cleaner flow
         dispatcher.dispatch(`theme ${nextTheme}`);
       } else if (cmd) {
-        // runCommand simulation
-        inputManager.setValue(cmd);
-        // We want to trigger the "Enter" or "execution".
-        // InputManager doesn't expose "submit" but we can direct call callback?
-        // Or better, let's just make inputManager.setValue not trigger default?
-        // We want to SHOW the command then execute.
-        // So we manually do what Enter does:
-        // But wait, runCommand originally mimicked "Executing: cmd...".
-
-        // Let's bring back runCommand helper
         runCommand(cmd);
       }
       return;
     }
 
-    if (target.classList.contains('clickable')) {
-      const cmd = target.getAttribute('data-command');
+    const clickableTarget = target.closest('.clickable') as HTMLElement | null;
+    if (clickableTarget) {
+      const cmd = clickableTarget.getAttribute('data-command');
       if (cmd) {
         runCommand(cmd);
       }
       return;
     }
 
-    // Only focus if not clicking interactive elements
+    // Only focus terminal input for non-interactive background clicks.
+    if (isInteractiveTarget(target)) return;
     inputManager.focus();
   });
 
   window.addEventListener('keydown', (e) => {
     const target = e.target as HTMLElement | null;
-    if (!target || !target.classList.contains('clickable')) return;
+    const trigger = target?.closest('.clickable') as HTMLElement | null;
+    if (!trigger) return;
     if (e.key !== 'Enter' && e.key !== ' ') return;
 
-    const cmd = target.getAttribute('data-command');
+    const cmd = trigger.getAttribute('data-command');
     if (!cmd) return;
 
     e.preventDefault();

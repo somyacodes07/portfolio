@@ -128,6 +128,23 @@
     border: none;
 }
 
+.pdf-viewer-shell {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.pdf-viewer-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #ffffff;
+}
+
 .window-content::-webkit-scrollbar {
     width: 8px;
 }
