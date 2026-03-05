@@ -1,4 +1,5 @@
 import command from '../../config.json';
+import { escapeHTML, sanitizeUrl } from '../core/Utils';
 
 const createAbout = (): string[] => {
   const about: string[] = [];
@@ -15,7 +16,7 @@ const createAbout = (): string[] => {
   let string = "";
 
   about.push("<br>");
-  about.push(command.aboutGreeting);
+  about.push(escapeHTML(command.aboutGreeting));
   about.push("<br>");
 
   // Professional Summary
@@ -32,21 +33,33 @@ const createAbout = (): string[] => {
   string += SPACE.repeat(2);
   string += email;
   string += SPACE.repeat(Math.max(0, 17 - EMAIL.length));
-  string += `<a target='_blank' href='mailto:${command.social.email}'>${command.social.email}</a>`;
+  const safeEmailHref = sanitizeUrl(`mailto:${command.social.email}`, { allowRelative: false, allowMailto: true });
+  const safeEmailText = escapeHTML(command.social.email);
+  string += safeEmailHref
+    ? `<a target='_blank' rel='noopener noreferrer' href='${safeEmailHref}'>${safeEmailText}</a>`
+    : safeEmailText;
   about.push(string);
 
   string = '';
   string += SPACE.repeat(2);
   string += github;
   string += SPACE.repeat(Math.max(0, 17 - GITHUB.length));
-  string += `<a target='_blank' href='${command.social.github}'>${command.social.github}</a>`;
+  const safeGithub = sanitizeUrl(command.social.github, { allowRelative: false });
+  const safeGithubText = escapeHTML(command.social.github);
+  string += safeGithub
+    ? `<a target='_blank' rel='noopener noreferrer' href='${safeGithub}'>${safeGithubText}</a>`
+    : safeGithubText;
   about.push(string);
 
   string = '';
   string += SPACE.repeat(2);
   string += linkedin;
   string += SPACE.repeat(Math.max(0, 17 - LINKEDIN.length));
-  string += `<a target='_blank' href='${command.social.linkedin}'>${command.social.linkedin}</a>`;
+  const safeLinkedIn = sanitizeUrl(command.social.linkedin, { allowRelative: false });
+  const safeLinkedInText = escapeHTML(command.social.linkedin);
+  string += safeLinkedIn
+    ? `<a target='_blank' rel='noopener noreferrer' href='${safeLinkedIn}'>${safeLinkedInText}</a>`
+    : safeLinkedInText;
   about.push(string);
 
   about.push("<br>");

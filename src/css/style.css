@@ -7,8 +7,10 @@
   --border: #30363D;
   --text: #E6EDF3;
   --prompt-default: #8B949E;
-  --prompt-1: #7EE787;
-  --prompt-2: #79C0FF;
+  --prompt-user: #7EE787;
+  --prompt-host: #79C0FF;
+  --wallpaper-image: none;
+  --wallpaper-opacity: 0;
 }
 
 @keyframes typing {
@@ -50,12 +52,12 @@ body::before {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background-image: url("/res/bg.png");
+  background-image: var(--wallpaper-image);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   filter: blur(3px);
-  opacity: 0.25;
+  opacity: var(--wallpaper-opacity);
   pointer-events: none;
 }
 

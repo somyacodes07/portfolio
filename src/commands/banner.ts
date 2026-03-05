@@ -1,4 +1,5 @@
 import command from '../../config.json';
+import { escapeHTML } from '../core/Utils';
 
 const createBanner = (): string[] => {
   const banner: string[] = [];
@@ -9,15 +10,7 @@ const createBanner = (): string[] => {
 
   banner.push("<br>")
   asciiArt.forEach((ele) => {
-    let bannerString = "";
-    //this is for the ascii art
-    for (let i = 0; i < ele.length; i++) {
-      if (ele[i] === " ") {
-        bannerString += "&nbsp;";
-      } else {
-        bannerString += ele[i];
-      }
-    }
+    const bannerString = escapeHTML(ele).replace(/ /g, "&nbsp;");
 
     let eleToPush = `<pre>${bannerString}</pre>`;
     banner.push(eleToPush);

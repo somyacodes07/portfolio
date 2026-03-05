@@ -1,4 +1,5 @@
 import command from '../../config.json';
+import { escapeHTML } from '../core/Utils';
 
 const createEducation = (): string[] => {
     const education: string[] = [];
@@ -10,17 +11,17 @@ const createEducation = (): string[] => {
         command.education.forEach((edu: any) => {
             let string = "";
             string += SPACE.repeat(2);
-            string += `<span class='command'>${edu.degree}</span>`;
+            string += `<span class='command'>${escapeHTML(String(edu.degree ?? ""))}</span>`;
             education.push(string);
 
             string = "";
             string += SPACE.repeat(4);
-            string += `${edu.institution}`;
+            string += escapeHTML(String(edu.institution ?? ""));
             education.push(string);
 
             string = "";
             string += SPACE.repeat(4);
-            string += `${edu.period}`;
+            string += escapeHTML(String(edu.period ?? ""));
             education.push(string);
 
             education.push("<br>");

@@ -1,5 +1,5 @@
 import command from '../../config.json';
-import { escapeHTML } from '../core/Utils';
+import { escapeHTML, sanitizeUrl } from '../core/Utils';
 
 const createProject = (args?: string[]): string[] => {
   const projects: string[] = [];
@@ -16,10 +16,10 @@ const createProject = (args?: string[]): string[] => {
   command.projects.forEach((ele: any[]) => {
     let string = "";
     // Config: [Title, Desc, Link, Img, Video, Screenshots[]]
-    const rawTitle = ele[0];
-    const rawUrl = ele[2];
-    const rawVideoUrl = ele[4];
-    const rawScreenshots = ele[5];
+    const rawTitle = String(ele[0] ?? "");
+    const rawUrl = String(ele[2] ?? "");
+    const rawVideoUrl = typeof ele[4] === "string" ? ele[4] : undefined;
+    const rawScreenshots = Array.isArray(ele[5]) ? ele[5] : undefined;
 
     // For Display: standard HTML escaping
     const displayTitle = escapeHTML(rawTitle);
@@ -45,7 +45,11 @@ const createProject = (args?: string[]): string[] => {
 
     // External Icon (GitHub) - rawUrl ok here because it's inside href="..." which browsers handle if standardly quoted, 
     // but better to escapeHTML(rawUrl) for safety in case of double quotes in URL.
-    let ext = `<a href="${escapeHTML(rawUrl)}" target="_blank" style="margin-left: 8px; text-decoration: none;"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>`;
+    const safeExtUrl = sanitizeUrl(rawUrl, { allowRelative: false });
+    let ext = "";
+    if (safeExtUrl) {
+      ext = `<a href="${safeExtUrl}" target="_blank" rel="noopener noreferrer" style="margin-left: 8px; text-decoration: none;"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>`;
+    }
 
     string += SPACE.repeat(2);
     string += link + ext;

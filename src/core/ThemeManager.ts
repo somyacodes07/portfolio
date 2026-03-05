@@ -24,9 +24,11 @@ export const setTheme = (colors: ThemeColors) => {
     const outputColor = `.output {color: ${colors.prompt.input}}`
     const preHost = `#pre-host {color: ${colors.prompt.host}}`
     const host = `#host {color: ${colors.prompt.host}}`
+    const promptHost = `.prompt-host {color: ${colors.prompt.host}}`
     const preUser = `#pre-user {color: ${colors.prompt.user}}`
     const user = `#user {color: ${colors.prompt.user}}`
-    const prompt = `#prompt {color: ${colors.prompt.default}}`
+    const promptUser = `.prompt-user {color: ${colors.prompt.user}}`
+    const prompt = `.prompt {color: ${colors.prompt.default}}`
     const banner = `pre {color: ${colors.banner}}`
     const link = `a {color: ${colors.link.text}}`
     const linkHighlight = `a:hover {background: ${colors.link.highlightColor}}`
@@ -62,8 +64,10 @@ export const setTheme = (colors: ThemeColors) => {
     sheet.insertRule(outputColor, sheet.cssRules.length)
     sheet.insertRule(preHost, sheet.cssRules.length)
     sheet.insertRule(host, sheet.cssRules.length)
+    sheet.insertRule(promptHost, sheet.cssRules.length)
     sheet.insertRule(preUser, sheet.cssRules.length)
     sheet.insertRule(user, sheet.cssRules.length)
+    sheet.insertRule(promptUser, sheet.cssRules.length)
     sheet.insertRule(prompt, sheet.cssRules.length)
     sheet.insertRule(banner, sheet.cssRules.length)
     sheet.insertRule(link, sheet.cssRules.length)
@@ -92,6 +96,9 @@ export const setTheme = (colors: ThemeColors) => {
     root.style.setProperty('--win-scrollbar-thumb-hover', colors.banner);
     root.style.setProperty('--win-active-border', colors.banner); // Using banner/accent color for active state
     root.style.setProperty('--win-controls-hover', colors.border.color);
+    root.style.setProperty('--prompt-default', colors.prompt.default);
+    root.style.setProperty('--prompt-user', colors.prompt.user);
+    root.style.setProperty('--prompt-host', colors.prompt.host);
 
     // Folder Icon Color (matches banner/accent)
     root.style.setProperty('--folder-color', colors.banner);

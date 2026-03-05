@@ -1,7 +1,7 @@
 
 import command from '../config.json';
 import './css/explorer.css';
-import { escapeHTML } from './core/Utils';
+import { escapeHTML, sanitizeUrl } from './core/Utils';
 import { HELP } from "./commands/help";
 import { getBanner } from "./commands/banner";
 import { ABOUT } from "./commands/about"
@@ -36,7 +36,6 @@ const PRE_HOST = document.getElementById("pre-host");
 const PRE_USER = document.getElementById("pre-user");
 const HOST = document.getElementById("host");
 const USER = document.getElementById("user");
-const PROMPT = document.getElementById("prompt");
 // Needed for references in legacy funcs if any
 
 // --- Config ---
@@ -44,6 +43,12 @@ const SUDO_PASSWORD = command.password;
 const REPO_LINK = command.repoLink;
 const RESUME_LINK = command.resume;
 const SOCIAL = command.social;
+const THEME_STORAGE_KEY = 'currentTheme';
+
+const OPTIONAL_CONFIG = command as unknown as {
+  wallpaper?: string;
+  backgroundImage?: string;
+};
 
 // --- Managers ---
 const windowManager = new WindowManager();
@@ -60,6 +65,56 @@ const scrollToBottom = () => {
   const HEADER = document.getElementById("content-wrapper");
   if (!HEADER) return
   HEADER.scrollTop = HEADER.scrollHeight;
+}
+
+const buildPromptMarkup = () => {
+  const safeUser = escapeHTML(command.username);
+  const safeHost = escapeHTML(command.hostname);
+  return `<span class="prompt"><span class="prompt-user">${safeUser}</span>@<span class="prompt-host">${safeHost}</span>:$ ~ </span>`;
+}
+
+const openInNewTab = (rawUrl: string, allowRelative = false) => {
+  const safeUrl = sanitizeUrl(rawUrl, { allowRelative });
+  if (!safeUrl) return false;
+  window.open(safeUrl, '_blank', 'noopener,noreferrer');
+  return true;
+}
+
+const checkResourceExists = async (rawUrl: string) => {
+  const safeUrl = sanitizeUrl(rawUrl, { allowRelative: true });
+  if (!safeUrl) return null;
+
+  try {
+    const headResponse = await fetch(safeUrl, { method: 'HEAD' });
+    if (headResponse.ok) return safeUrl;
+  } catch {
+    // Fallback handled below.
+  }
+
+  try {
+    const getResponse = await fetch(safeUrl, { method: 'GET' });
+    if (getResponse.ok) return safeUrl;
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
+const applyWallpaperFromConfig = () => {
+  const wallpaperRaw = OPTIONAL_CONFIG.wallpaper || OPTIONAL_CONFIG.backgroundImage || "";
+  const safeWallpaper = sanitizeUrl(wallpaperRaw, { allowRelative: true });
+  const root = document.documentElement;
+
+  if (!safeWallpaper) {
+    root.style.setProperty('--wallpaper-image', 'none');
+    root.style.setProperty('--wallpaper-opacity', '0');
+    return;
+  }
+
+  const escapedWallpaper = safeWallpaper.replace(/"/g, '\\"');
+  root.style.setProperty('--wallpaper-image', `url("${escapedWallpaper}")`);
+  root.style.setProperty('--wallpaper-opacity', '0.25');
 }
 
 function writeLines(message: string[]) {
@@ -106,7 +161,9 @@ function easterEggStyles() {
     userInput.style.fontFamily = "VT323, monospace";
     userInput.style.fontSize = "20px";
   }
-  if (PROMPT) PROMPT.style.color = "white";
+  document.querySelectorAll<HTMLElement>(".prompt").forEach((promptNode) => {
+    promptNode.style.color = "white";
+  });
 }
 
 // --- Password Logic ---
@@ -169,7 +226,7 @@ const registerCommands = () => {
   });
 
   dispatcher.register("whoami", () => {
-    if (bareMode) { writeLines([`${command.username}`, "<br>"]); return; }
+    if (bareMode) { writeLines([escapeHTML(command.username), "<br>"]); return; }
     writeLines(createWhoami());
   });
 
@@ -191,23 +248,39 @@ const registerCommands = () => {
   dispatcher.register("repo", () => {
     writeLines(["Redirecting to github.com...", "<br>"]);
     setTimeout(() => {
-      window.open(REPO_LINK, '_blank');
+      if (!openInNewTab(REPO_LINK)) {
+        writeLines(["Repository URL is not configured correctly.", "<br>"]);
+      }
     }, 500);
   });
 
   dispatcher.register("linkedin", () => {
-    writeLines([`LinkedIn: <a href='${SOCIAL.linkedin}' target='_blank'>${SOCIAL.linkedin}</a>`, "<br>"]);
+    const safeLinkedIn = sanitizeUrl(SOCIAL.linkedin, { allowRelative: false });
+    const linkedInText = escapeHTML(SOCIAL.linkedin);
+    if (!safeLinkedIn) {
+      writeLines(["LinkedIn URL is not configured correctly.", "<br>"]);
+      return;
+    }
+    writeLines([`LinkedIn: <a href='${safeLinkedIn}' target='_blank' rel='noopener noreferrer'>${linkedInText}</a>`, "<br>"]);
   });
 
   dispatcher.register("github", () => {
     writeLines(["Opening GitHub...", "<br>"]);
     setTimeout(() => {
-      window.open(SOCIAL.github, '_blank');
+      if (!openInNewTab(SOCIAL.github)) {
+        writeLines(["GitHub URL is not configured correctly.", "<br>"]);
+      }
     }, 500);
   });
 
   dispatcher.register("email", () => {
-    writeLines([`Email: <a href='mailto:${SOCIAL.email}'>${SOCIAL.email}</a>`, "<br>"]);
+    const safeMailto = sanitizeUrl(`mailto:${SOCIAL.email}`, { allowRelative: false, allowMailto: true });
+    const emailText = escapeHTML(SOCIAL.email);
+    if (!safeMailto) {
+      writeLines([`Email: ${emailText}`, "<br>"]);
+      return;
+    }
+    writeLines([`Email: <a href='${safeMailto}'>${emailText}</a>`, "<br>"]);
   });
 
   dispatcher.register("projects", (args) => {
@@ -235,30 +308,33 @@ const registerCommands = () => {
   dispatcher.register("resume", () => {
     if (bareMode) { writeLines(["resume not found.", "<br>"]); return; }
 
-    if (window.innerWidth <= 600) {
-      writeLines(["Opening resume...", "<br>"]);
-      setTimeout(() => {
-        window.open(RESUME_LINK, '_blank');
-      }, 500);
-    } else {
-      const downloadBtn = `<a href="${RESUME_LINK}" download class="command" style="text-decoration: underline; margin-left: 10px;">[Download PDF]</a>`;
-
-      fetch(RESUME_LINK, { method: 'HEAD' })
-        .then(response => {
-          if (response.ok) {
-            writeLines(["Launching Resume Viewer..." + downloadBtn, "<br>"]);
-            setTimeout(() => {
-              const content = `<iframe src="${RESUME_LINK}" style="width:100%; height:100%; border:none;"></iframe>`;
-              windowManager.open('resume', 'Resume.pdf', content, 600, 800);
-            }, 500);
-          } else {
-            writeLines(["Resume: Coming Soon...", "<br>"]);
-          }
-        })
-        .catch(() => {
+    checkResourceExists(RESUME_LINK)
+      .then((safeResumeUrl) => {
+        if (!safeResumeUrl) {
           writeLines(["Resume: Coming Soon...", "<br>"]);
-        });
-    }
+          return;
+        }
+
+        if (window.innerWidth <= 600) {
+          writeLines(["Opening resume...", "<br>"]);
+          setTimeout(() => {
+            openInNewTab(safeResumeUrl, true);
+          }, 500);
+          return;
+        }
+
+        const safeResumeHref = escapeHTML(safeResumeUrl);
+        const downloadBtn = `<a href="${safeResumeHref}" download class="command" style="text-decoration: underline; margin-left: 10px;">[Download PDF]</a>`;
+        writeLines(["Launching Resume Viewer..." + downloadBtn, "<br>"]);
+
+        setTimeout(() => {
+          const content = `<iframe src="${safeResumeHref}" style="width:100%; height:100%; border:none;"></iframe>`;
+          windowManager.open('resume', 'Resume.pdf', content, 600, 800);
+        }, 500);
+      })
+      .catch(() => {
+        writeLines(["Resume: Coming Soon...", "<br>"]);
+      });
   });
 
   dispatcher.register("sudo", () => {
@@ -335,10 +411,10 @@ const registerCommands = () => {
       const themeName = args[0];
       if (builtInThemes[themeName]) {
         setTheme(builtInThemes[themeName]);
-        writeLines([`Theme switched to ${themeName}`, "<br>"]);
-        localStorage.setItem('currentTheme', themeName);
+        writeLines([`Theme switched to ${escapeHTML(themeName)}`, "<br>"]);
+        localStorage.setItem(THEME_STORAGE_KEY, themeName);
       } else {
-        writeLines([`Theme '${themeName}' not found.`, "<br>", ...THEME_HELP]);
+        writeLines([`Theme '${escapeHTML(themeName)}' not found.`, "<br>", ...THEME_HELP]);
       }
     }
   });
@@ -357,7 +433,7 @@ const inputManager = new InputManager(
     onCommand: (cmd) => {
       // Echo
       const div = document.createElement("div");
-      div.innerHTML = `<span id="prompt">${PROMPT?.innerHTML}</span> <span class='output'>${escapeHTML(cmd)}</span>`;
+      div.innerHTML = `${buildPromptMarkup()}<span class='output'>${escapeHTML(cmd)}</span>`;
       if (mutWriteLines && mutWriteLines.parentNode) {
         mutWriteLines.parentNode.insertBefore(div, mutWriteLines);
       }
@@ -386,7 +462,7 @@ const inputManager = new InputManager(
     onInterrupt: () => {
       const currentState = inputManager.getValue();
       const div = document.createElement("div");
-      div.innerHTML = `<span id="prompt">${PROMPT?.innerHTML}</span> <span class='output'>${escapeHTML(currentState)}^C</span>`;
+      div.innerHTML = `${buildPromptMarkup()}<span class='output'>${escapeHTML(currentState)}^C</span>`;
       if (mutWriteLines && mutWriteLines.parentNode) {
         mutWriteLines.parentNode.insertBefore(div, mutWriteLines);
       }
@@ -405,6 +481,11 @@ const initEventListeners = () => {
   if (PRE_USER) PRE_USER.innerText = command.username;
 
   window.addEventListener('load', () => {
+    applyWallpaperFromConfig();
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    if (savedTheme && builtInThemes[savedTheme]) {
+      setTheme(builtInThemes[savedTheme]);
+    }
     writeLines(getBanner());
     inputManager.focus();
   });
@@ -427,7 +508,7 @@ const initEventListeners = () => {
       const cmd = button.getAttribute('data-cmd');
       if (cmd === 'theme-random') {
         const themeNames = Object.keys(builtInThemes);
-        const currentTheme = localStorage.getItem('currentTheme') || 'classic';
+        const currentTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'default';
         let nextIndex = themeNames.indexOf(currentTheme) + 1;
         if (nextIndex >= themeNames.length) nextIndex = 0;
         const nextTheme = themeNames[nextIndex];
@@ -465,7 +546,7 @@ const initEventListeners = () => {
 function runCommand(cmd: string) {
   // Create an animated system message: "Executing: <cmd>..."
   const p = document.createElement("p");
-  p.innerHTML = `<span class="keys">Executing:</span> ${cmd}...`;
+  p.innerHTML = `<span class="keys">Executing:</span> ${escapeHTML(cmd)}...`;
 
   if (mutWriteLines && mutWriteLines.parentNode) {
     mutWriteLines.parentNode.insertBefore(p, mutWriteLines);

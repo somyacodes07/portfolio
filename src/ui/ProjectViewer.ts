@@ -1,6 +1,6 @@
 
 import { WindowManager } from '../core/WindowManager';
-import { escapeHTML } from '../core/Utils';
+import { sanitizeUrl } from '../core/Utils';
 import command from '../../config.json';
 
 export class ProjectViewer {
@@ -11,14 +11,14 @@ export class ProjectViewer {
     }
 
     public openProjectWindow(title: string, link: string, videoUrl?: string, screenshots?: string[]) {
-        // Security Check: Ensure link is HTTPS
-        if (link && !link.startsWith("https://")) {
-            console.error("Blocked insecure or invalid link:", link);
+        const safeLink = sanitizeUrl(link, { allowRelative: false });
+        if (!safeLink) {
+            console.error("Blocked insecure or invalid project link:", link);
             return;
         }
 
         if (window.innerWidth <= 600) {
-            window.open(link, '_blank');
+            window.open(safeLink, '_blank', 'noopener,noreferrer');
             return;
         }
 
@@ -26,15 +26,20 @@ export class ProjectViewer {
         const mediaItems: { type: 'video' | 'image', src: string }[] = [];
 
         if (videoUrl) {
-            mediaItems.push({ type: 'video', src: videoUrl });
+            const safeVideo = sanitizeUrl(videoUrl, { allowRelative: true });
+            if (safeVideo) {
+                mediaItems.push({ type: 'video', src: safeVideo });
+            }
         }
 
         if (screenshots && Array.isArray(screenshots)) {
             screenshots.forEach(src => {
+                const safeSrc = sanitizeUrl(String(src), { allowRelative: true });
+                if (!safeSrc) return;
                 const isVideo = src.toLowerCase().endsWith('.mp4') || src.toLowerCase().endsWith('.webm');
                 mediaItems.push({
                     type: isVideo ? 'video' : 'image',
-                    src
+                    src: safeSrc
                 });
             });
         }
@@ -42,7 +47,7 @@ export class ProjectViewer {
         // If no visual media, fallback to iframe
         if (mediaItems.length === 0) {
             const iframeValue = document.createElement("iframe");
-            iframeValue.src = link;
+            iframeValue.src = safeLink;
             iframeValue.style.width = "100%";
             iframeValue.style.height = "100%";
             iframeValue.style.border = "none";
@@ -134,23 +139,28 @@ export class ProjectViewer {
             // [Title, Desc, Link, Thumb, Video, Screenshots[]]
             const [rawTitle, _desc, rawLink, imgPath, videoUrl, screenshots] = proj;
 
-            const title = escapeHTML(rawTitle);
-            const link = escapeHTML(rawLink);
-            const video = videoUrl ? escapeHTML(videoUrl) : undefined;
+            const title = String(rawTitle ?? "");
+            const link = String(rawLink ?? "");
+            const video = typeof videoUrl === "string" ? videoUrl : undefined;
+            const screenshotList = Array.isArray(screenshots)
+                ? screenshots.filter((src): src is string => typeof src === "string")
+                : undefined;
             // Screenshots are array, no need to escape array object itself, but items inside logic handled in openProjectWindow
 
             const item = document.createElement('div');
             item.className = 'explorer-item';
 
             // Pass screenshots array
-            item.onclick = () => this.openProjectWindow(title, link, video, screenshots);
+            item.onclick = () => this.openProjectWindow(title, link, video, screenshotList);
 
             let img: HTMLElement;
             // If a custom image is provided in config (and not null), use it as an IMG tag
             // Otherwise use a DIV which will get the default folder CSS mask
-            if (imgPath) {
+            const safeImagePath = typeof imgPath === "string" ? sanitizeUrl(imgPath, { allowRelative: true }) : null;
+
+            if (safeImagePath) {
                 const imageElement = document.createElement('img');
-                imageElement.src = imgPath;
+                imageElement.src = safeImagePath;
                 imageElement.className = 'explorer-icon';
                 // If custom image fails, fallback to the mask style? 
                 // Actually, if it fails, let's replace it with a div
@@ -173,7 +183,7 @@ export class ProjectViewer {
 
             const label = document.createElement('span');
             label.className = 'explorer-label';
-            label.innerText = rawTitle;
+            label.innerText = title;
 
             item.appendChild(img);
             item.appendChild(label);

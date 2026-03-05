@@ -1,4 +1,5 @@
 import command from '../../config.json';
+import { escapeHTML } from '../core/Utils';
 
 export const getSkills = (): string[] => {
     const config = (window as any).config || command;
@@ -26,7 +27,7 @@ export const getSkills = (): string[] => {
                 let string = "";
                 // Category header
                 string += SPACE.repeat(2);
-                string += `<span class='command'>${category.label}</span>`;
+                string += `<span class='command'>${escapeHTML(category.label)}</span>`;
                 skills.push(string);
 
                 // Find max length of name for alignment
@@ -41,17 +42,17 @@ export const getSkills = (): string[] => {
                 const gap = 4; // spaces between name and desc
 
                 skillList.forEach((item: any) => {
-                    const name = typeof item === 'string' ? item : item.name;
-                    const desc = typeof item === 'string' ? "" : item.desc;
+                    const name = String(typeof item === 'string' ? item : item.name ?? "");
+                    const desc = String(typeof item === 'string' ? "" : item.desc ?? "");
 
                     let line = "";
                     line += SPACE.repeat(4);
-                    line += `- ${name}`;
+                    line += `- ${escapeHTML(name)}`;
 
                     if (desc) {
                         const padding = (maxNameLen - name.length) + gap;
                         line += SPACE.repeat(padding);
-                        line += `<span class='desy'>${desc}</span>`; // 'desy' class might need to be defined or just use color span
+                        line += `<span class='desy'>${escapeHTML(desc)}</span>`; // 'desy' class might need to be defined or just use color span
                         // Actually, let's use a known class or standard color. 'command' is blueish. 
                         // Let's rely on default text color or a specific dim color.
                         // Since I can't easily add css right now without moving files, I'll style it inline or use existing.
@@ -69,4 +70,3 @@ export const getSkills = (): string[] => {
 }
 
 export const SKILLS = []; // Legacy compatibility if needed, but we should switch to getSkills call.
-

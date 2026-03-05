@@ -93,6 +93,10 @@ export class InputManager {
                 this.handleEnter();
                 this.onAutoScroll();
                 break;
+            case "Escape":
+                e.preventDefault();
+                this.setValue("");
+                break;
             case "ArrowUp":
                 this.handleArrowUp();
                 e.preventDefault();
