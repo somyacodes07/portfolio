@@ -1,7 +1,8 @@
 # Webterm - Somyajeet Singh
-<div align="center">
-  <img alt="banner" src="res/banner.png">
-</div>
+
+<p align="center">
+  <img alt="Webterm banner" src="res/banner.png" />
+</p>
 
 ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
@@ -9,109 +10,99 @@
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 
-Terminal-style portfolio website for Somyajeet Singh, showcasing projects in AI, ML, and Creative Systems. Note: This project has been rebranded from **Webshell** to **Webterm**.
+Terminal-style portfolio website for Somyajeet Singh, focused on AI/ML, full-stack development, and creative systems.
 
 ## Features
-* **Interactive Terminal**: Type commands like a pro.
-* **Window Manager**: 
-    * **Resizable Windows**: Drag the bottom-right corner to resize.
-    * **Draggable**: Move windows anywhere on your desktop.
-* **Project Explorer**: Visual grid layout for browsing projects (Desktop default).
-* **Project Gallery**: Sliding carousel supporting images and videos.
-* **PDF Viewer**: Integrated resume viewer with download option.
-* **Sidebar GUI**: Rapid navigation buttons on the right.
-* **Themes**: Cycle through color schemes with `theme` command.
-* **Mobile Optimized**:
-    * **Calculated Scroll**: Auto-scrolls to keep input visible.
-    * **Click-to-Type**: Tap terminal background to focus input.
-* **[Tab]** for auto completion.
-* **[Esc]** to clear the input line.
-* **[↑][↓]** to scroll through command history.
+
+- Interactive terminal command interface.
+- Desktop-style window manager (drag + resize).
+- Project Explorer grid (default on desktop for `projects`).
+- Project gallery viewer with image/video support.
+- Built-in PDF resume viewer window.
+- Sidebar quick actions for common commands.
+- Multiple built-in themes (`default`, `matrix`, `dracula`, `gruvbox`, `nord`).
+- Mobile-friendly interaction model and sticky action bar.
+- Keyboard support:
+  - `Tab` auto-complete.
+  - `Esc` clears the active input.
+  - `ArrowUp` and `ArrowDown` browse command history.
 
 ## Commands
-* `help`: List all available commands.
-* `about`: Display information about the user.
-* `projects`: View user's projects.
-* `whoami`: Display current user session info.
-* `education`: View educational background.
-* `skills`: View technical skills.
-* `banner`: Display the startup banner.
-* `clear`: Clear the terminal screen.
-* `resume`: Open resume in a dedicated PDF viewer window.
-* `linkedin`: Open LinkedIn profile.
-* `github`: Open GitHub profile.
-* `email`: Open default email client.
-* `ls`: List files (easter egg).
-* `theme [name]`: Change the terminal theme.
-* `repo`: Open this project's repository.
 
-## Themes
-You can change the look and feel of the terminal using the `theme` command.
-Usage: `theme [name]`
-
-Available themes:
-* `default`: The standard dark theme.
-* `matrix`: A Matrix-inspired green theme.
-* `dracula`: The famous Dracula theme.
-* `gruvbox`: A retro groove color scheme.
-* `nord`: An arctic, north-bluish color palette.
+- `help` - Show all available commands.
+- `about` - Intro and profile links.
+- `projects` - Open project explorer.
+- `projects --gui` - Force GUI project explorer mode.
+- `whoami` - Show current user.
+- `education` - Academic background.
+- `skills` - Technical stack summary.
+- `certificates` / `certifications` - Show certifications.
+- `resume` - Open resume viewer.
+- `linkedin` - Open LinkedIn.
+- `github` - Open GitHub.
+- `email` - Open mail client.
+- `repo` - Open repository.
+- `banner` - Print ASCII banner.
+- `theme [name]` - Switch theme.
+- `clear` - Clear terminal output.
 
 ## Configuration
 
-Most of the configuration is done in the `config.json` file. You can customize:
+Most customization is done through `config.json`:
 
-* **ascii**: The ASCII art banner shown on startup.
-* **title**: The title of the page.
-* **social**: Links to your social profiles (GitHub, LinkedIn, Email).
-* **colors**: Customize the color scheme (background, foreground, prompt, etc.).
-* **education**: List of educational qualifications.
-* **skills**: Categorized list of skills (languages, web, ai_ml, tools).
-* **projects**: List of projects with descriptions and links.
+- Profile info (`username`, `hostname`, `title`, `aboutGreeting`).
+- Social links and resume path.
+- Education and skills groups.
+- Projects (including screenshots/videos + metadata).
+- Certifications.
+- Theme colors and prompt styling.
+
+Example:
 
 ```json
 {
-  "ascii": [ " ... " ],
-  "title": "Somyajeet Singh",
+  "title": "Full-Stack Developer | AI/ML",
   "social": {
     "email": "...",
     "github": "...",
     "linkedin": "..."
   },
-  "colors": {
-    "background": "#0D1117",
-    "foreground": "#E6EDF3",
-    "banner": "#58A6FF"
-    // ...
-  }
+  "certifications": [
+    {
+      "name": "Scientific Computing with Python",
+      "issuer": "freeCodeCamp",
+      "date": "Feb 2026",
+      "link": "https://www.freecodecamp.org/certification/..."
+    }
+  ]
 }
 ```
 
-## Hidden Commands (Easter Eggs)
-There are a few hidden interactions to discover:
-* Try using `sudo`.
-* Be careful with `rm -rf`.
+## Easter Eggs
+
+- Try `sudo`.
+- Be careful with `rm -rf`.
 
 ![Sudo Permission Granted](res/secret.png)
 
-## Run the Project Locally:
+## Local Development
 
-Clone the repository
-```shell
+```sh
 git clone https://github.com/ssgamingop/portfolio.git
-```
-Go to the project directory
-```shell
 cd portfolio
-```
-Install the dependencies
-```shell
 npm install
-```
-Start the server
-```shell
 npm run dev
 ```
 
+## Build
+
+```sh
+npm run build
+npm run preview
+```
+
 ## Recent Updates
-* **v1.1.1**: Fixed `sudo` command alignment issues (CSS architecture improved).
-* **v1.1.0**: Added PDF Resume Viewer and Project Gallery.
+
+- Added SentinelIQ as the top featured project.
+- Added certification support via `certificates` and `certifications` commands.
+- Improved Project Explorer hover/focus styling to match active theme colors.

@@ -205,9 +205,19 @@ a:hover {
   height: clamp(32px, 3vw, 36px);
   background-color: var(--border);
   color: var(--bar-title-color, var(--bg));
-  line-height: clamp(32px, 3vw, 36px);
-  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
   font-weight: 500;
+}
+
+#bar-logo {
+  width: clamp(16px, 1.2vw, 20px);
+  height: clamp(16px, 1.2vw, 20px);
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.35));
 }
 
 #bar-2 {
