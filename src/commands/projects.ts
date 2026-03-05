@@ -39,9 +39,10 @@ const createProject = (args?: string[]): string[] => {
       : 'undefined';
 
     const onClickCall = `window.openProjectWindow(${jsTitle}, ${jsUrl}, ${jsVideo}, ${jsScreenshots})`;
+    const onKeyCall = `if(event.key==='Enter'||event.key===' '){event.preventDefault();${onClickCall}}`;
 
     // WebDesktop Link (Main Click)
-    let link = `<span class="command" style="cursor: pointer;" onclick="${onClickCall}">${displayTitle}</span>`;
+    let link = `<span class="command clickable" role="button" tabindex="0" aria-label="Open project ${displayTitle}" style="cursor: pointer;" onclick="${onClickCall}" onkeydown="${onKeyCall}">${displayTitle}</span>`;
 
     // External Icon (GitHub) - rawUrl ok here because it's inside href="..." which browsers handle if standardly quoted, 
     // but better to escapeHTML(rawUrl) for safety in case of double quotes in URL.

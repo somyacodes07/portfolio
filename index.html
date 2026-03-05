@@ -54,7 +54,7 @@
               <span class="prompt"><span id="pre-user" class="prompt-user"></span>@<span id="pre-host" class="prompt-host"></span>:$ ~ </span>
             </div>
             <!-- command output will be inserted before #write-lines-->
-            <a id="write-lines"></a>
+            <div id="write-lines"></div>
           </div>
         </div>
         <div id="input-line">
@@ -64,7 +64,7 @@
             <div id="input-hidden">
               <span class="prompt"><span id="user" class="prompt-user"></span>@<span id="host" class="prompt-host"></span>:$ ~
               </span>
-              <div id="container-input" style="display: inline-block; position: relative; width: 50%;">
+              <div id="container-input">
                 <span id="ghost-input"></span>
                 <input id="user-input" type="text" enterkeyhint="Enter" spellcheck="false" autocapitalize="none"
                   autocomplete="off" />
@@ -81,7 +81,7 @@
         <button class="action-btn" data-cmd="resume">RESUME</button>
         <button class="action-btn" data-cmd="email">CONTACT</button>
         <button class="action-btn" data-cmd="theme-random">THEME</button>
-        <div style="flex-grow: 1;"></div>
+        <div class="sidebar-spacer"></div>
         <button class="action-btn small-btn" data-cmd="clear" aria-label="Clear Terminal">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

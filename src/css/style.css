@@ -3,6 +3,11 @@
 :root {
   font-family: 'IBM Plex Mono', monospace;
   font-weight: 200;
+  --font-size-base: clamp(15px, 0.35vw + 14px, 18px);
+  --terminal-line-height: clamp(1.25rem, 1.45vw, 1.55rem);
+  --ascii-line-height: clamp(0.72rem, 1.05vw, 1.25rem);
+  --container-input-width: clamp(280px, 50vw, 820px);
+
   --bg: #0D1117;
   --border: #30363D;
   --text: #E6EDF3;
@@ -15,11 +20,11 @@
 
 @keyframes typing {
   from {
-    width: 0
+    width: 0;
   }
 
   to {
-    width: 100%
+    width: 100%;
   }
 }
 
@@ -28,8 +33,8 @@ body {
   color: var(--text);
   background-color: var(--bg);
   height: 100%;
-  font-size: 16px;
   display: block;
+  font-size: var(--font-size-base);
 }
 
 html {
@@ -37,20 +42,16 @@ html {
 }
 
 body {
-  padding: 16px;
+  padding: clamp(10px, 1.2vw, 16px);
   box-sizing: border-box;
   background-color: transparent;
-  /* Changed from var(--bg) to allow wallpaper visibility */
 }
 
 /* Background Wallpaper */
 body::before {
   content: "";
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   z-index: -1;
   background-image: var(--wallpaper-image);
   background-size: cover;
@@ -64,71 +65,67 @@ body::before {
 /* Scanline Effect */
 body::after {
   content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: repeating-linear-gradient(0deg,
-      rgba(0, 0, 0, 0.15),
-      rgba(0, 0, 0, 0.15) 1px,
-      transparent 1px,
-      transparent 2px);
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.1) 1px,
+    transparent 1px,
+    transparent 2px
+  );
   pointer-events: none;
-  z-index: 999;
-  opacity: 0.3;
+  z-index: 3;
+  opacity: 0.14;
 }
 
 main {
   display: flex;
   flex-direction: column;
-  /* Header on top, content below */
   box-sizing: border-box;
   height: 100%;
-  border: var(--border) solid 2px;
+  border: 2px solid var(--border);
   border-radius: 2px;
   overflow: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-main::-webkit-scrollbar {
-  display: none;
 }
 
 p {
   display: block;
-  line-height: 22px;
+  line-height: var(--terminal-line-height);
   animation: typing 0.5s steps(30, end);
   white-space: nowrap;
   overflow: hidden;
 }
 
-div {
-  line-height: 22px;
+#terminal > div,
+#input-line,
+#password-input {
+  line-height: var(--terminal-line-height);
 }
 
 @font-face {
   font-family: ascii;
-  src: url("./font/IBMPlexMono-Thin.ttf")
+  src: url("./font/IBMPlexMono-Thin.ttf");
 }
 
 pre {
   margin: 0;
   padding: 0;
-  line-height: 20px !important;
+  line-height: var(--ascii-line-height) !important;
   color: #FF9951;
   font-family: "ascii", monospace;
 }
 
 input {
   font-family: 'IBM Plex Mono', monospace;
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
   border: none;
   resize: none;
   outline: none;
-  font-size: 16px;
+  font-size: clamp(16px, 0.2vw + 15px, 18px);
   color: #FF7685;
   caret-color: var(--prompt-default);
   width: 100%;
@@ -143,9 +140,8 @@ input {
   height: 100%;
   pointer-events: none;
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 16px;
+  font-size: clamp(16px, 0.2vw + 15px, 18px);
   color: var(--text);
-  /* Use main text color instead of prompt color for better brightness */
   white-space: pre;
   z-index: 1;
 }
@@ -160,21 +156,17 @@ input {
 
 .ghost-text {
   opacity: 0.25;
-  /* Dimmer for better contrast */
   filter: grayscale(1);
-  /* Optional: make it fully gray if prompt has color */
 }
 
 .cursor-block {
   display: inline-block;
   background-color: var(--text, #E6EDF3);
-  /* Use text color for cursor block */
   color: var(--bg, #0D1117);
   animation: blink 1s step-end infinite;
 }
 
 @keyframes blink {
-
   0%,
   100% {
     opacity: 1;
@@ -197,20 +189,19 @@ a:hover {
 /* Header and Layout Containers */
 #bars {
   font-family: 'Pixelify Sans', sans-serif;
-  font-size: 20px;
+  font-size: clamp(1rem, 1.2vw, 1.25rem);
   width: 100%;
   flex-shrink: 0;
-  /* Removed sticky as it's now a flex item at the top */
   position: relative;
   background-color: var(--bg);
   z-index: 10;
 }
 
 #bar-1 {
-  height: 36px;
+  height: clamp(32px, 3vw, 36px);
   background-color: var(--border);
   color: var(--bg);
-  line-height: 36px;
+  line-height: clamp(32px, 3vw, 36px);
   padding-left: 10px;
 }
 
@@ -231,7 +222,6 @@ a:hover {
   background-color: var(--border);
   margin-top: 3px;
 }
-
 
 #bar-5 {
   height: 1px;
@@ -254,35 +244,42 @@ a:hover {
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-  padding-left: 20px;
+  padding-left: clamp(10px, 1.6vw, 20px);
 }
 
 #content-wrapper {
   flex: 0 1 auto;
-  /* Grow: 0 (hug content), Shrink: 1 (allow resizing), Basis: auto */
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
   height: auto;
-  /* Let it scale with content */
   min-height: 0;
   padding-bottom: 5px;
-  /* Spacing before fixed input */
   min-width: 0;
 
-  /* Hiding scrollbar for WebKit browsers */
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Hiding scrollbar for Firefox */
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139, 148, 158, 0.55) transparent;
 }
 
 #content-wrapper::-webkit-scrollbar {
-  display: none;
+  width: 8px;
+}
+
+#content-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#content-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(139, 148, 158, 0.5);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+#content-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(126, 231, 135, 0.7);
+  background-clip: content-box;
 }
 
 #terminal {
@@ -290,16 +287,25 @@ a:hover {
   padding-left: 0;
 }
 
+#write-lines {
+  display: block;
+}
+
 #input-line {
   margin-left: 0;
   overflow-x: hidden;
   width: 100%;
   flex-shrink: 0;
-  /* Sticky Input Fix */
+}
+
+#container-input {
+  display: inline-block;
+  position: relative;
+  width: var(--container-input-width);
+  max-width: calc(100vw - 130px);
 }
 
 .command {
-  /* text-shadow removed */
   color: #FD9BDB;
 }
 
@@ -312,23 +318,19 @@ a:hover {
   font-weight: 400;
 }
 
-
-#content-wrapper::-webkit-scrollbar {
-  display: none;
-  /* Chrome Safari */
-}
-
 #sidebar {
-  width: 220px;
-  padding: 50px;
-  /* Reset top padding as it's now below the header */
-  padding-top: 20px;
+  width: clamp(170px, 17vw, 210px);
+  padding: 18px 14px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
   border-left: 2px solid var(--border);
   background-color: transparent;
   flex-shrink: 0;
+}
+
+.sidebar-spacer {
+  flex-grow: 1;
 }
 
 .action-btn {
@@ -338,7 +340,7 @@ a:hover {
   padding: 10px;
   cursor: pointer;
   font-family: 'IBM Plex Mono', monospace;
-  transition: all 0.2s;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
   text-align: center;
   text-transform: uppercase;
   font-weight: 600;
@@ -364,10 +366,9 @@ a:hover {
   height: 40px;
   padding: 0;
   font-size: 16px;
-  opacity: 0.6;
+  opacity: 0.7;
   border-style: dashed;
   align-self: flex-end;
-  /* Align to the right in the sidebar */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -378,103 +379,15 @@ a:hover {
   opacity: 1;
   border-style: solid;
   color: #ff7b72;
-  /* Red hover for delete action */
   border-color: #ff7b72;
 }
 
-/* Mobile Responsive */
-@media (max-width: 600px) {
-  body {
-    font-size: 13px;
-    padding: 10px;
-    font-weight: 300;
-  }
-
-  input {
-    font-size: 16px;
-    margin-top: 2px;
-  }
-
-  a {
-    word-break: break-all;
-  }
-
-  p {
-    line-height: 18px;
-    white-space: normal;
-    /* Fixes text overflow */
-    animation: none;
-    /* Disables typing animation (which forces nowrap) for legibility */
-  }
-
-  pre {
-    line-height: 12px !important;
-    font-size: 9px;
-  }
-
-  main {
-    border-width: 1px;
-  }
-
-  div {
-    line-height: 14px;
-  }
-
-  #terminal,
-  #input-line {
-    margin-left: 8px;
-  }
-
-  #terminal-layout {
-    padding-left: 0;
-  }
-
-  .lower-main {
-    flex-direction: column;
-  }
-
-  /* Sidebar Mobile Overrides */
-  #sidebar {
-    width: 100%;
-    border-left: none;
-    border-top: 2px solid var(--border);
-    padding: 10px;
-    height: auto;
-    background-color: var(--bg);
-    box-sizing: border-box;
-
-    /* Grid Layout for Perfect Alignment */
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-  }
-
-  /* Hide the spacer div on mobile so the grid is perfect 4x2 */
-  #sidebar>div {
-    display: none;
-  }
-
-  .action-btn {
-    width: 100%;
-    /* Fill grid cell */
-    padding: 0;
-    font-size: 11px;
-    min-height: 44px;
-    /* Accessible touch target */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .small-btn {
-    width: 44px;
-    /* Stay square */
-    height: 44px;
-    margin: 0 auto;
-    /* Center in the grid cell */
-    margin-top: 0;
-    align-self: center;
-  }
+.action-btn:focus-visible,
+.small-btn:focus-visible,
+.clickable:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--prompt-host);
+  outline-offset: 2px;
 }
 
 #password-input {
@@ -498,8 +411,109 @@ a:hover {
   background: transparent;
 }
 
+/* Mobile Responsive */
 @media (max-width: 600px) {
+  body {
+    padding: 10px;
+    font-weight: 300;
+  }
+
+  input,
+  #ghost-input {
+    font-size: 16px;
+    margin-top: 2px;
+  }
+
+  a {
+    word-break: break-all;
+  }
+
+  p {
+    line-height: 1.35rem;
+    white-space: normal;
+    animation: none;
+  }
+
+  pre {
+    line-height: 0.78rem !important;
+    font-size: 0.56rem;
+  }
+
+  main {
+    border-width: 1px;
+  }
+
+  #terminal,
+  #input-line {
+    margin-left: 8px;
+  }
+
+  #terminal-layout {
+    padding-left: 0;
+  }
+
+  .lower-main {
+    flex-direction: column;
+  }
+
+  #container-input {
+    width: 100%;
+    max-width: none;
+  }
+
+  /* Sidebar Mobile Overrides */
+  #sidebar {
+    width: 100%;
+    border-left: none;
+    border-top: 2px solid var(--border);
+    padding: 10px;
+    height: auto;
+    background-color: var(--bg);
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  #sidebar > .sidebar-spacer {
+    display: none;
+  }
+
+  .action-btn {
+    width: 100%;
+    padding: 0;
+    font-size: 11px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .small-btn {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto;
+    margin-top: 0;
+    align-self: center;
+  }
+
   #password-input {
     margin-left: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  p,
+  .cursor-block {
+    animation: none !important;
   }
 }

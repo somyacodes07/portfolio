@@ -162,7 +162,16 @@
         "/projects/music-vis.mp4",
         "/projects/music-vis-1.png",
         "/projects/music-vis-2.png"
-      ]
+      ],
+      {
+        "stack": [
+          "Python",
+          "Audio Processing",
+          "Visualization"
+        ],
+        "year": "2025",
+        "status": "Completed"
+      }
     ],
     [
       "AR-Based Interactive Projects",
@@ -173,7 +182,16 @@
       [
         "/projects/ar-kit-2.mp4",
         "/projects/ar-kit-1.png"
-      ]
+      ],
+      {
+        "stack": [
+          "Python",
+          "OpenCV",
+          "AR"
+        ],
+        "year": "2024",
+        "status": "Completed"
+      }
     ],
     [
       "Sur Sangam - Music Generator",
@@ -184,7 +202,16 @@
       [
         "/projects/sur-sangam-1.png",
         "/projects/sur-sangam-2.png"
-      ]
+      ],
+      {
+        "stack": [
+          "AI",
+          "ML",
+          "Music Generation"
+        ],
+        "year": "2025",
+        "status": "Completed"
+      }
     ]
   ],
   "futureGoals": [

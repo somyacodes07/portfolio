@@ -37,13 +37,44 @@ export class WindowManager {
         const win = this.windows.get(id);
         if (!win) return;
 
+        const wasActive = win.classList.contains("is-active");
         win.remove();
         this.windows.delete(id);
+
+        if (wasActive) {
+            const nextTopWindow = this.getTopWindow();
+            if (nextTopWindow) {
+                this.setActiveWindow(nextTopWindow);
+            }
+        }
     }
 
     private bringToFront(win: HTMLElement): void {
         this.zIndexCounter++;
         win.style.zIndex = String(this.zIndexCounter);
+        this.setActiveWindow(win);
+    }
+
+    private setActiveWindow(win: HTMLElement): void {
+        this.windows.forEach((existingWindow) => {
+            existingWindow.classList.remove("is-active");
+        });
+        win.classList.add("is-active");
+    }
+
+    private getTopWindow(): HTMLElement | null {
+        let topWindow: HTMLElement | null = null;
+        let topZIndex = -Infinity;
+
+        this.windows.forEach((win) => {
+            const currentZ = Number.parseInt(win.style.zIndex || "0", 10);
+            if (currentZ >= topZIndex) {
+                topZIndex = currentZ;
+                topWindow = win;
+            }
+        });
+
+        return topWindow;
     }
 
     private createWindowDOM(

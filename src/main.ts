@@ -73,6 +73,8 @@ const buildPromptMarkup = () => {
   return `<span class="prompt"><span class="prompt-user">${safeUser}</span>@<span class="prompt-host">${safeHost}</span>:$ ~ </span>`;
 }
 
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 const openInNewTab = (rawUrl: string, allowRelative = false) => {
   const safeUrl = sanitizeUrl(rawUrl, { allowRelative });
   if (!safeUrl) return false;
@@ -124,13 +126,20 @@ function writeLines(message: string[]) {
 }
 
 function displayText(item: string, idx: number) {
-  setTimeout(() => {
+  const renderLine = () => {
     if (!mutWriteLines) return
     const p = document.createElement("p");
     p.innerHTML = item;
     mutWriteLines.parentNode!.insertBefore(p, mutWriteLines);
     scrollToBottom();
-  }, 40 * idx);
+  };
+
+  if (prefersReducedMotion) {
+    renderLine();
+    return;
+  }
+
+  setTimeout(renderLine, 40 * idx);
 }
 
 function easterEggStyles() {
@@ -541,6 +550,18 @@ const initEventListeners = () => {
     // Only focus if not clicking interactive elements
     inputManager.focus();
   });
+
+  window.addEventListener('keydown', (e) => {
+    const target = e.target as HTMLElement | null;
+    if (!target || !target.classList.contains('clickable')) return;
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+
+    const cmd = target.getAttribute('data-command');
+    if (!cmd) return;
+
+    e.preventDefault();
+    runCommand(cmd);
+  });
 }
 
 function runCommand(cmd: string) {
@@ -552,7 +573,7 @@ function runCommand(cmd: string) {
     mutWriteLines.parentNode.insertBefore(p, mutWriteLines);
   }
 
-  setTimeout(() => {
+  const runAfterDelay = () => {
     // Execute the command via dispatcher, BUT we also want to echo it?
     // Actually runCommand acts like typing it.
     // Standard "renderInput" style dispatch?
@@ -560,7 +581,13 @@ function runCommand(cmd: string) {
     // It bypasses the "user typed this" echo usually.
     dispatcher.dispatch(cmd);
     scrollToBottom();
-  }, 200);
+  };
+
+  if (prefersReducedMotion) {
+    runAfterDelay();
+  } else {
+    setTimeout(runAfterDelay, 200);
+  }
 
   inputManager.setValue("");
 }

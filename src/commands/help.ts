@@ -55,7 +55,7 @@ const createHelp = (): string[] => {
     string += SPACE.repeat(2);
     // Extract clean command name (remove quotes)
     const cmdName = ele[0].replace(/'/g, "");
-    string += `<span class='command clickable' data-command='${cmdName}'>`;
+    string += `<span class='command clickable' data-command='${cmdName}' role='button' tabindex='0' aria-label='Run ${cmdName} command'>`;
     string += ele[0];
     string += "</span>";
     string += SPACE.repeat(Math.max(0, 17 - ele[0].length));

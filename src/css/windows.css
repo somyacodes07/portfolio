@@ -35,11 +35,15 @@
     /* Quick Snap Animation */
     animation: openWindow 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     will-change: transform, opacity;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .desktop-window.is-active {
-    border-color: var(--win-active-border, #58A6FF);
-    box-shadow: 0 0 0 1px var(--win-active-border, #58A6FF), 0 10px 30px rgba(0, 0, 0, 0.9);
+    border-color: var(--win-active-border-soft, rgba(88, 166, 255, 0.45));
+    box-shadow:
+        0 0 0 1px var(--win-active-border-soft, rgba(88, 166, 255, 0.45)),
+        0 0 0 3px var(--win-active-glow, rgba(88, 166, 255, 0.16)),
+        0 10px 26px rgba(0, 0, 0, 0.82);
     z-index: 1001;
 }
 
@@ -95,6 +99,11 @@
 .win-btn:hover {
     background: var(--win-controls-hover, #30363D);
     color: var(--win-bg, #ffffff);
+}
+
+.win-btn:focus-visible {
+    outline: 2px solid var(--win-active-border, #58A6FF);
+    outline-offset: 1px;
 }
 
 .close-btn:hover {
@@ -168,4 +177,10 @@
 
 .resize-handle:hover::after {
     border-color: transparent transparent rgba(255, 255, 255, 0.6) transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .desktop-window {
+        animation: none;
+    }
 }

@@ -95,6 +95,8 @@ export const setTheme = (colors: ThemeColors) => {
     root.style.setProperty('--win-scrollbar-thumb', colors.border.color);
     root.style.setProperty('--win-scrollbar-thumb-hover', colors.banner);
     root.style.setProperty('--win-active-border', colors.banner); // Using banner/accent color for active state
+    root.style.setProperty('--win-active-border-soft', hexToRgba(colors.banner, 0.45));
+    root.style.setProperty('--win-active-glow', hexToRgba(colors.banner, 0.16));
     root.style.setProperty('--win-controls-hover', colors.border.color);
     root.style.setProperty('--prompt-default', colors.prompt.default);
     root.style.setProperty('--prompt-user', colors.prompt.user);
