@@ -14,10 +14,10 @@
   --prompt-default: #8B949E;
   --prompt-user: #7EE787;
   --prompt-host: #79C0FF;
-  --explorer-hover-bg: rgba(126, 231, 135, 0.1);
-  --explorer-hover-border: rgba(126, 231, 135, 0.34);
-  --explorer-hover-glow: rgba(126, 231, 135, 0.2);
-  --explorer-focus-ring: rgba(126, 231, 135, 0.62);
+  --explorer-hover-bg: rgba(88, 166, 255, 0.1);
+  --explorer-hover-border: rgba(88, 166, 255, 0.34);
+  --explorer-hover-glow: rgba(88, 166, 255, 0.2);
+  --explorer-focus-ring: rgba(88, 166, 255, 0.62);
   --wallpaper-image: none;
   --wallpaper-opacity: 0;
 }

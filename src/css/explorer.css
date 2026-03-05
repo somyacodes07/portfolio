@@ -127,20 +127,20 @@
 }
 
 .explorer-item:hover {
-    background: var(--explorer-hover-bg, rgba(126, 231, 135, 0.1));
-    border-color: var(--explorer-hover-border, rgba(126, 231, 135, 0.34));
+    background: var(--explorer-hover-bg, rgba(88, 166, 255, 0.1));
+    border-color: var(--explorer-hover-border, rgba(88, 166, 255, 0.34));
     box-shadow:
-        0 0 0 1px var(--explorer-hover-border, rgba(126, 231, 135, 0.34)),
-        0 0 16px var(--explorer-hover-glow, rgba(126, 231, 135, 0.2));
+        0 0 0 1px var(--explorer-hover-border, rgba(88, 166, 255, 0.34)),
+        0 0 16px var(--explorer-hover-glow, rgba(88, 166, 255, 0.2));
     transform: translateY(-1px);
 }
 
 .explorer-item:focus-visible {
-    background: var(--explorer-hover-bg, rgba(126, 231, 135, 0.1));
-    border-color: var(--explorer-focus-ring, rgba(126, 231, 135, 0.62));
+    background: var(--explorer-hover-bg, rgba(88, 166, 255, 0.1));
+    border-color: var(--explorer-focus-ring, rgba(88, 166, 255, 0.62));
     box-shadow:
-        0 0 0 1px var(--explorer-focus-ring, rgba(126, 231, 135, 0.62)),
-        0 0 0 3px var(--explorer-hover-glow, rgba(126, 231, 135, 0.2));
+        0 0 0 1px var(--explorer-focus-ring, rgba(88, 166, 255, 0.62)),
+        0 0 0 3px var(--explorer-hover-glow, rgba(88, 166, 255, 0.2));
 }
 
 .explorer-icon {
