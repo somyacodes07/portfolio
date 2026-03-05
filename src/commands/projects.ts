@@ -3,6 +3,7 @@ import { escapeHTML, sanitizeUrl } from '../core/Utils';
 
 const createProject = (args?: string[]): string[] => {
   const projects: string[] = [];
+  const isHttpUrl = (value: string) => /^https?:\/\//i.test(value);
 
   if (args && args.includes('--gui')) {
     (window as any).openProjectExplorer();
@@ -15,9 +16,11 @@ const createProject = (args?: string[]): string[] => {
 
   command.projects.forEach((ele: any[]) => {
     let string = "";
-    // Config: [Title, Desc, Link, Img, Video, Screenshots[]]
+    // Config: [Title, Desc, RepoLink, LiveLinkOrThumb, Video, Screenshots[]]
     const rawTitle = String(ele[0] ?? "");
-    const rawUrl = String(ele[2] ?? "");
+    const rawRepoUrl = String(ele[2] ?? "");
+    const rawSlot4 = String(ele[3] ?? "");
+    const rawUrl = isHttpUrl(rawSlot4) ? rawSlot4 : rawRepoUrl;
     const rawVideoUrl = typeof ele[4] === "string" ? ele[4] : undefined;
     const rawScreenshots = Array.isArray(ele[5]) ? ele[5] : undefined;
 

@@ -9,6 +9,10 @@ const helpObj = {
       "Academic background."
     ],
     [
+      "'certificates'",
+      "Professional certifications."
+    ],
+    [
       "'skills'",
       "Technical proficiency."
     ],

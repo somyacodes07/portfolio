@@ -118,7 +118,7 @@
     padding: 12px;
     min-height: 170px;
     border-radius: 0;
-    transition: background 0.12s ease, border-color 0.12s ease;
+    transition: background 0.12s ease, border-color 0.12s ease, box-shadow 0.14s ease, transform 0.12s ease;
     color: var(--text);
     text-align: left;
     background: transparent;
@@ -127,14 +127,20 @@
 }
 
 .explorer-item:hover {
-    background: rgba(88, 166, 255, 0.1);
-    border-color: rgba(88, 166, 255, 0.3);
-    box-shadow: none;
+    background: var(--explorer-hover-bg, rgba(126, 231, 135, 0.1));
+    border-color: var(--explorer-hover-border, rgba(126, 231, 135, 0.34));
+    box-shadow:
+        0 0 0 1px var(--explorer-hover-border, rgba(126, 231, 135, 0.34)),
+        0 0 16px var(--explorer-hover-glow, rgba(126, 231, 135, 0.2));
+    transform: translateY(-1px);
 }
 
 .explorer-item:focus-visible {
-    border-color: var(--prompt-host, #79C0FF);
-    box-shadow: 0 0 0 1px var(--prompt-host, #79C0FF);
+    background: var(--explorer-hover-bg, rgba(126, 231, 135, 0.1));
+    border-color: var(--explorer-focus-ring, rgba(126, 231, 135, 0.62));
+    box-shadow:
+        0 0 0 1px var(--explorer-focus-ring, rgba(126, 231, 135, 0.62)),
+        0 0 0 3px var(--explorer-hover-glow, rgba(126, 231, 135, 0.2));
 }
 
 .explorer-icon {
@@ -159,7 +165,7 @@
 }
 
 .explorer-item:hover .explorer-icon {
-    filter: brightness(1.1);
+    filter: brightness(1.07) saturate(1.08);
 }
 
 .explorer-label {

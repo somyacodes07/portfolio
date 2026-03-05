@@ -29,8 +29,8 @@
   "education": [
     {
       "institution": "ITM Skills University, Navi Mumbai",
-      "degree": "B.Tech in Computer Science (AI & ML)",
-      "period": "2025 – Present"
+      "degree": "B.Tech in Computer Science (AI & Machine Learning)",
+      "period": "2025 – 2029 (Expected)"
     },
     {
       "institution": "Sarvodaya Bal Vidyalaya, Moti Nagar, New Delhi",
@@ -68,16 +68,16 @@
         "desc": "UI Library"
       },
       {
-        "name": "Next.js",
+        "name": "Next.js 15",
         "desc": "Full-Stack Framework"
+      },
+      {
+        "name": "MapLibre",
+        "desc": "Interactive Web Maps"
       },
       {
         "name": "Tailwind CSS",
         "desc": "Utility-First Styling"
-      },
-      {
-        "name": "Sass (SCSS)",
-        "desc": "CSS Preprocessor"
       },
       {
         "name": "HTML5",
@@ -94,12 +94,8 @@
         "desc": "REST APIs"
       },
       {
-        "name": "Express.js",
-        "desc": "Middleware & Auth"
-      },
-      {
-        "name": "NestJS",
-        "desc": "Scalable Services"
+        "name": "FastAPI",
+        "desc": "High-Performance Python APIs"
       },
       {
         "name": "MongoDB",
@@ -108,6 +104,10 @@
       {
         "name": "PostgreSQL",
         "desc": "Relational"
+      },
+      {
+        "name": "SQLite",
+        "desc": "Lightweight Relational DB"
       }
     ],
     "ai_ml": [
@@ -122,6 +122,14 @@
       {
         "name": "Scikit-learn",
         "desc": "Machine Learning"
+      },
+      {
+        "name": "Google Earth Engine (GEE)",
+        "desc": "Geospatial Analysis"
+      },
+      {
+        "name": "Neural Networks",
+        "desc": "Deep Learning Foundations"
       },
       {
         "name": "AI Workflows",
@@ -142,16 +150,33 @@
         "desc": "Development Environment"
       },
       {
-        "name": "Terminal",
-        "desc": "CLI"
-      },
-      {
         "name": "Figma",
         "desc": "UI/UX Design"
       }
     ]
   },
   "projects": [
+    [
+      "SentinelIQ",
+      "Planetary-scale flood risk intelligence platform powered by satellite telemetry and hybrid ML risk scoring.",
+      "https://github.com/ssgamingop/DDoS-PS6",
+      "https://somyacodes.in/sentineliq",
+      null,
+      [
+        "/projects/sentinel.mp4",
+        "/projects/sentinel-dashboard.png"
+      ],
+      {
+        "stack": [
+          "FastAPI",
+          "Next.js",
+          "GEE",
+          "MapLibre"
+        ],
+        "year": "2026",
+        "status": "In Progress"
+      }
+    ],
     [
       "Music Visualizer using Python",
       "Audio visualizer built in Python that plays .wav files and renders real-time visual effects.",
@@ -224,6 +249,14 @@
     "Strong learning mindset",
     "Logical problem-solving",
     "Consistent self-improvement"
+  ],
+  "certifications": [
+    {
+      "name": "Scientific Computing with Python",
+      "issuer": "freeCodeCamp",
+      "date": "Feb 2026",
+      "link": "https://www.freecodecamp.org/certification/somyacodes/python-v9"
+    }
   ],
   "colors": {
     "background": "#0D1117",

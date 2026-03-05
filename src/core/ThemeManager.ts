@@ -180,6 +180,10 @@ export const setTheme = (colors: ThemeColors) => {
     root.style.setProperty('--prompt-default', colors.prompt.default);
     root.style.setProperty('--prompt-user', colors.prompt.user);
     root.style.setProperty('--prompt-host', colors.prompt.host);
+    root.style.setProperty('--explorer-hover-bg', hexToRgba(colors.prompt.user, 0.1));
+    root.style.setProperty('--explorer-hover-border', hexToRgba(colors.prompt.user, 0.34));
+    root.style.setProperty('--explorer-hover-glow', hexToRgba(colors.prompt.user, 0.2));
+    root.style.setProperty('--explorer-focus-ring', hexToRgba(colors.prompt.user, 0.62));
 
     // Folder Icon Color (matches banner/accent)
     root.style.setProperty('--folder-color', colors.banner);

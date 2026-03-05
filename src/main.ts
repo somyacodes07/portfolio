@@ -7,6 +7,7 @@ import { getBanner } from "./commands/banner";
 import { ABOUT } from "./commands/about"
 import { createProject } from "./commands/projects";
 import { EDUCATION } from "./commands/education";
+import { CERTIFICATIONS } from "./commands/certifications";
 
 import { createWhoami } from "./commands/whoami";
 import { setTheme } from "./core/ThemeManager";
@@ -273,6 +274,16 @@ const registerCommands = () => {
     writeLines(EDUCATION);
   });
 
+  dispatcher.register("certificates", () => {
+    if (bareMode) { writeLines(["No certificates in bare mode.", "<br>"]); return; }
+    writeLines(CERTIFICATIONS);
+  });
+
+  dispatcher.register("certifications", () => {
+    if (bareMode) { writeLines(["No certifications in bare mode.", "<br>"]); return; }
+    writeLines(CERTIFICATIONS);
+  });
+
   dispatcher.register("skills", () => {
     if (bareMode) { writeLines(["Skill issue.", "<br>"]); return; }
     writeLines(getSkills());
@@ -453,7 +464,7 @@ const registerCommands = () => {
 
 // --- Input Manager Init ---
 
-const commandList = ["help", "about", "projects", "whoami", "education", "skills", "banner", "clear", "resume", "linkedin", "github", "email", "ls", "sudo", "rm -rf", "repo", "theme"];
+const commandList = ["help", "about", "projects", "whoami", "education", "certificates", "certifications", "skills", "banner", "clear", "resume", "linkedin", "github", "email", "ls", "sudo", "rm -rf", "repo", "theme"];
 
 const inputManager = new InputManager(
   "user-input",

@@ -21,6 +21,10 @@ export class ProjectViewer {
         this.windowManager = windowManager;
     }
 
+    private isHttpUrl(value: string): boolean {
+        return /^https?:\/\//i.test(value);
+    }
+
     public openProjectWindow(title: string, link: string, videoUrl?: string, screenshots?: string[]) {
         const safeLink = sanitizeUrl(link, { allowRelative: false });
         if (!safeLink) {
@@ -263,12 +267,15 @@ export class ProjectViewer {
         container.className = 'explorer-grid';
 
         command.projects.forEach((proj: any[]) => {
-            // [Title, Desc, Link, Thumb, Video, Screenshots[], Meta?]
-            const [rawTitle, rawDesc, rawLink, imgPath, videoUrl, screenshots, rawMeta] = proj;
+            // [Title, Desc, RepoLink, LiveLinkOrThumb, Video, Screenshots[], Meta?]
+            const [rawTitle, rawDesc, rawRepoLink, rawSlot4, videoUrl, screenshots, rawMeta] = proj;
 
             const title = String(rawTitle ?? 'Untitled Project');
             const description = String(rawDesc ?? '');
-            const link = String(rawLink ?? '');
+            const slot4 = String(rawSlot4 ?? '');
+            const liveLink = this.isHttpUrl(slot4) ? slot4 : '';
+            const link = liveLink || String(rawRepoLink ?? '');
+            const imgPath = liveLink ? null : rawSlot4;
             const video = typeof videoUrl === 'string' ? videoUrl : undefined;
             const screenshotList = Array.isArray(screenshots)
                 ? screenshots.filter((src): src is string => typeof src === 'string')
