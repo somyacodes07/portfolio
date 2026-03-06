@@ -101,6 +101,10 @@ export class CertificateViewer {
         const copy = document.createElement('div');
         copy.className = 'certificate-window-copy';
 
+        const eyebrow = document.createElement('div');
+        eyebrow.className = 'certificate-window-eyebrow';
+        eyebrow.innerText = 'Verified Credential';
+
         const title = document.createElement('h2');
         title.className = 'certificate-window-title';
         title.innerText = cert.name;
@@ -109,6 +113,7 @@ export class CertificateViewer {
         meta.className = 'certificate-window-meta';
         meta.innerText = this.getMetaText(cert) || cert.issuer;
 
+        copy.appendChild(eyebrow);
         copy.appendChild(title);
         copy.appendChild(meta);
 
@@ -132,22 +137,26 @@ export class CertificateViewer {
         const media = document.createElement('div');
         media.className = 'certificate-window-media';
 
+        const frame = document.createElement('div');
+        frame.className = 'certificate-window-frame';
+
         if (safeImage) {
             const img = document.createElement('img');
             img.className = 'certificate-window-image';
             img.src = safeImage;
             img.alt = `${cert.name} certificate`;
-            media.appendChild(img);
+            frame.appendChild(img);
         } else {
             const empty = document.createElement('div');
             empty.className = 'certificate-window-empty';
             empty.innerText = 'Certificate image not configured.';
-            media.appendChild(empty);
+            frame.appendChild(empty);
         }
 
+        media.appendChild(frame);
         shell.appendChild(media);
 
-        this.windowManager.open(`cert-${cert.id}`, cert.name, shell, 980, 720);
+        this.windowManager.open(`cert-${cert.id}`, cert.name, shell, 940, 690);
     }
 
     public openCertificateExplorer(): void {
@@ -200,16 +209,23 @@ export class CertificateViewer {
                 preview = fallback;
             }
 
+            const previewShell = document.createElement('div');
+            previewShell.className = 'certificate-card-preview';
+            previewShell.appendChild(preview);
+
+            const body = document.createElement('div');
+            body.className = 'certificate-card-body';
+
+            const kicker = document.createElement('div');
+            kicker.className = 'certificate-card-kicker';
+            kicker.innerText = cert.issuer;
+
             const label = document.createElement('span');
             label.className = 'explorer-label';
             label.innerText = cert.name;
 
-            const description = document.createElement('p');
-            description.className = 'explorer-description';
-            description.innerText = cert.issuer;
-
             const meta = document.createElement('div');
-            meta.className = 'explorer-stack';
+            meta.className = 'certificate-card-meta';
             meta.innerText = cert.date || 'Certificate';
 
             const badges = document.createElement('div');
@@ -227,14 +243,16 @@ export class CertificateViewer {
                 badges.appendChild(verifyBadge);
             }
 
-            card.appendChild(preview);
-            card.appendChild(label);
-            card.appendChild(description);
-            card.appendChild(meta);
-            card.appendChild(badges);
+            body.appendChild(kicker);
+            body.appendChild(label);
+            body.appendChild(meta);
+            body.appendChild(badges);
+
+            card.appendChild(previewShell);
+            card.appendChild(body);
             container.appendChild(card);
         });
 
-        this.windowManager.open('certificate-explorer', 'Certificates', container, 900, 640);
+        this.windowManager.open('certificate-explorer', 'Certificates', container, 880, 620);
     }
 }
