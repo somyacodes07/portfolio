@@ -154,14 +154,6 @@ export const setTheme = (colors: ThemeColors) => {
 
     // Sidebar specific styles (Theme Colors only)
     // Layout is handled in style.css
-    const sidebar = `#sidebar { border-left: none; background: transparent; }`;
-    const actionBtn = `.action-btn { color: ${colors.prompt.default}; border: 1px solid ${colors.border.color}; }`;
-    const actionBtnHover = `.action-btn:hover { background: ${colors.border.color}; color: ${colors.background} }`;
-
-    sheet.insertRule(sidebar, sheet.cssRules.length);
-    sheet.insertRule(actionBtn, sheet.cssRules.length);
-    sheet.insertRule(actionBtnHover, sheet.cssRules.length);
-
     // Window System Variables
     const root = document.documentElement;
     root.style.setProperty('--bg', colors.background);
@@ -184,6 +176,14 @@ export const setTheme = (colors: ThemeColors) => {
     root.style.setProperty('--explorer-hover-border', hexToRgba(colors.banner, 0.34));
     root.style.setProperty('--explorer-hover-glow', hexToRgba(colors.banner, 0.2));
     root.style.setProperty('--explorer-focus-ring', hexToRgba(colors.banner, 0.62));
+    root.style.setProperty('--panel-surface', 'transparent');
+    root.style.setProperty('--panel-surface-strong', 'transparent');
+    root.style.setProperty('--panel-border-soft', hexToRgba(colors.foreground, 0.1));
+    root.style.setProperty('--control-bg', 'transparent');
+    root.style.setProperty('--control-bg-hover', hexToRgba(colors.banner, 0.08));
+    root.style.setProperty('--control-border', hexToRgba(colors.border.color, 0.72));
+    root.style.setProperty('--control-text', colors.prompt.default);
+    root.style.setProperty('--control-hover-text', colors.prompt.input);
 
     // Folder Icon Color (matches banner/accent)
     root.style.setProperty('--folder-color', colors.banner);

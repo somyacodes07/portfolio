@@ -20,6 +20,14 @@
   --explorer-focus-ring: rgba(88, 166, 255, 0.62);
   --wallpaper-image: none;
   --wallpaper-opacity: 0;
+  --panel-surface: transparent;
+  --panel-surface-strong: transparent;
+  --panel-border-soft: rgba(255, 255, 255, 0.08);
+  --control-bg: transparent;
+  --control-bg-hover: rgba(255, 255, 255, 0.04);
+  --control-border: rgba(255, 255, 255, 0.14);
+  --control-text: var(--prompt-default);
+  --control-hover-text: var(--text);
 }
 
 @keyframes typing {
@@ -185,7 +193,7 @@ a {
   color: #B6AAEE;
 }
 
-a:hover {
+a:not(.certificate-window-link):hover {
   background-color: var(--border);
   color: var(--bg);
 }
@@ -259,7 +267,7 @@ a:hover {
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-  padding-left: clamp(10px, 1.6vw, 20px);
+  padding: clamp(8px, 1vw, 12px) clamp(8px, 1vw, 12px) 0 clamp(10px, 1.6vw, 20px);
 }
 
 #content-wrapper {
@@ -270,8 +278,7 @@ a:hover {
   overflow-x: hidden;
   height: auto;
   min-height: 0;
-  padding-bottom: 5px;
-  padding-right: 4px;
+  padding: 4px 6px 8px 0;
   min-width: 0;
 
   scrollbar-width: thin;
@@ -301,6 +308,10 @@ a:hover {
 #terminal {
   margin-left: 0;
   padding-left: 0;
+  padding-right: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 #write-lines {
@@ -312,13 +323,24 @@ a:hover {
   overflow-x: hidden;
   width: 100%;
   flex-shrink: 0;
+  padding: 10px 0 12px;
+}
+
+#input-hidden {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
 }
 
 #container-input {
   display: inline-block;
+  flex: 1 1 auto;
   position: relative;
-  width: var(--container-input-width);
-  max-width: calc(100vw - 130px);
+  width: min(var(--container-input-width), 100%);
+  max-width: 100%;
+  min-width: 0;
 }
 
 .command {
@@ -336,12 +358,11 @@ a:hover {
 
 #sidebar {
   width: clamp(170px, 17vw, 210px);
-  padding: 18px 14px;
+  padding: 14px 10px 14px 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  border-left: 2px solid var(--border);
-  background-color: transparent;
+  background: transparent;
   flex-shrink: 0;
 }
 
@@ -350,21 +371,30 @@ a:hover {
 }
 
 .action-btn {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  background: var(--control-bg);
+  border: 1px solid var(--control-border);
+  color: var(--control-text);
+  padding: 8px 10px;
   cursor: pointer;
   font-family: 'IBM Plex Mono', monospace;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.12s ease;
   text-align: center;
   text-transform: uppercase;
   font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  border-style: dashed;
 }
 
 .action-btn:hover {
-  background-color: var(--border);
-  color: var(--bg);
+  background-color: var(--control-bg-hover);
+  color: var(--control-hover-text);
+  transform: translateX(1px);
+  border-style: solid;
 }
 
 .clickable {
@@ -378,17 +408,18 @@ a:hover {
 }
 
 .small-btn {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
+  min-height: 42px;
   padding: 0;
-  font-size: 16px;
+  font-size: 14px;
   opacity: 0.7;
   border-style: dashed;
   align-self: flex-end;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .small-btn:hover {
@@ -479,7 +510,7 @@ a:focus-visible {
   }
 
   #terminal-layout {
-    padding-left: 0;
+    padding: 0;
   }
 
   .lower-main {
@@ -495,10 +526,10 @@ a:focus-visible {
   #sidebar {
     width: 100%;
     border-left: none;
-    border-top: 2px solid var(--border);
+    border-top: 1px dashed var(--panel-border-soft);
     padding: 10px;
     height: auto;
-    background-color: var(--bg);
+    background: var(--bg);
     box-sizing: border-box;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -516,12 +547,13 @@ a:focus-visible {
 
   .action-btn {
     width: 100%;
-    padding: 0;
+    padding: 0 6px;
     font-size: 11px;
     min-height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
   }
 
   .small-btn {

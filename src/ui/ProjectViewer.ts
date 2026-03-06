@@ -356,6 +356,6 @@ export class ProjectViewer {
             container.appendChild(item);
         });
 
-        this.windowManager.open('project-explorer', 'Project Explorer', container);
+        this.windowManager.open('project-explorer', 'Project Explorer', container, 960, 660);
     }
 }

@@ -606,12 +606,18 @@ const initEventListeners = () => {
 }
 
 function runCommand(cmd: string) {
-  // Create an animated system message: "Executing: <cmd>..."
-  const p = document.createElement("p");
-  p.innerHTML = `<span class="keys">Executing:</span> ${escapeHTML(cmd)}...`;
+  const normalized = cmd.trim().toLowerCase();
+  const baseCommand = normalized.split(/\s+/)[0] ?? "";
+  const windowShortcutCommands = new Set(["projects", "certificates", "certifications", "resume"]);
+  const suppressExecutionLine = window.innerWidth > 600 && windowShortcutCommands.has(baseCommand);
 
-  if (mutWriteLines && mutWriteLines.parentNode) {
-    mutWriteLines.parentNode.insertBefore(p, mutWriteLines);
+  if (!suppressExecutionLine) {
+    const p = document.createElement("p");
+    p.innerHTML = `<span class="keys">Executing:</span> ${escapeHTML(cmd)}...`;
+
+    if (mutWriteLines && mutWriteLines.parentNode) {
+      mutWriteLines.parentNode.insertBefore(p, mutWriteLines);
+    }
   }
 
   const runAfterDelay = () => {
@@ -624,7 +630,7 @@ function runCommand(cmd: string) {
     scrollToBottom();
   };
 
-  if (prefersReducedMotion) {
+  if (suppressExecutionLine || prefersReducedMotion) {
     runAfterDelay();
   } else {
     setTimeout(runAfterDelay, 200);
