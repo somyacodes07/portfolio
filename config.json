@@ -252,10 +252,18 @@
   ],
   "certifications": [
     {
+      "name": "Python Certificate",
+      "issuer": "HackerRank",
+      "date": "Mar 2026",
+      "link": "https://www.hackerrank.com/certificates/iframe/9a1129b636e4",
+      "image": "/projects/certificates/hackerrank-python.jpg"
+    },
+    {
       "name": "Scientific Computing with Python",
       "issuer": "freeCodeCamp",
       "date": "Feb 2026",
-      "link": "https://www.freecodecamp.org/certification/somyacodes/python-v9"
+      "link": "https://www.freecodecamp.org/certification/somyacodes/python-v9",
+      "image": "/projects/certificates/freecodecamp-python.png"
     }
   ],
   "colors": {

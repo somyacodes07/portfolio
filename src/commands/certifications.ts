@@ -6,6 +6,7 @@ type Certification = {
   issuer?: string;
   date?: string;
   link?: string;
+  image?: string;
 };
 
 const createCertifications = (): string[] => {
@@ -21,26 +22,27 @@ const createCertifications = (): string[] => {
     return certifications;
   }
 
-  config.certifications.forEach((cert) => {
+  config.certifications.forEach((cert, index) => {
     const name = escapeHTML(String(cert.name ?? "Untitled Certification"));
     const issuer = escapeHTML(String(cert.issuer ?? "Unknown Issuer"));
-    const date = escapeHTML(String(cert.date ?? "Unknown Date"));
+    const date = String(cert.date ?? "").trim();
+    const safeDate = date ? escapeHTML(date) : "";
     const safeLink = sanitizeUrl(String(cert.link ?? ""), { allowRelative: false });
 
     let line = "";
     line += SPACE.repeat(2);
-    line += `<span class='command'>${name}</span>`;
+    line += `<span class='command clickable' role='button' tabindex='0' aria-label='Open certificate ${name}' style='cursor: pointer;' onclick='window.openCertificateWindow(${index})' onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.openCertificateWindow(${index})}">${name}</span>`;
     certifications.push(line);
 
     line = "";
     line += SPACE.repeat(4);
-    line += `${issuer} - ${date}`;
+    line += safeDate ? `${issuer} - ${safeDate}` : issuer;
     certifications.push(line);
 
     if (safeLink) {
       line = "";
       line += SPACE.repeat(4);
-      line += `<a href='${safeLink}' target='_blank' rel='noopener noreferrer'>${escapeHTML(safeLink)}</a>`;
+      line += `<a href='${safeLink}' target='_blank' rel='noopener noreferrer'>Verify online</a>`;
       certifications.push(line);
     }
 

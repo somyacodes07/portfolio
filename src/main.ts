@@ -17,6 +17,7 @@ import { WindowManager } from './core/WindowManager';
 import { InputManager } from './core/InputManager';
 import { CommandDispatcher } from './core/CommandDispatcher';
 import { ProjectViewer } from './ui/ProjectViewer';
+import { CertificateViewer } from './ui/CertificateViewer';
 
 // --- State ---
 let mutWriteLines = document.getElementById("write-lines");
@@ -51,11 +52,14 @@ const OPTIONAL_CONFIG = command as unknown as {
 // --- Managers ---
 const windowManager = new WindowManager();
 const projectViewer = new ProjectViewer(windowManager);
+const certificateViewer = new CertificateViewer(windowManager);
 const dispatcher = new CommandDispatcher();
 
 // --- Globals for Legacy Support ---
 (window as any).openProjectWindow = projectViewer.openProjectWindow.bind(projectViewer);
 (window as any).openProjectExplorer = projectViewer.openProjectExplorer.bind(projectViewer);
+(window as any).openCertificateWindow = certificateViewer.openCertificateWindow.bind(certificateViewer);
+(window as any).openCertificateExplorer = certificateViewer.openCertificateExplorer.bind(certificateViewer);
 
 // --- Helper Functions ---
 
@@ -276,11 +280,23 @@ const registerCommands = () => {
 
   dispatcher.register("certificates", () => {
     if (bareMode) { writeLines(["No certificates in bare mode.", "<br>"]); return; }
+    if (window.innerWidth > 600) {
+      certificateViewer.openCertificateExplorer();
+      writeLines(["Opening certificate gallery...", "<br>"]);
+      return;
+    }
+
     writeLines(CERTIFICATIONS);
   });
 
   dispatcher.register("certifications", () => {
     if (bareMode) { writeLines(["No certifications in bare mode.", "<br>"]); return; }
+    if (window.innerWidth > 600) {
+      certificateViewer.openCertificateExplorer();
+      writeLines(["Opening certificate gallery...", "<br>"]);
+      return;
+    }
+
     writeLines(CERTIFICATIONS);
   });
 

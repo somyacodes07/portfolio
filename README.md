@@ -18,6 +18,7 @@ Terminal-style portfolio website for Somyajeet Singh, focused on AI/ML, full-sta
 - Desktop-style window manager (drag + resize).
 - Project Explorer grid (default on desktop for `projects`).
 - Project gallery viewer with image/video support.
+- Certificate gallery window with local image previews.
 - Built-in PDF resume viewer window.
 - Sidebar quick actions for common commands.
 - Multiple built-in themes (`default`, `matrix`, `dracula`, `gruvbox`, `nord`).
@@ -36,7 +37,7 @@ Terminal-style portfolio website for Somyajeet Singh, focused on AI/ML, full-sta
 - `whoami` - Show current user.
 - `education` - Academic background.
 - `skills` - Technical stack summary.
-- `certificates` / `certifications` - Show certifications.
+- `certificates` / `certifications` - Open the certificate gallery on desktop.
 - `resume` - Open resume viewer.
 - `linkedin` - Open LinkedIn.
 - `github` - Open GitHub.
@@ -69,10 +70,18 @@ Example:
   },
   "certifications": [
     {
+      "name": "Python Certificate",
+      "issuer": "HackerRank",
+      "date": "Mar 2026",
+      "link": "https://www.hackerrank.com/certificates/iframe/...",
+      "image": "/projects/certificates/hackerrank-python.jpg"
+    },
+    {
       "name": "Scientific Computing with Python",
       "issuer": "freeCodeCamp",
       "date": "Feb 2026",
-      "link": "https://www.freecodecamp.org/certification/..."
+      "link": "https://www.freecodecamp.org/certification/...",
+      "image": "/projects/certificates/freecodecamp-python.png"
     }
   ]
 }
@@ -105,4 +114,5 @@ npm run preview
 
 - Added SentinelIQ as the top featured project.
 - Added certification support via `certificates` and `certifications` commands.
+- Added desktop certificate previews backed by local image assets.
 - Improved Project Explorer hover/focus styling to match active theme colors.
