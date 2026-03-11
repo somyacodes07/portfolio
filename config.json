@@ -259,6 +259,13 @@
       "image": "/projects/certificates/hackerrank-python.jpg"
     },
     {
+      "name": "Frontend Development(React) Certificate",
+      "issuer": "HackerRank",
+      "date": "Mar 2026",
+      "link": "https://www.hackerrank.com/certificates/iframe/b9cdcb18259e",
+      "image": "/projects/certificates/hackerrank-frontend.jpg"
+    },
+    {
       "name": "Python Course",
       "issuer": "freeCodeCamp",
       "date": "Feb 2026",
