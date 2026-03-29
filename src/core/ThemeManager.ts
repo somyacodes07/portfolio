@@ -187,6 +187,9 @@ export const setTheme = (colors: ThemeColors) => {
 
     // Folder Icon Color (matches banner/accent)
     root.style.setProperty('--folder-color', colors.banner);
+    // Custom cursor colours (matches accent/banner)
+    root.style.setProperty('--cursor-color', colors.banner);
+    root.style.setProperty('--cursor-glow', hexToRgba(colors.banner, 0.30));
 }
 
 // Initial set
