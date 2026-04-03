@@ -18,7 +18,6 @@ import { InputManager } from './core/InputManager';
 import { CommandDispatcher } from './core/CommandDispatcher';
 import { ProjectViewer } from './ui/ProjectViewer';
 import { CertificateViewer } from './ui/CertificateViewer';
-import { initCursor } from './core/CursorManager';
 
 // --- State ---
 let mutWriteLines = document.getElementById("write-lines");
@@ -546,7 +545,6 @@ const initEventListeners = () => {
     }
     writeLines(getBanner());
     inputManager.focus();
-    initCursor();
   });
 
   PASSWORD_INPUT.addEventListener('keydown', (e) => {
