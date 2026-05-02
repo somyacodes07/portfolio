@@ -58,8 +58,8 @@
         "desc": "Type Safety"
       },
       {
-        "name": "C++ (Basics)",
-        "desc": "System Programming"
+        "name": "C++",
+        "desc": "System Programming & Compiler Backends"
       }
     ],
     "web": [
@@ -156,6 +156,29 @@
     ]
   },
   "projects": [
+    [
+      "AlgoViz",
+      "Interactive code visualizer that steps through JavaScript and C++ execution line-by-line, with real-time variable tracking and complexity analysis.",
+      "https://github.com/ssgamingop/AlgoViz",
+      "https://algoviz.somyacodes.in/",
+      null,
+      [
+        "/projects/algoviz.mp4",
+        "/projects/algoviz-cpp.png",
+        "/projects/algoviz-js.png"
+      ],
+      {
+        "stack": [
+          "React",
+          "TypeScript",
+          "C++",
+          "Tree-sitter",
+          "Node.js"
+        ],
+        "year": "2026",
+        "status": "Completed"
+      }
+    ],
     [
       "SentinelIQ",
       "Planetary-scale flood risk intelligence platform powered by satellite telemetry and hybrid ML risk scoring.",
