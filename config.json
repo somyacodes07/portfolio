@@ -171,8 +171,8 @@
         "stack": [
           "React",
           "TypeScript",
-          "C++",
           "Tree-sitter",
+          "C++",
           "Node.js"
         ],
         "year": "2026",
@@ -183,7 +183,7 @@
       "SentinelIQ",
       "Planetary-scale flood risk intelligence platform powered by satellite telemetry and hybrid ML risk scoring.",
       "https://github.com/ssgamingop/DDoS-PS6",
-      "https://somyacodes.in/sentineliq",
+      "Not Yet Deployed",
       null,
       [
         "/projects/sentinel.mp4",
@@ -197,7 +197,7 @@
           "MapLibre"
         ],
         "year": "2026",
-        "status": "In Progress"
+        "status": "Completed"
       }
     ],
     [
