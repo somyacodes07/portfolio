@@ -250,7 +250,12 @@ const registerCommands = () => {
   });
 
   dispatcher.register("banner", () => {
-    if (bareMode) { writeLines(["Welcome to Webterm v1.0.0", "<br>"]); return; }
+    if (bareMode) { writeLines(["Welcome to Webterm v1.1.1", "<br>"]); return; }
+    writeLines(getBanner());
+  });
+
+  dispatcher.register("fetch", () => {
+    if (bareMode) { writeLines(["Welcome to Webterm v1.1.1", "<br>"]); return; }
     writeLines(getBanner());
   });
 
@@ -482,7 +487,7 @@ const registerCommands = () => {
 
 // --- Input Manager Init ---
 
-const commandList = ["help", "about", "projects", "whoami", "education", "certificates", "certifications", "skills", "banner", "clear", "resume", "linkedin", "github", "email", "ls", "sudo", "rm -rf", "repo", "theme"];
+const commandList = ["help", "about", "projects", "whoami", "education", "certificates", "certifications", "skills", "banner", "fetch", "clear", "resume", "linkedin", "github", "email", "ls", "sudo", "rm -rf", "repo", "theme"];
 
 const inputManager = new InputManager(
   "user-input",
@@ -582,6 +587,18 @@ const initEventListeners = () => {
 
     const clickableTarget = target.closest('.clickable') as HTMLElement | null;
     if (clickableTarget) {
+      if (clickableTarget.classList.contains('proj-link')) {
+        const title = clickableTarget.getAttribute('data-proj-title') || '';
+        const url = clickableTarget.getAttribute('data-proj-url') || '';
+        const video = clickableTarget.getAttribute('data-proj-video') || undefined;
+        const screenshotsAttr = clickableTarget.getAttribute('data-proj-screenshots');
+        const screenshots = screenshotsAttr ? JSON.parse(screenshotsAttr) : undefined;
+        const liveLink = clickableTarget.getAttribute('data-proj-live') || undefined;
+        
+        (window as any).openProjectWindow(title, url, video, screenshots, liveLink);
+        return;
+      }
+
       const cmd = clickableTarget.getAttribute('data-command');
       if (cmd) {
         runCommand(cmd);
@@ -599,11 +616,24 @@ const initEventListeners = () => {
     const trigger = target?.closest('.clickable') as HTMLElement | null;
     if (!trigger) return;
     if (e.key !== 'Enter' && e.key !== ' ') return;
+    
+    e.preventDefault();
+
+    if (trigger.classList.contains('proj-link')) {
+        const title = trigger.getAttribute('data-proj-title') || '';
+        const url = trigger.getAttribute('data-proj-url') || '';
+        const video = trigger.getAttribute('data-proj-video') || undefined;
+        const screenshotsAttr = trigger.getAttribute('data-proj-screenshots');
+        const screenshots = screenshotsAttr ? JSON.parse(screenshotsAttr) : undefined;
+        const liveLink = trigger.getAttribute('data-proj-live') || undefined;
+        
+        (window as any).openProjectWindow(title, url, video, screenshots, liveLink);
+        return;
+    }
 
     const cmd = trigger.getAttribute('data-command');
     if (!cmd) return;
 
-    e.preventDefault();
     runCommand(cmd);
   });
 }
