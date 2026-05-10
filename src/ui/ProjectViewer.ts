@@ -1,4 +1,4 @@
-import { WindowManager } from '../core/WindowManager';
+import { WindowManager, WindowAction, WindowOptions } from '../core/WindowManager';
 import { sanitizeUrl } from '../core/Utils';
 import command from '../../config.json';
 
@@ -196,7 +196,7 @@ export class ProjectViewer {
 
         showSlide(currentIndex);
 
-        this.windowManager.open(`proj-${title}`, title, galleryContainer);
+        this.windowManager.open(`proj-${title}`, title, galleryContainer, { actions });
         requestAnimationFrame(() => {
             galleryContainer.focus();
         });
@@ -297,7 +297,7 @@ export class ProjectViewer {
             item.setAttribute('role', 'button');
             item.setAttribute('aria-label', `Open project ${title}`);
 
-            const openProject = () => this.openProjectWindow(title, link, video, screenshotList);
+            const openProject = () => this.openProjectWindow(title, link, video, screenshotList, liveLink);
             item.onclick = openProject;
             item.onkeydown = (event: KeyboardEvent) => {
                 if (event.key === 'Enter' || event.key === ' ') {
