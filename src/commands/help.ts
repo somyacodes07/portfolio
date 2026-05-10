@@ -38,6 +38,9 @@ const helpObj = {
     ["'banner'",
       "Display the banner."
     ],
+    ["'fetch'",
+      "Display system info."
+    ],
     [
       "'clear'",
       "Clear the terminal."
