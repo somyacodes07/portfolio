@@ -20,17 +20,16 @@ interface GitHubContributionData {
 
 // ─── Color Mapping ──────────────────────────────────────────────────
 
-// Green palette for active contributions (levels 1–4).
-// Level 0 uses the current theme's --border via a CSS class instead of inline color.
-const ACTIVE_LEVEL_COLORS = [
-  '', // placeholder – level 0 handled by class
-  '#0E4429', // Level 1 – low
-  '#006D32', // Level 2 – medium-low
-  '#26A641', // Level 3 – medium-high
-  '#39D353', // Level 4 – high
-];
-
 const LEVEL_LABELS = ['None', 'Low', 'Med', 'High', 'Max'];
+
+// CSS classes for each level – colors set via CSS variables so they adapt to theme
+const LEVEL_CLASSES = [
+  'gh-cell-empty', // Level 0
+  'gh-cell-1',     // Level 1 – low
+  'gh-cell-2',     // Level 2 – medium-low
+  'gh-cell-3',     // Level 3 – medium-high
+  'gh-cell-4',     // Level 4 – high
+];
 
 function getContributionLevel(count: number): number {
   if (count === 0) return 0;
@@ -51,82 +50,87 @@ const DAY_LABELS = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
 
 function renderContributionGraph(data: GitHubContributionData): string[] {
   const lines: string[] = [];
-  const SPACE = '&nbsp;';
+  const SP = '&nbsp;';
   const BLOCK = '█';
 
   // ── Header ──
   lines.push('<br>');
   lines.push(
-    `${SPACE.repeat(2)}<span class="gh-graph-header">` +
-    `<i class='fa-brands fa-github'></i>${SPACE}GitHub Contributions</span>`
+    `${SP.repeat(2)}<span class="gh-graph-header">` +
+    `<i class='fa-brands fa-github'></i>${SP}GitHub Contributions</span>`
   );
   lines.push(
-    `${SPACE.repeat(2)}<span class="gh-graph-dim">` +
+    `${SP.repeat(2)}<span class="gh-graph-dim">` +
     `${data.totalContributions.toLocaleString()} contributions in the last year</span>`
   );
   lines.push('<br>');
 
-  // ── Determine how many weeks to show ──
+  // ── Weeks to render ──
   const maxWeeks = Math.min(data.weeks.length, 52);
   const weeksToShow = data.weeks.slice(-maxWeeks);
 
   // ── Month labels row ──
+  // Determine which week index each month first appears at
   const monthCells: string[] = new Array(weeksToShow.length).fill('');
   let lastMonth = -1;
+  let lastMonthWeek = -10; // track last label position to avoid collisions
 
   for (let w = 0; w < weeksToShow.length; w++) {
     const firstDay = weeksToShow[w].contributionDays[0];
     if (firstDay) {
       const month = new Date(firstDay.date).getMonth();
-      if (month !== lastMonth) {
+      if (month !== lastMonth && (w - lastMonthWeek) >= 2) {
+        // Only place label if at least 2 cells away from last label
         lastMonth = month;
+        lastMonthWeek = w;
         monthCells[w] = MONTH_NAMES[month];
+      } else if (month !== lastMonth) {
+        lastMonth = month;
+        // Skip placing label if too close, update tracker only
       }
     }
   }
 
-  let monthRow = SPACE.repeat(6);
-  let charBudget = 0;
+  // Day-label gutter is 5 chars: "Mon" + SP = 4, but we use fixed 5 for alignment
+  const GUTTER = SP.repeat(5);
+  let monthRow = GUTTER;
 
   for (let w = 0; w < monthCells.length; w++) {
-    if (charBudget > 0) {
-      charBudget--;
-      continue;
-    }
     if (monthCells[w]) {
-      monthRow += `<span class="gh-graph-dim" style="font-size:0.82em;">${monthCells[w]}</span>`;
-      charBudget = 1;
+      // 3-char label occupies this cell (2 chars) + borrows 1 from next
+      monthRow += `<span class="gh-graph-dim" style="font-size:0.82em">${monthCells[w]}</span>`;
+      // Skip next cell since the label spills into it
+      w++;
+      if (w >= monthCells.length) break;
     } else {
-      monthRow += SPACE.repeat(2);
+      monthRow += SP.repeat(2); // block + space per cell
     }
   }
   lines.push(monthRow);
 
   // ── Grid rows (7 days: Sun–Sat) ──
   for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
-    let row = SPACE.repeat(2);
+    let row = '';
 
+    // Day label – fixed width gutter
     const dayLabel = DAY_LABELS[dayOfWeek];
     if (dayLabel) {
-      row += `<span class="gh-graph-dim" style="font-size:0.82em;">${dayLabel}</span>${SPACE}`;
+      // "Mon" = 3 chars, pad to 4 with trailing space, total 5 with leading space
+      row += SP + `<span class="gh-graph-dim" style="font-size:0.82em">${dayLabel}</span>` + SP;
     } else {
-      row += SPACE.repeat(4);
+      row += GUTTER;
     }
 
+    // Contribution cells
     for (let w = 0; w < weeksToShow.length; w++) {
       const day = weeksToShow[w].contributionDays[dayOfWeek];
       if (day) {
         const level = getContributionLevel(day.contributionCount);
+        const cls = LEVEL_CLASSES[level];
         const tooltip = `${day.date}: ${day.contributionCount} contribution${day.contributionCount !== 1 ? 's' : ''}`;
-
-        if (level === 0) {
-          // Use theme-aware class for empty cells so they're always visible
-          row += `<span class="gh-cell-empty" title="${escapeHTML(tooltip)}">${BLOCK}</span>` + SPACE;
-        } else {
-          row += `<span style="color:${ACTIVE_LEVEL_COLORS[level]};" title="${escapeHTML(tooltip)}">${BLOCK}</span>` + SPACE;
-        }
+        row += `<span class="${cls}" title="${escapeHTML(tooltip)}">${BLOCK}</span>` + SP;
       } else {
-        row += SPACE.repeat(2);
+        row += SP.repeat(2);
       }
     }
 
@@ -135,30 +139,29 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
 
   // ── Legend ──
   lines.push('');
-  let legendRow = SPACE.repeat(6);
-  legendRow += `<span class="gh-graph-dim" style="font-size:0.82em;">Less</span>${SPACE}`;
-  legendRow += `<span class="gh-cell-empty" title="${LEVEL_LABELS[0]}">${BLOCK}</span>` + SPACE;
-  for (let i = 1; i < ACTIVE_LEVEL_COLORS.length; i++) {
-    legendRow += `<span style="color:${ACTIVE_LEVEL_COLORS[i]};" title="${LEVEL_LABELS[i]}">${BLOCK}</span>` + SPACE;
+  let legendRow = GUTTER;
+  legendRow += `<span class="gh-graph-dim" style="font-size:0.82em">Less</span>${SP}`;
+  for (let i = 0; i < LEVEL_CLASSES.length; i++) {
+    legendRow += `<span class="${LEVEL_CLASSES[i]}" title="${LEVEL_LABELS[i]}">${BLOCK}</span>` + SP;
   }
-  legendRow += `<span class="gh-graph-dim" style="font-size:0.82em;">More</span>`;
+  legendRow += `<span class="gh-graph-dim" style="font-size:0.82em">More</span>`;
   lines.push(legendRow);
 
   // ── Stats row ──
   lines.push('');
   const stats = computeStats(data);
   lines.push(
-    `${SPACE.repeat(2)}<span style="color:#39D353;">▲</span> ` +
+    `${SP.repeat(2)}<span class="gh-cell-4">▲</span> ` +
     `<span class="gh-graph-text">Current streak:</span> ` +
-    `<span style="color:#39D353;font-weight:600;">${stats.currentStreak} days</span>` +
-    `${SPACE.repeat(4)}` +
+    `<span class="gh-cell-4" style="font-weight:600">${stats.currentStreak} days</span>` +
+    `${SP.repeat(4)}` +
     `<span class="gh-graph-accent">●</span> ` +
     `<span class="gh-graph-text">Longest streak:</span> ` +
-    `<span class="gh-graph-accent" style="font-weight:600;">${stats.longestStreak} days</span>` +
-    `${SPACE.repeat(4)}` +
-    `<span style="color:#FFA657;">◆</span> ` +
+    `<span class="gh-graph-accent" style="font-weight:600">${stats.longestStreak} days</span>` +
+    `${SP.repeat(4)}` +
+    `<span class="gh-graph-warm">◆</span> ` +
     `<span class="gh-graph-text">Best day:</span> ` +
-    `<span style="color:#FFA657;font-weight:600;">${stats.bestDay.count} contributions</span>`
+    `<span class="gh-graph-warm" style="font-weight:600">${stats.bestDay.count} contributions</span>`
   );
 
   lines.push('<br>');
