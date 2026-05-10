@@ -125,9 +125,12 @@ export class WindowManager {
         const titleBar = document.createElement("div");
         titleBar.className = "window-title-bar";
 
+        const titleGroup = document.createElement("div");
+        titleGroup.className = "window-title-group";
+
         const titleText = document.createElement("span");
         titleText.textContent = title;
-        titleBar.appendChild(titleText);
+        titleGroup.appendChild(titleText);
 
         if (actions && actions.length > 0) {
             actions.forEach(action => {
@@ -137,7 +140,7 @@ export class WindowManager {
                 actionBtn.className = `window-title-action ${action.className || ""}`;
                 actionBtn.innerHTML = `${action.icon ? `<i class="${action.icon}"></i> ` : ""}${action.label}`;
                 actionBtn.addEventListener("pointerdown", (e) => e.stopPropagation());
-                titleBar.appendChild(actionBtn);
+                titleGroup.appendChild(actionBtn);
             });
         }
 
@@ -150,6 +153,7 @@ export class WindowManager {
         closeBtn.addEventListener("click", () => this.close(id));
 
         controls.appendChild(closeBtn);
+        titleBar.appendChild(titleGroup);
         titleBar.appendChild(controls);
 
         // Content

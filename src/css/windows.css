@@ -80,6 +80,43 @@
     background: rgba(255, 255, 255, 0.05);
 }
 
+.window-title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.window-title-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(126, 231, 135, 0.12);
+    color: #7EE787;
+    border: 1px solid rgba(126, 231, 135, 0.35);
+    cursor: pointer;
+    line-height: 1;
+}
+
+.window-title-action:hover {
+    background: rgba(126, 231, 135, 0.25);
+    border-color: #7EE787;
+    transform: translateY(-0.5px);
+    box-shadow: 0 2px 8px rgba(126, 231, 135, 0.2);
+}
+
+.window-title-action i {
+    font-size: 9px;
+    opacity: 0.9;
+}
+
 .window-controls {
     display: flex;
     gap: 8px;
