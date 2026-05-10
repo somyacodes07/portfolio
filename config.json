@@ -171,8 +171,7 @@
         "stack": [
           "React",
           "TypeScript",
-          "Tree-sitter",
-          "C++",
+          "WebAssembly",
           "Node.js"
         ],
         "year": "2026",
@@ -201,7 +200,7 @@
       }
     ],
     [
-      "Music Visualizer using Python",
+      "Music Visualizer",
       "Audio visualizer built in Python that plays .wav files and renders real-time visual effects.",
       "https://github.com/ssgamingop/ss-music-visualizer",
       null,
@@ -214,8 +213,8 @@
       {
         "stack": [
           "Python",
-          "Audio Processing",
-          "Visualization"
+          "Pygame",
+          "Audio Processing "
         ],
         "year": "2025",
         "status": "Completed"
@@ -245,7 +244,7 @@
       "Sur Sangam - Music Generator",
       "AI to generate Hindi lyrics, compose music, and suggest improvements with browser-based persistent storage.",
       "https://github.com/ssgamingop/sur_sangam",
-      null,
+      "https://sur-sangam.vercel.app/",
       null,
       [
         "/projects/sur-sangam-1.png",
