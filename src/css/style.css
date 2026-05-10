@@ -368,6 +368,30 @@ a:not(.certificate-window-link):hover {
   font-weight: 400;
 }
 
+/* Skills – Two-Column Layout */
+.skill-col-header {
+  color: var(--prompt-host);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.skill-separator {
+  color: var(--border);
+  opacity: 0.6;
+}
+
+.skill-tag {
+  cursor: help;
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.2);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.skill-tag:hover {
+  color: var(--prompt-user);
+  border-bottom-color: var(--prompt-user);
+  border-bottom-style: solid;
+}
+
 /* GitHub Contribution Graph – theme-aware colors
    --gh-1 through --gh-4 are set by ThemeManager based on the active theme's accent. */
 :root {
