@@ -40,13 +40,13 @@ const createFetch = (): string[] => {
   const infoLines = [
       titleLine,
       sepLine,
-      `<span class="prompt-user">OS</span>        WebTerm v1.1.1`,
-      `<span class="prompt-user">Shell</span>     IBM Plex Mono`,
-      `<span class="prompt-user">Theme</span>     ${getTheme()}`,
-      `<span class="prompt-user">Uptime</span>    ${getUptime()}`,
-      `<span class="prompt-user">Projects</span>  ${command.projects.length}`,
-      `<span class="prompt-user">Skills</span>    19`,
-      `<span class="prompt-user">Certs</span>     ${command.certifications ? command.certifications.length : 3}`,
+      `<span class="prompt-user">OS:</span>        WebTerm v1.1.1`,
+      `<span class="prompt-user">Shell:</span>     IBM Plex Mono`,
+      `<span class="prompt-user">Theme:</span>     ${getTheme()}`,
+      `<span class="prompt-user">Uptime:</span>    ${getUptime()}`,
+      `<span class="prompt-user">Projects:</span>  ${command.projects.length}`,
+      `<span class="prompt-user">Skills:</span>    19`,
+      `<span class="prompt-user">Certs:</span>     ${command.certifications ? command.certifications.length : 3}`,
       ``,
       // Color blocks
       `<span style="background:var(--bg);color:var(--bg)">███</span><span style="background:var(--prompt-host);color:var(--prompt-host)">███</span><span style="background:var(--prompt-user);color:var(--prompt-user)">███</span><span style="background:var(--banner);color:var(--banner)">███</span>`
