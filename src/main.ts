@@ -8,6 +8,7 @@ import { ABOUT } from "./commands/about"
 import { createProject } from "./commands/projects";
 import { EDUCATION } from "./commands/education";
 import { CERTIFICATIONS } from "./commands/certifications";
+import { getGitHubContributions } from "./commands/github";
 
 import { createWhoami } from "./commands/whoami";
 import { setTheme } from "./core/ThemeManager";
@@ -333,6 +334,20 @@ const registerCommands = () => {
     }, 500);
   });
 
+  dispatcher.register("contributions", () => {
+    if (bareMode) { writeLines(["no graphs in the void.", "<br>"]); return; }
+
+    // Show loading state immediately
+    const loadingLines = getGitHubContributions((graphLines) => {
+      // When data arrives, render graph lines
+      graphLines.forEach((line, idx) => {
+        displayText(line, idx);
+      });
+      scrollToBottom();
+    });
+    writeLines(loadingLines);
+  });
+
   dispatcher.register("email", () => {
     const safeMailto = sanitizeUrl(`mailto:${SOCIAL.email}`, { allowRelative: false, allowMailto: true });
     const emailText = escapeHTML(SOCIAL.email);
@@ -480,7 +495,7 @@ const registerCommands = () => {
 
 // --- Input Manager Init ---
 
-const commandList = ["help", "about", "projects", "whoami", "education", "certificates", "certifications", "skills", "banner", "clear", "resume", "linkedin", "github", "email", "ls", "sudo", "rm -rf", "repo", "theme"];
+const commandList = ["help", "about", "projects", "whoami", "education", "certificates", "certifications", "skills", "contributions", "banner", "clear", "resume", "linkedin", "github", "email", "ls", "sudo", "rm -rf", "repo", "theme"];
 
 const inputManager = new InputManager(
   "user-input",
