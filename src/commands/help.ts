@@ -35,10 +35,6 @@ const helpObj = {
       "'repo'",
       "View the Github Repository."
     ],
-    [
-      "'contributions'",
-      "GitHub contribution graph."
-    ],
     ["'banner'",
       "Display the banner."
     ],
