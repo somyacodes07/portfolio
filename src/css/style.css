@@ -293,28 +293,11 @@ a:not(.certificate-window-link):hover {
   padding: 4px 6px 8px 0;
   min-width: 0;
 
-  scrollbar-width: thin;
-  scrollbar-color: rgba(139, 148, 158, 0.55) transparent;
+  scrollbar-width: none;
 }
 
 #content-wrapper::-webkit-scrollbar {
-  width: 8px;
-}
-
-#content-wrapper::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-#content-wrapper::-webkit-scrollbar-thumb {
-  background: rgba(139, 148, 158, 0.5);
-  border-radius: 999px;
-  border: 2px solid transparent;
-  background-clip: content-box;
-}
-
-#content-wrapper::-webkit-scrollbar-thumb:hover {
-  background: rgba(126, 231, 135, 0.7);
-  background-clip: content-box;
+  display: none;
 }
 
 #terminal {
@@ -393,27 +376,25 @@ a:not(.certificate-window-link):hover {
   border-bottom-style: solid;
 }
 
-/* Styled Tooltip Box */
-.skill-tip {
+/* Global floating tooltip (JS-driven, lives at body level) */
+#skill-tooltip {
+  position: fixed;
   display: none;
-  position: absolute;
-  left: 0;
-  top: calc(100% + 8px);
   padding: 5px 10px;
   background: var(--bg);
   border: 1px solid var(--prompt-user);
   color: var(--text);
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;
   font-weight: 300;
   white-space: nowrap;
-  z-index: 999;
+  z-index: 9999;
   pointer-events: none;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.55);
   letter-spacing: 0;
 }
 
-/* Caret arrow pointing up */
-.skill-tip::before {
+#skill-tooltip::before {
   content: '';
   position: absolute;
   bottom: 100%;
@@ -422,10 +403,12 @@ a:not(.certificate-window-link):hover {
   border-bottom-color: var(--prompt-user);
 }
 
-.skill-tag:hover .skill-tip {
-  display: block;
+#skill-tooltip.flip::before {
+  bottom: auto;
+  top: 100%;
+  border-bottom-color: transparent;
+  border-top-color: var(--prompt-user);
 }
-
 /* GitHub Contribution Graph – theme-aware colors
    --gh-1 through --gh-4 are set by ThemeManager based on the active theme's accent. */
 :root {

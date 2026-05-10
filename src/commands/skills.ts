@@ -35,10 +35,8 @@ const getItems = (config: any, key: string): SkillItem[] => {
 
 /** Render a single skill name as an interactive tag with a styled hover tooltip. */
 const skillTag = (item: SkillItem): string => {
-    const tip = item.desc
-        ? `<span class="skill-tip">${escapeHTML(item.desc)}</span>`
-        : '';
-    return `<span class="skill-tag">${escapeHTML(item.name)}${tip}</span>`;
+    const tip = item.desc ? ` data-tip="${escapeHTML(item.desc)}"` : '';
+    return `<span class="skill-tag"${tip}>${escapeHTML(item.name)}</span>`;
 };
 
 /** Render two categories side-by-side in a fixed-width two-column layout. */

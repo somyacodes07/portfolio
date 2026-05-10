@@ -643,3 +643,49 @@ function runCommand(cmd: string) {
 }
 
 initEventListeners();
+
+// ── Global Skill Tooltip (fixed-position, immune to overflow clipping) ──
+const skillTooltip = document.createElement('div');
+skillTooltip.id = 'skill-tooltip';
+document.body.appendChild(skillTooltip);
+
+document.addEventListener('mouseover', (e) => {
+  const tag = (e.target as HTMLElement).closest('.skill-tag[data-tip]') as HTMLElement | null;
+  if (!tag) return;
+
+  const tip = tag.getAttribute('data-tip');
+  if (!tip) return;
+
+  skillTooltip.textContent = tip;
+  skillTooltip.style.display = 'block';
+
+  const rect = tag.getBoundingClientRect();
+  const tipRect = skillTooltip.getBoundingClientRect();
+
+  // Position below the tag, clamped to viewport
+  let left = rect.left;
+  let top = rect.bottom + 8;
+
+  // Prevent overflow off the right edge
+  if (left + tipRect.width > window.innerWidth - 12) {
+    left = window.innerWidth - tipRect.width - 12;
+  }
+
+  // If it would go below viewport, show above instead
+  if (top + tipRect.height > window.innerHeight - 12) {
+    top = rect.top - tipRect.height - 8;
+    // Flip the caret
+    skillTooltip.classList.add('flip');
+  } else {
+    skillTooltip.classList.remove('flip');
+  }
+
+  skillTooltip.style.left = `${Math.max(4, left)}px`;
+  skillTooltip.style.top = `${top}px`;
+});
+
+document.addEventListener('mouseout', (e) => {
+  const tag = (e.target as HTMLElement).closest('.skill-tag[data-tip]');
+  if (!tag) return;
+  skillTooltip.style.display = 'none';
+});
