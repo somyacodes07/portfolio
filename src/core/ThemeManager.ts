@@ -159,6 +159,7 @@ export const setTheme = (colors: ThemeColors) => {
     root.style.setProperty('--bg', colors.background);
     root.style.setProperty('--text', colors.foreground);
     root.style.setProperty('--border', colors.border.color);
+    root.style.setProperty('--banner', colors.banner);
     root.style.setProperty('--bar-title-color', barTitleColor);
     root.style.setProperty('--win-bg', hexToRgba(colors.background, 0.95));
     root.style.setProperty('--win-border', colors.border.color);
