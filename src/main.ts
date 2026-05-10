@@ -1,16 +1,15 @@
-
 import command from '../config.json';
 import './css/explorer.css';
 import { escapeHTML, sanitizeUrl } from './core/Utils';
 import { HELP } from "./commands/help";
 import { getBanner } from "./commands/banner";
-import { getAbout } from "./commands/about"
+import { getFetch } from "./commands/fetch";
+import { getAbout } from "./commands/about";
+import { createWhoami } from "./commands/whoami";
 import { createProject } from "./commands/projects";
 import { EDUCATION } from "./commands/education";
 import { CERTIFICATIONS } from "./commands/certifications";
 import { prefetchContributions } from "./commands/github";
-
-import { createWhoami } from "./commands/whoami";
 import { setTheme } from "./core/ThemeManager";
 import { builtInThemes, THEME_HELP } from "./commands/themes";
 import { getSkills } from "./commands/skills";
@@ -256,7 +255,7 @@ const registerCommands = () => {
 
   dispatcher.register("fetch", () => {
     if (bareMode) { writeLines(["Welcome to Webterm v1.1.1", "<br>"]); return; }
-    writeLines(getBanner());
+    writeLines(getFetch());
   });
 
   dispatcher.register("clear", () => {
@@ -551,7 +550,11 @@ const initEventListeners = () => {
     if (savedTheme && builtInThemes[savedTheme]) {
       setTheme(builtInThemes[savedTheme]);
     }
-    writeLines(getBanner());
+    if (window.innerWidth <= 600) {
+      writeLines(getBanner());
+    } else {
+      writeLines(getFetch());
+    }
     inputManager.focus();
   });
 
