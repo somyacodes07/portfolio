@@ -20,9 +20,10 @@ interface GitHubContributionData {
 
 // ─── Color Mapping ──────────────────────────────────────────────────
 
-// GitHub-style green palette mapped to terminal block chars
-const LEVEL_COLORS = [
-  '#21262D', // Level 0 – no contributions (subtle grid)
+// Green palette for active contributions (levels 1–4).
+// Level 0 uses the current theme's --border via a CSS class instead of inline color.
+const ACTIVE_LEVEL_COLORS = [
+  '', // placeholder – level 0 handled by class
   '#0E4429', // Level 1 – low
   '#006D32', // Level 2 – medium-low
   '#26A641', // Level 3 – medium-high
@@ -52,27 +53,24 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
   const lines: string[] = [];
   const SPACE = '&nbsp;';
   const BLOCK = '█';
-  const LIGHT_BLOCK = '░';
 
   // ── Header ──
   lines.push('<br>');
   lines.push(
-    `${SPACE.repeat(2)}<span style="color:#58A6FF;font-weight:600;">` +
+    `${SPACE.repeat(2)}<span class="gh-graph-header">` +
     `<i class='fa-brands fa-github'></i>${SPACE}GitHub Contributions</span>`
   );
   lines.push(
-    `${SPACE.repeat(2)}<span style="color:#8B949E;">` +
+    `${SPACE.repeat(2)}<span class="gh-graph-dim">` +
     `${data.totalContributions.toLocaleString()} contributions in the last year</span>`
   );
   lines.push('<br>');
 
   // ── Determine how many weeks to show ──
-  // Show last ~26 weeks (6 months) on desktop, fewer on mobile
   const maxWeeks = Math.min(data.weeks.length, 52);
   const weeksToShow = data.weeks.slice(-maxWeeks);
 
   // ── Month labels row ──
-  // Each cell is 2 chars wide (block + space). Build a char-cell array first.
   const monthCells: string[] = new Array(weeksToShow.length).fill('');
   let lastMonth = -1;
 
@@ -87,22 +85,17 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
     }
   }
 
-  // Now build the month row string. Each cell is 2 chars wide.
-  let monthRow = SPACE.repeat(6); // offset for day labels
-  let charBudget = 0; // chars we've "spent" from previous label spillover
+  let monthRow = SPACE.repeat(6);
+  let charBudget = 0;
 
   for (let w = 0; w < monthCells.length; w++) {
     if (charBudget > 0) {
       charBudget--;
-      continue; // this cell is consumed by the previous month label
+      continue;
     }
-
     if (monthCells[w]) {
-      monthRow += `<span style="color:#8B949E;font-size:0.82em;">${monthCells[w]}</span>`;
-      // Month name is 3 chars, cell is 2 chars, so we spill into the next cell by 1
-      // Actually label takes 3 chars but each cell is 2 chars (block + space)
-      // We've used 3 chars, so we need to skip ceil(3/2) - 1 = 1 more cell
-      charBudget = 1; // skip next cell since the 3-char label overflows
+      monthRow += `<span class="gh-graph-dim" style="font-size:0.82em;">${monthCells[w]}</span>`;
+      charBudget = 1;
     } else {
       monthRow += SPACE.repeat(2);
     }
@@ -113,23 +106,25 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
   for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
     let row = SPACE.repeat(2);
 
-    // Day label
     const dayLabel = DAY_LABELS[dayOfWeek];
     if (dayLabel) {
-      row += `<span style="color:#8B949E;font-size:0.82em;">${dayLabel}</span>${SPACE}`;
+      row += `<span class="gh-graph-dim" style="font-size:0.82em;">${dayLabel}</span>${SPACE}`;
     } else {
       row += SPACE.repeat(4);
     }
 
-    // Contribution cells
     for (let w = 0; w < weeksToShow.length; w++) {
       const day = weeksToShow[w].contributionDays[dayOfWeek];
       if (day) {
         const level = getContributionLevel(day.contributionCount);
-        const color = LEVEL_COLORS[level];
-        const char = level === 0 ? LIGHT_BLOCK : BLOCK;
         const tooltip = `${day.date}: ${day.contributionCount} contribution${day.contributionCount !== 1 ? 's' : ''}`;
-        row += `<span style="color:${color};" title="${escapeHTML(tooltip)}">${char}</span>` + SPACE;
+
+        if (level === 0) {
+          // Use theme-aware class for empty cells so they're always visible
+          row += `<span class="gh-cell-empty" title="${escapeHTML(tooltip)}">${BLOCK}</span>` + SPACE;
+        } else {
+          row += `<span style="color:${ACTIVE_LEVEL_COLORS[level]};" title="${escapeHTML(tooltip)}">${BLOCK}</span>` + SPACE;
+        }
       } else {
         row += SPACE.repeat(2);
       }
@@ -141,12 +136,12 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
   // ── Legend ──
   lines.push('');
   let legendRow = SPACE.repeat(6);
-  legendRow += `<span style="color:#8B949E;font-size:0.82em;">Less</span>${SPACE}`;
-  for (let i = 0; i < LEVEL_COLORS.length; i++) {
-    const char = i === 0 ? LIGHT_BLOCK : BLOCK;
-    legendRow += `<span style="color:${LEVEL_COLORS[i]};" title="${LEVEL_LABELS[i]}">${char}</span>` + SPACE;
+  legendRow += `<span class="gh-graph-dim" style="font-size:0.82em;">Less</span>${SPACE}`;
+  legendRow += `<span class="gh-cell-empty" title="${LEVEL_LABELS[0]}">${BLOCK}</span>` + SPACE;
+  for (let i = 1; i < ACTIVE_LEVEL_COLORS.length; i++) {
+    legendRow += `<span style="color:${ACTIVE_LEVEL_COLORS[i]};" title="${LEVEL_LABELS[i]}">${BLOCK}</span>` + SPACE;
   }
-  legendRow += `<span style="color:#8B949E;font-size:0.82em;">More</span>`;
+  legendRow += `<span class="gh-graph-dim" style="font-size:0.82em;">More</span>`;
   lines.push(legendRow);
 
   // ── Stats row ──
@@ -154,15 +149,15 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
   const stats = computeStats(data);
   lines.push(
     `${SPACE.repeat(2)}<span style="color:#39D353;">▲</span> ` +
-    `<span style="color:#E6EDF3;">Current streak:</span> ` +
+    `<span class="gh-graph-text">Current streak:</span> ` +
     `<span style="color:#39D353;font-weight:600;">${stats.currentStreak} days</span>` +
     `${SPACE.repeat(4)}` +
-    `<span style="color:#58A6FF;">●</span> ` +
-    `<span style="color:#E6EDF3;">Longest streak:</span> ` +
-    `<span style="color:#58A6FF;font-weight:600;">${stats.longestStreak} days</span>` +
+    `<span class="gh-graph-accent">●</span> ` +
+    `<span class="gh-graph-text">Longest streak:</span> ` +
+    `<span class="gh-graph-accent" style="font-weight:600;">${stats.longestStreak} days</span>` +
     `${SPACE.repeat(4)}` +
     `<span style="color:#FFA657;">◆</span> ` +
-    `<span style="color:#E6EDF3;">Best day:</span> ` +
+    `<span class="gh-graph-text">Best day:</span> ` +
     `<span style="color:#FFA657;font-weight:600;">${stats.bestDay.count} contributions</span>`
   );
 
@@ -216,7 +211,6 @@ function computeStats(data: GitHubContributionData) {
 // ─── Fetch Contributions ────────────────────────────────────────────
 
 async function fetchContributions(username: string): Promise<GitHubContributionData | null> {
-  // Use the public GitHub contributions API (no token needed)
   const apiUrl = `https://github-contributions-api.jogruber.de/v4/${encodeURIComponent(username)}?y=last`;
 
   try {
@@ -224,13 +218,10 @@ async function fetchContributions(username: string): Promise<GitHubContributionD
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const json = await response.json();
 
-    // Transform API response → our format
     const weeks: ContributionWeek[] = [];
     let totalContributions = 0;
 
     if (json.contributions && Array.isArray(json.contributions)) {
-      // API returns flat array of { date, count, color, intensity }
-      // Group by week (7 days each)
       const sorted = json.contributions.sort(
         (a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime()
       );
@@ -245,22 +236,18 @@ async function fetchContributions(username: string): Promise<GitHubContributionD
           color: entry.color,
         });
 
-        // Weeks start on Sunday
         const dayOfWeek = new Date(entry.date).getDay();
         if (dayOfWeek === 6) {
-          // Saturday = end of week
           weeks.push({ contributionDays: currentWeek });
           currentWeek = [];
         }
       }
 
-      // Push remaining days
       if (currentWeek.length > 0) {
         weeks.push({ contributionDays: currentWeek });
       }
     }
 
-    // Also try the `total` field if available
     if (json.total && typeof json.total === 'object') {
       const lastYearKey = Object.keys(json.total).sort().pop();
       if (lastYearKey && json.total[lastYearKey]) {
@@ -275,54 +262,35 @@ async function fetchContributions(username: string): Promise<GitHubContributionD
   }
 }
 
-// ─── Loading Animation ─────────────────────────────────────────────
+// ─── Pre-fetch Cache ────────────────────────────────────────────────
 
-function renderLoadingState(): string[] {
-  const SPACE = '&nbsp;';
-  return [
-    '<br>',
-    `${SPACE.repeat(2)}<span style="color:#58A6FF;">` +
-    `<i class='fa-brands fa-github'></i>${SPACE}Fetching GitHub contributions...</span>`,
-    '<br>',
-  ];
-}
-
-function renderError(): string[] {
-  const SPACE = '&nbsp;';
-  const ghUrl = escapeHTML(command.social.github);
-  return [
-    '<br>',
-    `${SPACE.repeat(2)}<span style="color:#F85149;">` +
-    `<i class='fa-solid fa-triangle-exclamation'></i>${SPACE}Could not fetch contribution data.</span>`,
-    `${SPACE.repeat(2)}<span style="color:#8B949E;">Visit </span>` +
-    `<a href="${ghUrl}" target="_blank" rel="noopener noreferrer">${ghUrl}</a>` +
-    `<span style="color:#8B949E;"> to see contributions.</span>`,
-    '<br>',
-  ];
-}
-
-// ─── Public API ─────────────────────────────────────────────────────
+let cachedGraphLines: string[] | null = null;
+let fetchPromise: Promise<void> | null = null;
 
 /**
- * Returns loading-state lines immediately, then fetches real data
- * and calls `onDataReady` with the rendered graph lines.
+ * Starts fetching GitHub contributions immediately.
+ * Call this on page load so data is ready before the user clicks "about".
  */
-export function getGitHubContributions(
-  onDataReady: (lines: string[]) => void
-): string[] {
-  // Extract username from GitHub URL
+export function prefetchContributions(): void {
+  if (fetchPromise) return; // already in flight
+
   const githubUrl = command.social.github || '';
   const username = githubUrl.split('/').filter(Boolean).pop() || 'ssgamingop';
 
-  // Fire async fetch
-  fetchContributions(username).then((data) => {
+  fetchPromise = fetchContributions(username).then((data) => {
     if (data && data.weeks.length > 0) {
-      onDataReady(renderContributionGraph(data));
+      cachedGraphLines = renderContributionGraph(data);
     } else {
-      onDataReady(renderError());
+      cachedGraphLines = []; // silently omit on error
     }
   });
+}
 
-  // Return loading state immediately
-  return renderLoadingState();
+/**
+ * Returns cached contribution graph lines, or empty if not yet loaded.
+ * Since we pre-fetch on page load, this should be ready by the time
+ * the user clicks "about" (typically 1-2 seconds after load).
+ */
+export function getCachedContributionLines(): string[] {
+  return cachedGraphLines ?? [];
 }
