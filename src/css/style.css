@@ -398,6 +398,20 @@ a:not(.certificate-window-link):hover {
   color: var(--gh-4);
 }
 
+.gh-cell {
+  display: inline-block;
+  width: 1.3ch;
+  text-align: center;
+  margin-right: 0.1ch;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.gh-cell-wide {
+  width: 2.7ch; /* 2 cells + spacing */
+  text-align: left;
+}
+
 .gh-graph-header {
   color: var(--prompt-host);
   font-weight: 600;
