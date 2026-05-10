@@ -69,41 +69,44 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
   const maxWeeks = Math.min(data.weeks.length, 52);
   const weeksToShow = data.weeks.slice(-maxWeeks);
 
+  // Each cell is rendered as a fixed-width inline-block to guarantee alignment.
+  const cell = (content: string, cls?: string, title?: string) =>
+    `<span class="gh-cell${cls ? ' ' + cls : ''}" ${title ? 'title="' + title + '"' : ''}>${content}</span>`;
+
   // ── Month labels row ──
   // Determine which week index each month first appears at
-  const monthCells: string[] = new Array(weeksToShow.length).fill('');
+  const monthAtWeek: (string | null)[] = new Array(weeksToShow.length).fill(null);
   let lastMonth = -1;
-  let lastMonthWeek = -10; // track last label position to avoid collisions
+  let lastLabelWeek = -10;
 
   for (let w = 0; w < weeksToShow.length; w++) {
     const firstDay = weeksToShow[w].contributionDays[0];
     if (firstDay) {
       const month = new Date(firstDay.date).getMonth();
-      if (month !== lastMonth && (w - lastMonthWeek) >= 2) {
-        // Only place label if at least 2 cells away from last label
+      if (month !== lastMonth) {
+        if ((w - lastLabelWeek) >= 3) {
+          // Place label only if 3+ cells from last to avoid collisions
+          monthAtWeek[w] = MONTH_NAMES[month];
+          lastLabelWeek = w;
+        }
         lastMonth = month;
-        lastMonthWeek = w;
-        monthCells[w] = MONTH_NAMES[month];
-      } else if (month !== lastMonth) {
-        lastMonth = month;
-        // Skip placing label if too close, update tracker only
       }
     }
   }
 
-  // Day-label gutter is 5 chars: "Mon" + SP = 4, but we use fixed 5 for alignment
-  const GUTTER = SP.repeat(5);
-  let monthRow = GUTTER;
+  // Gutter = 4 cells wide (to fit "Mon" + padding)
+  const GUTTER_CELLS = 4;
+  let monthRow = '';
+  for (let g = 0; g < GUTTER_CELLS; g++) monthRow += cell(SP);
 
-  for (let w = 0; w < monthCells.length; w++) {
-    if (monthCells[w]) {
-      // 3-char label occupies this cell (2 chars) + borrows 1 from next
-      monthRow += `<span class="gh-graph-dim" style="font-size:0.82em">${monthCells[w]}</span>`;
-      // Skip next cell since the label spills into it
-      w++;
-      if (w >= monthCells.length) break;
+  for (let w = 0; w < weeksToShow.length; w++) {
+    if (monthAtWeek[w]) {
+      // Month label spans 2 cells wide
+      monthRow += cell(monthAtWeek[w], 'gh-cell-wide gh-graph-dim', undefined);
+      w++; // consumed 2 cells
+      if (w >= weeksToShow.length) break;
     } else {
-      monthRow += SP.repeat(2); // block + space per cell
+      monthRow += cell(SP);
     }
   }
   lines.push(monthRow);
@@ -112,13 +115,14 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
   for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
     let row = '';
 
-    // Day label – fixed width gutter
+    // Day label – fixed width gutter (4 cells)
     const dayLabel = DAY_LABELS[dayOfWeek];
     if (dayLabel) {
-      // "Mon" = 3 chars, pad to 4 with trailing space, total 5 with leading space
-      row += SP + `<span class="gh-graph-dim" style="font-size:0.82em">${dayLabel}</span>` + SP;
+      row += cell(SP);
+      row += cell(dayLabel, 'gh-cell-wide gh-graph-dim', undefined);
+      row += cell(SP);
     } else {
-      row += GUTTER;
+      for (let g = 0; g < GUTTER_CELLS; g++) row += cell(SP);
     }
 
     // Contribution cells
@@ -128,9 +132,9 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
         const level = getContributionLevel(day.contributionCount);
         const cls = LEVEL_CLASSES[level];
         const tooltip = `${day.date}: ${day.contributionCount} contribution${day.contributionCount !== 1 ? 's' : ''}`;
-        row += `<span class="${cls}" title="${escapeHTML(tooltip)}">${BLOCK}</span>` + SP;
+        row += cell(BLOCK, cls, escapeHTML(tooltip));
       } else {
-        row += SP.repeat(2);
+        row += cell(SP);
       }
     }
 
@@ -139,12 +143,14 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
 
   // ── Legend ──
   lines.push('');
-  let legendRow = GUTTER;
-  legendRow += `<span class="gh-graph-dim" style="font-size:0.82em">Less</span>${SP}`;
+  let legendRow = '';
+  for (let g = 0; g < GUTTER_CELLS; g++) legendRow += cell(SP);
+  
+  legendRow += `<span class="gh-graph-dim" style="font-size:0.82em; margin-right: 4px;">Less</span>`;
   for (let i = 0; i < LEVEL_CLASSES.length; i++) {
-    legendRow += `<span class="${LEVEL_CLASSES[i]}" title="${LEVEL_LABELS[i]}">${BLOCK}</span>` + SP;
+    legendRow += cell(BLOCK, LEVEL_CLASSES[i], LEVEL_LABELS[i]);
   }
-  legendRow += `<span class="gh-graph-dim" style="font-size:0.82em">More</span>`;
+  legendRow += `<span class="gh-graph-dim" style="font-size:0.82em; margin-left: 4px;">More</span>`;
   lines.push(legendRow);
 
   // ── Stats row ──
