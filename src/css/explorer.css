@@ -224,6 +224,49 @@
     background: rgba(255, 255, 255, 0.04);
 }
 
+.explorer-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 12px;
+}
+
+.explorer-action-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 10px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.72);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.14);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.explorer-action-btn:hover {
+    background: rgba(88, 166, 255, 0.08);
+    border: 1px solid var(--folder-color, #58A6FF);
+    color: var(--folder-color, #58A6FF);
+    transform: translateY(-1px);
+    border-style: solid;
+}
+
+.explorer-action-btn.live {
+    border-color: rgba(126, 231, 135, 0.25);
+}
+
+.explorer-action-btn.live:hover {
+    border-color: #7EE787;
+    color: #7EE787;
+    background: rgba(126, 231, 135, 0.06);
+}
+
 .explorer-badge.status-completed {
     border-color: rgba(126, 231, 135, 0.36);
     color: rgba(126, 231, 135, 0.98);
