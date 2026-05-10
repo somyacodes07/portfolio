@@ -1,9 +1,10 @@
 import command from '../../config.json';
 import { escapeHTML, sanitizeUrl } from '../core/Utils';
 
+const isHttpUrl = (value: string) => /^https?:\/\//i.test(value);
+
 const createProject = (args?: string[]): string[] => {
   const projects: string[] = [];
-  const isHttpUrl = (value: string) => /^https?:\/\//i.test(value);
 
   if (args && args.includes('--gui')) {
     (window as any).openProjectExplorer();
@@ -14,41 +15,41 @@ const createProject = (args?: string[]): string[] => {
 
   projects.push("<br>")
 
-  command.projects.forEach((ele: any[]) => {
+  command.projects.forEach((ele: any[], idx: number) => {
     let string = "";
-    // Config: [Title, Desc, RepoLink, LiveLinkOrThumb, Video, Screenshots[]]
+    // Config: [Title, Desc, RepoLink, LiveLinkOrThumb, Video, Screenshots[], Meta?]
     const rawTitle = String(ele[0] ?? "");
     const rawRepoUrl = String(ele[2] ?? "");
     const rawSlot4 = String(ele[3] ?? "");
-    const rawUrl = isHttpUrl(rawSlot4) ? rawSlot4 : rawRepoUrl;
+    const liveLink = isHttpUrl(rawSlot4) ? rawSlot4 : '';
+    const rawUrl = liveLink || rawRepoUrl;
     const rawVideoUrl = typeof ele[4] === "string" ? ele[4] : undefined;
     const rawScreenshots = Array.isArray(ele[5]) ? ele[5] : undefined;
 
     // For Display: standard HTML escaping
     const displayTitle = escapeHTML(rawTitle);
 
-    // For JS Arguments (inside onclick):
-    // 1. JSON.stringify() to get a valid JS string literal (e.g. "It's time")
-    // 2. escapeHTML() to make it safe to sit inside an HTML attribute (encodes " to &quot;)
-    const jsTitle = escapeHTML(JSON.stringify(rawTitle));
-    const jsUrl = escapeHTML(JSON.stringify(rawUrl));
+    // Store data on the element for event delegation
+    const dataAttrs = [
+      `data-proj-idx="${idx}"`,
+      `data-proj-title="${escapeHTML(rawTitle)}"`,
+      `data-proj-url="${escapeHTML(rawUrl)}"`,
+    ];
 
-    const jsVideo = rawVideoUrl
-      ? escapeHTML(JSON.stringify(rawVideoUrl))
-      : 'undefined';
+    if (rawVideoUrl) {
+      dataAttrs.push(`data-proj-video="${escapeHTML(rawVideoUrl)}"`);
+    }
+    if (rawScreenshots) {
+      dataAttrs.push(`data-proj-screenshots="${escapeHTML(JSON.stringify(rawScreenshots))}"`);
+    }
+    if (liveLink) {
+      dataAttrs.push(`data-proj-live="${escapeHTML(liveLink)}"`);
+    }
 
-    const jsScreenshots = rawScreenshots
-      ? escapeHTML(JSON.stringify(rawScreenshots))
-      : 'undefined';
+    // WebDesktop Link (Main Click) – uses data attributes instead of inline onclick
+    let link = `<span class="command clickable proj-link" role="button" tabindex="0" aria-label="Open project ${displayTitle}" style="cursor: pointer;" ${dataAttrs.join(' ')}>${displayTitle}</span>`;
 
-    const onClickCall = `window.openProjectWindow(${jsTitle}, ${jsUrl}, ${jsVideo}, ${jsScreenshots})`;
-    const onKeyCall = `if(event.key==='Enter'||event.key===' '){event.preventDefault();${onClickCall}}`;
-
-    // WebDesktop Link (Main Click)
-    let link = `<span class="command clickable" role="button" tabindex="0" aria-label="Open project ${displayTitle}" style="cursor: pointer;" onclick="${onClickCall}" onkeydown="${onKeyCall}">${displayTitle}</span>`;
-
-    // External Icon (GitHub) - rawUrl ok here because it's inside href="..." which browsers handle if standardly quoted, 
-    // but better to escapeHTML(rawUrl) for safety in case of double quotes in URL.
+    // External Icon (GitHub)
     const safeExtUrl = sanitizeUrl(rawUrl, { allowRelative: false });
     let ext = "";
     if (safeExtUrl) {
