@@ -1,7 +1,8 @@
 import command from '../../config.json';
 import { escapeHTML, sanitizeUrl } from '../core/Utils';
+import { getCachedContributionLines } from './github';
 
-const createAbout = (): string[] => {
+const createAboutBase = (): string[] => {
   const about: string[] = [];
 
   const SPACE = "&nbsp;";
@@ -66,4 +67,16 @@ const createAbout = (): string[] => {
   return about
 }
 
-export const ABOUT = createAbout();
+/**
+ * Returns the full about output including the GitHub contribution graph.
+ * Called dynamically (not cached at import time) so it picks up
+ * the pre-fetched contribution data.
+ */
+export const getAbout = (): string[] => {
+  const about = createAboutBase();
+  const graphLines = getCachedContributionLines();
+  if (graphLines.length > 0) {
+    about.push(...graphLines);
+  }
+  return about;
+}
