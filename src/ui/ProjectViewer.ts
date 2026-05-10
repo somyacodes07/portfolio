@@ -25,11 +25,20 @@ export class ProjectViewer {
         return /^https?:\/\//i.test(value);
     }
 
-    public openProjectWindow(title: string, link: string, videoUrl?: string, screenshots?: string[]) {
+    public openProjectWindow(title: string, link: string, videoUrl?: string, screenshots?: string[], liveLink?: string) {
         const safeLink = sanitizeUrl(link, { allowRelative: false });
         if (!safeLink) {
             console.error('Blocked insecure or invalid project link:', link);
             return;
+        }
+
+        const actions: WindowAction[] = [];
+        if (liveLink) {
+            actions.push({
+                label: 'Live',
+                link: liveLink,
+                icon: 'fa-solid fa-earth-americas'
+            });
         }
 
         if (window.innerWidth <= 600) {
@@ -64,7 +73,7 @@ export class ProjectViewer {
             iframeValue.style.width = '100%';
             iframeValue.style.height = '100%';
             iframeValue.style.border = 'none';
-            this.windowManager.open(`proj-${title}`, title, iframeValue);
+            this.windowManager.open(`proj-${title}`, title, iframeValue, { actions });
             return;
         }
 
@@ -354,19 +363,9 @@ export class ProjectViewer {
             item.appendChild(stackNode);
             item.appendChild(badges);
 
-            // Action Buttons (Live Link, GitHub)
+            // Action Buttons (GitHub)
             const actions = document.createElement('div');
             actions.className = 'explorer-actions';
-
-            if (liveLink) {
-                const liveBtn = document.createElement('a');
-                liveBtn.href = liveLink;
-                liveBtn.target = '_blank';
-                liveBtn.className = 'explorer-action-btn live';
-                liveBtn.innerHTML = '<i class="fa-solid fa-earth-americas"></i> View Live';
-                liveBtn.onclick = (e) => e.stopPropagation();
-                actions.appendChild(liveBtn);
-            }
 
             const repoLink = String(rawRepoLink ?? '');
             if (this.isHttpUrl(repoLink)) {
@@ -386,6 +385,6 @@ export class ProjectViewer {
             container.appendChild(item);
         });
 
-        this.windowManager.open('project-explorer', 'Project Explorer', container, 960, 660);
+        this.windowManager.open('project-explorer', 'Project Explorer', container, { width: 960, height: 660 });
     }
 }
