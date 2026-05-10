@@ -1,4 +1,4 @@
-import { WindowManager, WindowAction, WindowOptions } from '../core/WindowManager';
+import { WindowManager, WindowAction } from '../core/WindowManager';
 import { sanitizeUrl } from '../core/Utils';
 import command from '../../config.json';
 
