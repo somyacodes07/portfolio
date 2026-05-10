@@ -33,7 +33,6 @@ const getItems = (config: any, key: string): SkillItem[] => {
     }));
 };
 
-/** Render a single skill name as an interactive tag with a hover tooltip. */
 /** Render a single skill name as an interactive tag with a styled hover tooltip. */
 const skillTag = (item: SkillItem): string => {
     const tip = item.desc
