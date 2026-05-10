@@ -100,9 +100,10 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
   for (let g = 0; g < GUTTER_CELLS; g++) monthRow += cell(SP);
 
   for (let w = 0; w < weeksToShow.length; w++) {
-    if (monthAtWeek[w]) {
+    const label = monthAtWeek[w];
+    if (label) {
       // Month label spans 2 cells wide
-      monthRow += cell(monthAtWeek[w], 'gh-cell-wide gh-graph-dim', undefined);
+      monthRow += cell(label, 'gh-cell-wide gh-graph-dim', undefined);
       w++; // consumed 2 cells
       if (w >= weeksToShow.length) break;
     } else {
