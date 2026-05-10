@@ -10,7 +10,7 @@ const getTheme = () => {
 }
 
 const getUptime = () => {
-    return "1y 2m (since May 2025)";
+    return "1y 3m";
 }
 
 const createFetch = (): string[] => {
@@ -34,7 +34,7 @@ const createFetch = (): string[] => {
   const asciiArt = command.ascii;
   
   // Prepare info lines
-  const titleLine = `<span class="prompt-user">Welcome to webterm</span>`;
+  const titleLine = `<span class="prompt-user">Welcome to WebTerm!</span>`;
   const sepLine = `─────────────────────`;
   
   const infoLines = [
@@ -52,14 +52,23 @@ const createFetch = (): string[] => {
       `<span style="background:var(--bg);color:var(--bg)">███</span><span style="background:var(--prompt-host);color:var(--prompt-host)">███</span><span style="background:var(--prompt-user);color:var(--prompt-user)">███</span><span style="background:var(--banner);color:var(--banner)">███</span>`
   ];
 
-  const maxAsciiWidth = Math.max(...asciiArt.map(line => line.length));
-  const maxLines = Math.max(asciiArt.length, infoLines.length);
+  const asciiArtWithHelp = [...asciiArt, "","","", "Type 'help' for all commands."];
+  const maxAsciiWidth = Math.max(...asciiArtWithHelp.map(line => line.length));
+  const maxLines = Math.max(asciiArtWithHelp.length, infoLines.length);
 
   for (let i = 0; i < maxLines; i++) {
-      const leftRaw = asciiArt[i] || "";
+      const leftRaw = asciiArtWithHelp[i] || "";
       // Pad right with spaces
       const leftPadded = leftRaw + " ".repeat(Math.max(0, maxAsciiWidth - leftRaw.length));
-      const leftHtml = `<pre style="display:inline; margin:0; padding:0; color:var(--banner)">${escapeHTML(leftPadded).replace(/ /g, "&nbsp;")}</pre>`;
+      
+      let leftHtml;
+      if (i === asciiArtWithHelp.length - 1) { // The help text line
+          const escaped = escapeHTML(leftPadded).replace(/ /g, "&nbsp;");
+          const clickable = escaped.replace("&#039;help&#039;", "<span class='command clickable' data-command='help' role='button' tabindex='0'>'help'</span>");
+          leftHtml = `<pre style="display:inline; margin:0; padding:0; color:var(--text, #fff)">${clickable}</pre>`;
+      } else {
+          leftHtml = `<pre style="display:inline; margin:0; padding:0; color:var(--banner)">${escapeHTML(leftPadded).replace(/ /g, "&nbsp;")}</pre>`;
+      }
       
       const rightHtml = infoLines[i] || "";
       
