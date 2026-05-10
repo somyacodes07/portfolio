@@ -353,6 +353,36 @@ export class ProjectViewer {
             item.appendChild(descriptionNode);
             item.appendChild(stackNode);
             item.appendChild(badges);
+
+            // Action Buttons (Live Link, GitHub)
+            const actions = document.createElement('div');
+            actions.className = 'explorer-actions';
+
+            if (liveLink) {
+                const liveBtn = document.createElement('a');
+                liveBtn.href = liveLink;
+                liveBtn.target = '_blank';
+                liveBtn.className = 'explorer-action-btn live';
+                liveBtn.innerHTML = '<i class="fa-solid fa-earth-americas"></i> View Live';
+                liveBtn.onclick = (e) => e.stopPropagation();
+                actions.appendChild(liveBtn);
+            }
+
+            const repoLink = String(rawRepoLink ?? '');
+            if (this.isHttpUrl(repoLink)) {
+                const githubBtn = document.createElement('a');
+                githubBtn.href = repoLink;
+                githubBtn.target = '_blank';
+                githubBtn.className = 'explorer-action-btn github';
+                githubBtn.innerHTML = '<i class="fa-brands fa-github"></i> GitHub';
+                githubBtn.onclick = (e) => e.stopPropagation();
+                actions.appendChild(githubBtn);
+            }
+
+            if (actions.children.length > 0) {
+                item.appendChild(actions);
+            }
+
             container.appendChild(item);
         });
 
