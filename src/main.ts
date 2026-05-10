@@ -4,11 +4,11 @@ import './css/explorer.css';
 import { escapeHTML, sanitizeUrl } from './core/Utils';
 import { HELP } from "./commands/help";
 import { getBanner } from "./commands/banner";
-import { ABOUT } from "./commands/about"
+import { getAbout } from "./commands/about"
 import { createProject } from "./commands/projects";
 import { EDUCATION } from "./commands/education";
 import { CERTIFICATIONS } from "./commands/certifications";
-import { getGitHubContributions } from "./commands/github";
+import { prefetchContributions } from "./commands/github";
 
 import { createWhoami } from "./commands/whoami";
 import { setTheme } from "./core/ThemeManager";
@@ -271,7 +271,7 @@ const registerCommands = () => {
 
   dispatcher.register("about", () => {
     if (bareMode) { writeLines(["Nothing to see here.", "<br>"]); return; }
-    writeLines(ABOUT);
+    writeLines(getAbout());
   });
 
   dispatcher.register("education", () => {
@@ -334,19 +334,6 @@ const registerCommands = () => {
     }, 500);
   });
 
-  dispatcher.register("contributions", () => {
-    if (bareMode) { writeLines(["no graphs in the void.", "<br>"]); return; }
-
-    // Show loading state immediately
-    const loadingLines = getGitHubContributions((graphLines) => {
-      // When data arrives, render graph lines
-      graphLines.forEach((line, idx) => {
-        displayText(line, idx);
-      });
-      scrollToBottom();
-    });
-    writeLines(loadingLines);
-  });
 
   dispatcher.register("email", () => {
     const safeMailto = sanitizeUrl(`mailto:${SOCIAL.email}`, { allowRelative: false, allowMailto: true });
@@ -495,7 +482,7 @@ const registerCommands = () => {
 
 // --- Input Manager Init ---
 
-const commandList = ["help", "about", "projects", "whoami", "education", "certificates", "certifications", "skills", "contributions", "banner", "clear", "resume", "linkedin", "github", "email", "ls", "sudo", "rm -rf", "repo", "theme"];
+const commandList = ["help", "about", "projects", "whoami", "education", "certificates", "certifications", "skills", "banner", "clear", "resume", "linkedin", "github", "email", "ls", "sudo", "rm -rf", "repo", "theme"];
 
 const inputManager = new InputManager(
   "user-input",
@@ -554,6 +541,7 @@ const initEventListeners = () => {
 
   window.addEventListener('load', () => {
     applyWallpaperFromConfig();
+    prefetchContributions(); // Start fetching GitHub data immediately
     const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
     if (savedTheme && builtInThemes[savedTheme]) {
       setTheme(builtInThemes[savedTheme]);
