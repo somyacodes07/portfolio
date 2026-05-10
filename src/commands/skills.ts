@@ -1,72 +1,126 @@
 import command from '../../config.json';
 import { escapeHTML } from '../core/Utils';
 
-export const getSkills = (): string[] => {
-    const config = (window as any).config || command;
-    const skills: string[] = [];
-    const SPACE = "&nbsp;";
-
-    skills.push("<br>");
-
-    if (config.skills) {
-        const categories = [
-            { key: 'languages', label: 'Languages' },
-            { key: 'web', label: 'Web Technologies' },
-            { key: 'backend', label: 'Backend' },
-            { key: 'ai_ml', label: 'AI/ML' },
-            { key: 'tools', label: 'Tools' }
-        ];
-
-        categories.forEach((category) => {
-            const key = category.key as keyof typeof config.skills;
-            // The type handling here might need adjustment if TS strictly checks config structure vs original json import
-            // treating as any for flexibility since we just changed json
-            const skillList = config.skills[key] as any[];
-
-            if (skillList && skillList.length > 0) {
-                let string = "";
-                // Category header
-                string += SPACE.repeat(2);
-                string += `<span class='command'>${escapeHTML(category.label)}</span>`;
-                skills.push(string);
-
-                // Find max length of name for alignment
-                // We want: "- Name   Description"
-                // So we need to pad Name to max length + gap
-                let maxNameLen = 0;
-                skillList.forEach((item: any) => {
-                    const name = typeof item === 'string' ? item : item.name;
-                    if (name.length > maxNameLen) maxNameLen = name.length;
-                });
-
-                const gap = 4; // spaces between name and desc
-
-                skillList.forEach((item: any) => {
-                    const name = String(typeof item === 'string' ? item : item.name ?? "");
-                    const desc = String(typeof item === 'string' ? "" : item.desc ?? "");
-
-                    let line = "";
-                    line += SPACE.repeat(4);
-                    line += `- ${escapeHTML(name)}`;
-
-                    if (desc) {
-                        const padding = (maxNameLen - name.length) + gap;
-                        line += SPACE.repeat(padding);
-                        line += `<span class='desy'>${escapeHTML(desc)}</span>`; // 'desy' class might need to be defined or just use color span
-                        // Actually, let's use a known class or standard color. 'command' is blueish. 
-                        // Let's rely on default text color or a specific dim color.
-                        // Since I can't easily add css right now without moving files, I'll style it inline or use existing.
-                        // But wait, I am restructuring files in next step. I can add css there.
-                        // For now let's just output text.
-                    }
-                    skills.push(line);
-                });
-                skills.push("<br>");
-            }
-        });
-    }
-
-    return skills;
+interface SkillItem {
+    name: string;
+    desc: string;
 }
 
-export const SKILLS = []; // Legacy compatibility if needed, but we should switch to getSkills call.
+interface SkillCategory {
+    key: string;
+    label: string;
+}
+
+const COL_WIDTH = 28;
+const INDENT = 2;
+const SP = '&nbsp;';
+
+const CATEGORIES: SkillCategory[] = [
+    { key: 'languages', label: 'Languages' },
+    { key: 'web', label: 'Web' },
+    { key: 'backend', label: 'Backend' },
+    { key: 'ai_ml', label: 'AI / ML' },
+    { key: 'tools', label: 'Tools' }
+];
+
+/** Read skill items from config for a given category key. */
+const getItems = (config: any, key: string): SkillItem[] => {
+    const raw = config.skills?.[key] as any[] | undefined;
+    if (!Array.isArray(raw)) return [];
+    return raw.map((item: any) => ({
+        name: String(typeof item === 'string' ? item : item.name ?? ''),
+        desc: String(typeof item === 'string' ? '' : item.desc ?? '')
+    }));
+};
+
+/** Render a single skill name as an interactive tag with a hover tooltip. */
+/** Render a single skill name as an interactive tag with a styled hover tooltip. */
+const skillTag = (item: SkillItem): string => {
+    const tip = item.desc
+        ? `<span class="skill-tip">${escapeHTML(item.desc)}</span>`
+        : '';
+    return `<span class="skill-tag">${escapeHTML(item.name)}${tip}</span>`;
+};
+
+/** Render two categories side-by-side in a fixed-width two-column layout. */
+const renderPair = (config: any, left: SkillCategory, right: SkillCategory): string[] => {
+    const leftItems = getItems(config, left.key);
+    const rightItems = getItems(config, right.key);
+    const maxRows = Math.max(leftItems.length, rightItems.length);
+    const lines: string[] = [];
+
+    // Header
+    let header = SP.repeat(INDENT);
+    header += `<span class="skill-col-header" style="display:inline-block;width:${COL_WIDTH}ch">${escapeHTML(left.label)}</span>`;
+    header += `<span class="skill-col-header">${escapeHTML(right.label)}</span>`;
+    lines.push(header);
+
+    // Separator
+    let sep = SP.repeat(INDENT);
+    sep += `<span class="skill-separator" style="display:inline-block;width:${COL_WIDTH}ch">${'─'.repeat(left.label.length)}</span>`;
+    sep += `<span class="skill-separator">${'─'.repeat(right.label.length)}</span>`;
+    lines.push(sep);
+
+    // Rows
+    for (let i = 0; i < maxRows; i++) {
+        let row = SP.repeat(INDENT);
+
+        if (i < leftItems.length) {
+            row += `<span style="display:inline-block;width:${COL_WIDTH}ch">${skillTag(leftItems[i])}</span>`;
+        } else {
+            row += `<span style="display:inline-block;width:${COL_WIDTH}ch">${SP}</span>`;
+        }
+
+        if (i < rightItems.length) {
+            row += skillTag(rightItems[i]);
+        }
+
+        lines.push(row);
+    }
+
+    return lines;
+};
+
+/** Render a standalone category as inline tags separated by dots. */
+const renderInline = (config: any, cat: SkillCategory): string[] => {
+    const items = getItems(config, cat.key);
+    if (items.length === 0) return [];
+    const lines: string[] = [];
+
+    let header = SP.repeat(INDENT);
+    header += `<span class="skill-col-header">${escapeHTML(cat.label)}</span>`;
+    lines.push(header);
+
+    let sep = SP.repeat(INDENT);
+    sep += `<span class="skill-separator">${'─'.repeat(cat.label.length)}</span>`;
+    lines.push(sep);
+
+    let row = SP.repeat(INDENT);
+    row += items.map(item => skillTag(item)).join(`<span class="skill-separator"> · </span>`);
+    lines.push(row);
+
+    return lines;
+};
+
+export const getSkills = (): string[] => {
+    const config = (window as any).config || command;
+    if (!config.skills) return [];
+
+    const lines: string[] = ['<br>'];
+
+    // Pair 1: Languages | Web
+    lines.push(...renderPair(config, CATEGORIES[0], CATEGORIES[1]));
+    lines.push('<br>');
+
+    // Pair 2: Backend | AI/ML
+    lines.push(...renderPair(config, CATEGORIES[2], CATEGORIES[3]));
+    lines.push('<br>');
+
+    // Standalone: Tools (inline tags)
+    lines.push(...renderInline(config, CATEGORIES[4]));
+    lines.push('<br>');
+
+    return lines;
+};
+
+export const SKILLS = []; // Legacy compatibility
