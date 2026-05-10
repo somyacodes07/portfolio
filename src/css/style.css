@@ -368,10 +368,34 @@ a:not(.certificate-window-link):hover {
   font-weight: 400;
 }
 
-/* GitHub Contribution Graph – theme-aware colors */
+/* GitHub Contribution Graph – theme-aware colors
+   --gh-1 through --gh-4 are set by ThemeManager based on the active theme's accent. */
+:root {
+  --gh-1: rgba(14, 68, 41, 1);
+  --gh-2: rgba(0, 109, 50, 1);
+  --gh-3: rgba(38, 166, 65, 1);
+  --gh-4: rgba(57, 211, 83, 1);
+}
+
 .gh-cell-empty {
   color: var(--border);
-  opacity: 0.7;
+  opacity: 0.55;
+}
+
+.gh-cell-1 {
+  color: var(--gh-1);
+}
+
+.gh-cell-2 {
+  color: var(--gh-2);
+}
+
+.gh-cell-3 {
+  color: var(--gh-3);
+}
+
+.gh-cell-4 {
+  color: var(--gh-4);
 }
 
 .gh-graph-header {
@@ -389,6 +413,10 @@ a:not(.certificate-window-link):hover {
 
 .gh-graph-accent {
   color: var(--prompt-host);
+}
+
+.gh-graph-warm {
+  color: var(--prompt-user);
 }
 
 #sidebar {
