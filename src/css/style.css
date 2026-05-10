@@ -368,6 +368,29 @@ a:not(.certificate-window-link):hover {
   font-weight: 400;
 }
 
+/* GitHub Contribution Graph – theme-aware colors */
+.gh-cell-empty {
+  color: var(--border);
+  opacity: 0.7;
+}
+
+.gh-graph-header {
+  color: var(--prompt-host);
+  font-weight: 600;
+}
+
+.gh-graph-dim {
+  color: var(--prompt-default);
+}
+
+.gh-graph-text {
+  color: var(--text);
+}
+
+.gh-graph-accent {
+  color: var(--prompt-host);
+}
+
 #sidebar {
   width: clamp(170px, 17vw, 210px);
   padding: 14px 10px 14px 0;
