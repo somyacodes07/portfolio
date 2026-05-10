@@ -1,3 +1,16 @@
+export interface WindowAction {
+    label: string;
+    link: string;
+    icon?: string;
+    className?: string;
+}
+
+export interface WindowOptions {
+    width?: number;
+    height?: number;
+    actions?: WindowAction[];
+}
+
 export class WindowManager {
     private windows = new Map<string, HTMLElement>();
     private zIndexCounter = 100;
@@ -17,7 +30,7 @@ export class WindowManager {
         return window.innerWidth <= 600;
     }
 
-    public open(id: string, title: string, content: string | HTMLElement, width?: number, height?: number): void {
+    public open(id: string, title: string, content: string | HTMLElement, options?: WindowOptions | number, height?: number): void {
         if (this.isMobile()) {
             return;
         }
@@ -27,7 +40,20 @@ export class WindowManager {
             return;
         }
 
-        const win = this.createWindowDOM(id, title, content, width, height);
+        let widthValue: number | undefined;
+        let heightValue: number | undefined;
+        let actions: WindowAction[] | undefined;
+
+        if (typeof options === "number") {
+            widthValue = options;
+            heightValue = height;
+        } else if (options) {
+            widthValue = options.width;
+            heightValue = options.height;
+            actions = options.actions;
+        }
+
+        const win = this.createWindowDOM(id, title, content, widthValue, heightValue, actions);
         this.container.appendChild(win);
         this.windows.set(id, win);
         this.bringToFront(win);
@@ -82,7 +108,8 @@ export class WindowManager {
         title: string,
         content: string | HTMLElement,
         width?: number,
-        height?: number
+        height?: number,
+        actions?: WindowAction[]
     ): HTMLElement {
         const win = document.createElement("div");
         win.className = "desktop-window";
@@ -100,6 +127,19 @@ export class WindowManager {
 
         const titleText = document.createElement("span");
         titleText.textContent = title;
+        titleBar.appendChild(titleText);
+
+        if (actions && actions.length > 0) {
+            actions.forEach(action => {
+                const actionBtn = document.createElement("a");
+                actionBtn.href = action.link;
+                actionBtn.target = "_blank";
+                actionBtn.className = `window-title-action ${action.className || ""}`;
+                actionBtn.innerHTML = `${action.icon ? `<i class="${action.icon}"></i> ` : ""}${action.label}`;
+                actionBtn.addEventListener("pointerdown", (e) => e.stopPropagation());
+                titleBar.appendChild(actionBtn);
+            });
+        }
 
         const controls = document.createElement("div");
         controls.className = "window-controls";
@@ -110,7 +150,6 @@ export class WindowManager {
         closeBtn.addEventListener("click", () => this.close(id));
 
         controls.appendChild(closeBtn);
-        titleBar.appendChild(titleText);
         titleBar.appendChild(controls);
 
         // Content
