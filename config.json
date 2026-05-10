@@ -26,6 +26,7 @@
     "linkedin": "https://linkedin.com/in/somyajeetsingh"
   },
   "aboutGreeting": "I work across design and development.",
+  "wallpaper": "",
   "education": [
     {
       "institution": "ITM Skills University, Navi Mumbai",
@@ -47,111 +48,87 @@
     "languages": [
       {
         "name": "Python",
-        "desc": "Data Science & Scripting"
+        "desc": "ML pipelines, data science, automation scripts"
       },
       {
         "name": "JavaScript (ES6+)",
-        "desc": "Web Interaction"
+        "desc": "Full-stack web apps, async patterns, DOM APIs"
       },
       {
         "name": "TypeScript",
-        "desc": "Type Safety"
+        "desc": "Type-safe production codebases, large-scale apps"
       },
       {
         "name": "C++",
-        "desc": "System Programming & Compiler Backends"
+        "desc": "DSA, systems programming, Wasm compilation"
       }
     ],
     "web": [
       {
         "name": "React.js",
-        "desc": "UI Library"
+        "desc": "Component-driven SPAs with hooks & state management"
       },
       {
         "name": "Next.js 15",
-        "desc": "Full-Stack Framework"
-      },
-      {
-        "name": "MapLibre",
-        "desc": "Interactive Web Maps"
+        "desc": "SSR, SSG, API routes, full-stack React framework"
       },
       {
         "name": "Tailwind CSS",
-        "desc": "Utility-First Styling"
-      },
-      {
-        "name": "HTML5",
-        "desc": "Markup"
-      },
-      {
-        "name": "CSS3",
-        "desc": "Styling"
+        "desc": "Utility-first rapid UI prototyping & design systems"
       }
     ],
     "backend": [
       {
         "name": "Node.js",
-        "desc": "REST APIs"
+        "desc": "REST & real-time APIs, Express, event-driven I/O"
       },
       {
         "name": "FastAPI",
-        "desc": "High-Performance Python APIs"
+        "desc": "High-perf Python APIs with auto-generated docs"
       },
       {
         "name": "MongoDB",
-        "desc": "NoSQL"
+        "desc": "Document-oriented NoSQL, aggregation pipelines"
       },
       {
         "name": "PostgreSQL",
-        "desc": "Relational"
-      },
-      {
-        "name": "SQLite",
-        "desc": "Lightweight Relational DB"
+        "desc": "Relational DB, complex queries, production-grade"
       }
     ],
     "ai_ml": [
       {
         "name": "NumPy",
-        "desc": "Numerical Computing"
+        "desc": "Numerical computing, matrix ops, vectorization"
       },
       {
         "name": "Pandas",
-        "desc": "Data Analysis"
+        "desc": "Data wrangling, cleaning, exploratory analysis"
       },
       {
         "name": "Scikit-learn",
-        "desc": "Machine Learning"
-      },
-      {
-        "name": "Google Earth Engine (GEE)",
-        "desc": "Geospatial Analysis"
+        "desc": "Classical ML — regression, classification, clustering"
       },
       {
         "name": "Neural Networks",
-        "desc": "Deep Learning Foundations"
-      },
-      {
-        "name": "AI Workflows",
-        "desc": "Automation"
+        "desc": "Deep learning architectures, CNNs, backpropagation"
       }
     ],
     "tools": [
       {
         "name": "Git & GitHub",
-        "desc": "Version Control"
+        "desc": "Branching, PRs, CI/CD workflows, collaboration"
       },
       {
         "name": "Docker",
-        "desc": "Containerization"
+        "desc": "Containerized builds, multi-stage Dockerfiles"
       },
       {
         "name": "VS Code",
-        "desc": "Development Environment"
+        "desc": "Extensions, debugging, custom workspace configs"
       },
       {
         "name": "Figma",
-        "desc": "UI/UX Design"
+        "desc": "Wireframes, prototypes, design-to-code handoff"
       }
     ]
   },
