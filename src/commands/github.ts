@@ -285,7 +285,7 @@ export function prefetchContributions(): void {
   if (fetchPromise) return; // already in flight
 
   const githubUrl = command.social.github || '';
-  const username = githubUrl.split('/').filter(Boolean).pop() || 'ssgamingop';
+  const username = githubUrl.split('/').filter(Boolean).pop() || 'somyacodes07';
 
   fetchPromise = fetchContributions(username).then((data) => {
     if (data && data.weeks.length > 0) {

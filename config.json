@@ -18,15 +18,15 @@
   "username": "somyacodes",
   "hostname": "portfolio",
   "password": "admin",
-  "repoLink": "https://github.com/ssgamingop/portfolio",
+  "repoLink": "https://github.com/somyacodes07/portfolio",
   "resume": "/projects/resume.pdf",
   "social": {
     "email": "somyajeetsingh15@gmail.com",
-    "github": "https://github.com/ssgamingop",
+    "github": "https://github.com/somyacodes07",
     "linkedin": "https://linkedin.com/in/somyajeetsingh"
   },
   "aboutGreeting": "I work across design and development.",
-  "wallpaper": "https://raw.githubusercontent.com/ssgamingop/portfolio/refs/heads/main/res/wall.png",
+  "wallpaper": "/res/wall.png",
   "education": [
     {
       "institution": "ITM Skills University, Navi Mumbai",
@@ -136,7 +136,7 @@
     [
       "AlgoViz",
       "Interactive code visualizer that steps through JavaScript and C++ execution line-by-line, with real-time variable tracking and complexity analysis.",
-      "https://github.com/ssgamingop/AlgoViz",
+      "https://github.com/somyacodes07/AlgoViz",
       "https://algoviz.somyacodes.in/",
       null,
       [
@@ -158,7 +158,7 @@
     [
       "SentinelIQ",
       "Planetary-scale flood risk intelligence platform powered by satellite telemetry and hybrid ML risk scoring.",
-      "https://github.com/ssgamingop/DDoS-PS6",
+      "https://github.com/somyacodes07/DDoS-PS6",
       "Not Yet Deployed",
       null,
       [
@@ -179,7 +179,7 @@
     [
       "Music Visualizer",
       "Audio visualizer built in Python that plays .wav files and renders real-time visual effects.",
-      "https://github.com/ssgamingop/ss-music-visualizer",
+      "https://github.com/somyacodes07/music_visualizer",
       null,
       null,
       [
@@ -200,7 +200,7 @@
     [
       "AR-Based Interactive Projects",
       "Experimental AR applications built with OpenCV and Python, featuring real-time mouse-based interactions.",
-      "https://github.com/ssgamingop/kit_making",
+      "https://github.com/somyacodes07/AR_Kite",
       null,
       null,
       [
@@ -220,7 +220,7 @@
     [
       "Sur Sangam - Music Generator",
       "AI to generate Hindi lyrics, compose music, and suggest improvements with browser-based persistent storage.",
-      "https://github.com/ssgamingop/sur_sangam",
+      "https://github.com/somyacodes07/sur_sangam",
       "https://sur-sangam.vercel.app/",
       null,
       [
