@@ -2,6 +2,9 @@ import command from '../../config.json';
 import { WindowManager } from '../core/WindowManager';
 import { sanitizeUrl } from '../core/Utils';
 
+/**
+ * Represents a document stored within a company experience folder.
+ */
 export type ExperienceDocument = {
     id: string;
     title: string;
@@ -11,6 +14,9 @@ export type ExperienceDocument = {
     description?: string;
 };
 
+/**
+ * Represents a company work experience folder containing role details and documents.
+ */
 export type CompanyExperience = {
     id: string;
     company: string;
@@ -22,6 +28,9 @@ export type CompanyExperience = {
     documents: ExperienceDocument[];
 };
 
+/**
+ * UI Viewer for Work Experience, Company Folders, and Document PDF Viewers.
+ */
 export class ExperienceViewer {
     private windowManager: WindowManager;
 
