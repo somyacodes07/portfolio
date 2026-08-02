@@ -12,18 +12,22 @@
     width: 700px;
     height: 480px;
 
-    /* Terminal Aesthetic: Darker, sharper, minimal blur */
-    background: var(--win-bg, rgba(13, 17, 23, 0.95));
-    /* Nearly opaque */
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    /* Terminal Glass Aesthetic */
+    background:
+        radial-gradient(circle at top left, rgba(88, 166, 255, 0.05), transparent 40%),
+        var(--win-bg, rgba(13, 17, 23, 0.96));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 
-    /* Sharp Borders */
+    /* Sharp Accented Borders */
     border: 1px solid var(--win-border, #30363D);
+    border-top: 3px solid var(--banner, #58A6FF);
     border-radius: 0;
 
-    /* Terminal Shadow */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    /* Terminal Shadow with Depth */
+    box-shadow:
+        0 16px 38px rgba(0, 0, 0, 0.75),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
 
     display: flex;
     flex-direction: column;
@@ -32,47 +36,48 @@
     overflow: hidden;
     user-select: none;
 
-    /* Quick Snap Animation */
-    animation: openWindow 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Smooth Entrance Animation */
+    animation: openWindow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform, opacity;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .desktop-window.is-active {
-    border-color: var(--win-active-border-soft, rgba(88, 166, 255, 0.45));
+    border-color: var(--win-active-border-soft, rgba(88, 166, 255, 0.5));
+    border-top-color: var(--banner, #58A6FF);
     box-shadow:
-        0 0 0 1px var(--win-active-border-soft, rgba(88, 166, 255, 0.45)),
-        0 0 0 3px var(--win-active-glow, rgba(88, 166, 255, 0.16)),
-        0 10px 26px rgba(0, 0, 0, 0.82);
+        0 0 0 1px var(--win-active-border-soft, rgba(88, 166, 255, 0.5)),
+        0 0 24px var(--win-active-glow, rgba(88, 166, 255, 0.22)),
+        0 18px 42px rgba(0, 0, 0, 0.85);
     z-index: 1001;
 }
 
 @keyframes openWindow {
     from {
-        transform: scale(0);
+        transform: scale(0.96) translateY(8px);
         opacity: 0;
     }
 
     to {
-        transform: scale(1);
+        transform: scale(1) translateY(0);
         opacity: 1;
     }
 }
 
 .window-title-bar {
-    height: 36px;
-    background: rgba(255, 255, 255, 0.03);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    height: 40px;
+    background: rgba(255, 255, 255, 0.025);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 12px;
+    padding: 0 14px;
     cursor: grab;
     user-select: none;
-    color: var(--win-title-color, rgba(255, 255, 255, 0.9));
+    color: var(--win-title-color, rgba(255, 255, 255, 0.95));
     font-size: 13px;
     font-weight: 600;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.03em;
 }
 
 .window-title-bar:active {
@@ -89,48 +94,55 @@
 .window-title-action {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 2px 8px;
-    font-size: 10px;
-    font-weight: 800;
+    gap: 5px;
+    padding: 3px 9px;
+    font-size: 10.5px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    border-radius: 2px;
+    letter-spacing: 0.08em;
+    border-radius: 0;
     text-decoration: none;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    background: rgba(126, 231, 135, 0.12);
-    color: #7EE787;
-    border: 1px solid rgba(126, 231, 135, 0.35);
+    transition: all 0.15s ease;
+    background: rgba(88, 166, 255, 0.08);
+    color: var(--banner, #58A6FF);
+    border: 1px dashed rgba(88, 166, 255, 0.4);
     cursor: pointer;
     line-height: 1;
 }
 
 .window-title-action:hover {
-    background: rgba(126, 231, 135, 0.25);
-    border-color: #7EE787;
-    transform: translateY(-0.5px);
-    box-shadow: 0 2px 8px rgba(126, 231, 135, 0.2);
+    background: var(--banner, #58A6FF);
+    color: #0d1117;
+    border-style: solid;
+    border-color: var(--banner, #58A6FF);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 10px rgba(88, 166, 255, 0.3);
 }
 
 .window-title-action i {
-    font-size: 9px;
-    opacity: 0.9;
+    font-size: 10px;
 }
 
 .window-controls {
     display: flex;
+    align-items: center;
     gap: 8px;
 }
 
 .win-btn {
     border: none;
-    background: none;
+    background: rgba(255, 255, 255, 0.06);
     color: #8B949E;
     font-family: inherit;
+    font-size: 11px;
     font-weight: bold;
     cursor: pointer;
-    padding: 2px 6px;
-    border-radius: 2px;
+    width: 22px;
+    height: 22px;
+    display: grid;
+    place-items: center;
+    border-radius: 0;
+    transition: all 0.15s ease;
 }
 
 .win-btn:hover {
@@ -144,16 +156,16 @@
 }
 
 .close-btn:hover {
-    background: #DA3633;
+    background: #ff5555;
     color: #ffffff;
+    box-shadow: 0 0 10px rgba(255, 85, 85, 0.4);
 }
 
 .window-content {
     flex: 1;
     padding: 0;
     overflow: hidden;
-    /* Fix: scroll handled by children (explorer grid, iframe) */
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.25);
     color: #E6EDF3;
     position: relative;
     user-select: text;
