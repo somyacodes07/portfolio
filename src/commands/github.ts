@@ -22,13 +22,13 @@ interface GitHubContributionData {
 
 const LEVEL_LABELS = ['None', 'Low', 'Med', 'High', 'Max'];
 
-// CSS classes for each level – colors set via CSS variables so they adapt to theme
+// CSS classes for each level - colors set via CSS variables so they adapt to theme
 const LEVEL_CLASSES = [
   'gh-cell-empty', // Level 0
-  'gh-cell-1',     // Level 1 – low
-  'gh-cell-2',     // Level 2 – medium-low
-  'gh-cell-3',     // Level 3 – medium-high
-  'gh-cell-4',     // Level 4 – high
+  'gh-cell-1',     // Level 1 - low
+  'gh-cell-2',     // Level 2 - medium-low
+  'gh-cell-3',     // Level 3 - medium-high
+  'gh-cell-4',     // Level 4 - high
 ];
 
 function getContributionLevel(count: number): number {
@@ -112,11 +112,11 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
   }
   lines.push(monthRow);
 
-  // ── Grid rows (7 days: Sun–Sat) ──
+  // ── Grid rows (7 days: Sun-Sat) ──
   for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
     let row = '';
 
-    // Day label – fixed width gutter (4 cells)
+    // Day label - fixed width gutter (4 cells)
     const dayLabel = DAY_LABELS[dayOfWeek];
     if (dayLabel) {
       row += cell(SP);
@@ -146,7 +146,7 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
   lines.push('');
   let legendRow = '';
   for (let g = 0; g < GUTTER_CELLS; g++) legendRow += cell(SP);
-  
+
   legendRow += `<span class="gh-graph-dim" style="font-size:0.82em; margin-right: 4px;">Less</span>`;
   for (let i = 0; i < LEVEL_CLASSES.length; i++) {
     legendRow += cell(BLOCK, LEVEL_CLASSES[i], LEVEL_LABELS[i]);

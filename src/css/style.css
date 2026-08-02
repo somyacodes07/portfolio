@@ -93,13 +93,11 @@ body::after {
   inset: 0;
   width: 100%;
   height: 100%;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.1),
-    rgba(0, 0, 0, 0.1) 1px,
-    transparent 1px,
-    transparent 2px
-  );
+  background: repeating-linear-gradient(0deg,
+      rgba(0, 0, 0, 0.1),
+      rgba(0, 0, 0, 0.1) 1px,
+      transparent 1px,
+      transparent 2px);
   pointer-events: none;
   z-index: 3;
   opacity: 0.14;
@@ -123,7 +121,7 @@ p {
   overflow: hidden;
 }
 
-#terminal > div,
+#terminal>div,
 #input-line,
 #password-input {
   line-height: var(--terminal-line-height);
@@ -191,6 +189,7 @@ input {
 }
 
 @keyframes blink {
+
   0%,
   100% {
     opacity: 1;
@@ -351,7 +350,7 @@ a:not(.certificate-window-link):hover {
   font-weight: 400;
 }
 
-/* Skills – Two-Column Layout */
+/* Skills - Two-Column Layout */
 .skill-col-header {
   color: var(--prompt-user);
   font-weight: 600;
@@ -409,7 +408,8 @@ a:not(.certificate-window-link):hover {
   border-bottom-color: transparent;
   border-top-color: var(--prompt-user);
 }
-/* GitHub Contribution Graph – theme-aware colors
+
+/* GitHub Contribution Graph - theme-aware colors
    --gh-1 through --gh-4 are set by ThemeManager based on the active theme's accent. */
 :root {
   --gh-1: rgba(14, 68, 41, 1);
@@ -449,7 +449,8 @@ a:not(.certificate-window-link):hover {
 }
 
 .gh-cell-wide {
-  width: 2.7ch; /* 2 cells + spacing */
+  width: 2.7ch;
+  /* 2 cells + spacing */
   text-align: left;
 }
 
@@ -640,46 +641,74 @@ a:focus-visible {
     max-width: none;
   }
 
-  /* Sidebar Mobile Overrides */
+  /* Sidebar Mobile Overrides - Smooth Horizontal Touch Bar */
   #sidebar {
     width: 100%;
     border-left: none;
-    border-top: 1px dashed var(--panel-border-soft);
-    padding: 10px;
+    border-top: 1px solid var(--panel-border-soft, rgba(255, 255, 255, 0.12));
+    padding: 10px 12px max(10px, env(safe-area-inset-bottom));
     height: auto;
-    background: var(--bg);
+    background: var(--win-bg, var(--bg));
     box-sizing: border-box;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
     gap: 8px;
     position: sticky;
     bottom: 0;
     z-index: 12;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
 
-  #sidebar > .sidebar-spacer {
+  #sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  #sidebar>.sidebar-spacer {
     display: none;
   }
 
   .action-btn {
-    width: 100%;
-    padding: 0 6px;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    white-space: nowrap;
+    padding: 8px 14px;
     font-size: 11px;
-    min-height: 44px;
-    display: flex;
+    font-weight: 700;
+    min-height: 42px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    letter-spacing: 0.06em;
+    border-radius: 4px;
+    touch-action: manipulation;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  }
+
+  .action-btn:active {
+    transform: scale(0.95);
+    background: var(--explorer-hover-bg, rgba(88, 166, 255, 0.15));
+    border-color: var(--banner, #58A6FF);
+    color: var(--banner, #58A6FF);
   }
 
   .small-btn {
-    width: 44px;
-    height: 44px;
-    margin: 0 auto;
-    margin-top: 0;
-    align-self: center;
+    flex: 0 0 auto;
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
+    min-height: 42px;
+    padding: 0;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
   }
 
   #password-input {
@@ -688,6 +717,7 @@ a:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

@@ -46,7 +46,7 @@ const createProject = (args?: string[]): string[] => {
       dataAttrs.push(`data-proj-live="${escapeHTML(liveLink)}"`);
     }
 
-    // WebDesktop Link (Main Click) – uses data attributes instead of inline onclick
+    // WebDesktop Link (Main Click) - uses data attributes instead of inline onclick
     let link = `<span class="command clickable proj-link" role="button" tabindex="0" aria-label="Open project ${displayTitle}" style="cursor: pointer;" ${dataAttrs.join(' ')}>${displayTitle}</span>`;
 
     // External Icon (GitHub)

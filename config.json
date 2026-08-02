@@ -14,7 +14,7 @@
     "█▄▄██▀█▄▄██▀",
     "            "
   ],
-  "title": "Full-Stack Developer | AI/ML",
+  "title": "Full-Stack • AI • DevOps Developer",
   "username": "somyacodes",
   "hostname": "portfolio",
   "password": "admin",
@@ -31,7 +31,7 @@
     {
       "institution": "ITM Skills University, Navi Mumbai",
       "degree": "B.Tech in Computer Science (AI & Machine Learning)",
-      "period": "2025 – 2029 (Expected)"
+      "period": "2025 - 2029"
     },
     {
       "institution": "Sarvodaya Bal Vidyalaya, Moti Nagar, New Delhi",
@@ -48,39 +48,51 @@
     "languages": [
       {
         "name": "Python",
-        "desc": "ML pipelines, data science, automation scripts"
+        "desc": "ML pipelines, data science, automation, Librosa & Pygame"
+      },
+      {
+        "name": "TypeScript",
+        "desc": "Type-safe production codebases, desktop apps, webterm core"
       },
       {
         "name": "JavaScript (ES6+)",
         "desc": "Full-stack web apps, async patterns, DOM APIs"
       },
       {
-        "name": "TypeScript",
-        "desc": "Type-safe production codebases, large-scale apps"
+        "name": "C++",
+        "desc": "DSA, AST instrumentation, Wasm compilation, systems programming"
       },
       {
-        "name": "C++",
-        "desc": "DSA, systems programming, Wasm compilation"
+        "name": "SQL",
+        "desc": "Relational schema design, SQLite, complex query optimization"
       }
     ],
     "web": [
       {
         "name": "React.js",
-        "desc": "Component-driven SPAs with hooks & state management"
+        "desc": "Component-driven SPAs with hooks, timeline playback & state management"
       },
       {
         "name": "Next.js 15",
-        "desc": "SSR, SSG, API routes, full-stack React framework"
+        "desc": "SSR, SSG, API routes, geospatial data processing pipelines"
+      },
+      {
+        "name": "Vite",
+        "desc": "Ultra-fast frontend bundler, HMR development, production builds"
       },
       {
         "name": "Tailwind CSS",
-        "desc": "Utility-first rapid UI prototyping & design systems"
+        "desc": "Utility-first rapid UI prototyping & modern design systems"
       }
     ],
     "backend": [
       {
         "name": "Node.js",
         "desc": "REST & real-time APIs, Express, event-driven I/O"
+      },
+      {
+        "name": "Express.js",
+        "desc": "Fast, unopinionated backend API microservices"
       },
       {
         "name": "FastAPI",
@@ -91,8 +103,8 @@
         "desc": "Document-oriented NoSQL, aggregation pipelines"
       },
       {
-        "name": "PostgreSQL",
-        "desc": "Relational DB, complex queries, production-grade"
+        "name": "SQLite",
+        "desc": "Embedded relational database storage for high performance"
       }
     ],
     "ai_ml": [
@@ -105,8 +117,8 @@
         "desc": "Data wrangling, cleaning, exploratory analysis"
       },
       {
-        "name": "Scikit-learn",
-        "desc": "Classical ML — regression, classification, clustering"
+        "name": "AST Instrumentation",
+        "desc": "Code parsing, execution tracing, variable step inspection"
       },
       {
         "name": "Neural Networks",
@@ -135,8 +147,8 @@
   "projects": [
     [
       "AlgoViz",
-      "Interactive code visualizer that steps through JavaScript and C++ execution line-by-line, with real-time variable tracking and complexity analysis.",
-      "https://github.com/somyacodes07/AlgoViz",
+      "Browser-based algorithm visualization platform for JavaScript and C++ with execution replay, variable tracing, recursive call stack inspection, WebAssembly compilation.",
+      "https://github.com/somyacodes07/AlgoViz-copy",
       "https://algoviz.somyacodes.in/",
       null,
       [
@@ -157,7 +169,7 @@
     ],
     [
       "SentinelIQ",
-      "Planetary-scale flood risk intelligence platform powered by satellite telemetry and hybrid ML risk scoring.",
+      "Geospatial disaster monitoring platform built with FastAPI and Next.js 15. Features flood-risk analysis using Google Earth Engine satellite telemetry, NDWI calculations, and interactive MapLibre spatial visualizations.",
       "https://github.com/somyacodes07/DDoS-PS6",
       "Not Yet Deployed",
       null,
@@ -168,7 +180,7 @@
       {
         "stack": [
           "FastAPI",
-          "Next.js",
+          "Next.js 15",
           "GEE",
           "MapLibre"
         ],
@@ -190,8 +202,9 @@
       {
         "stack": [
           "Python",
+          "Librosa",
           "Pygame",
-          "Audio Processing "
+          "Audio Processing"
         ],
         "year": "2025",
         "status": "Completed"
@@ -199,7 +212,7 @@
     ],
     [
       "AR-Based Interactive Projects",
-      "Experimental AR applications built with OpenCV and Python, featuring real-time mouse-based interactions.",
+      "Experimental Augmented Reality applications built with OpenCV and Python, featuring real-time vision tracking and mouse-based digital interactions.",
       "https://github.com/somyacodes07/AR_Kite",
       null,
       null,
@@ -219,7 +232,7 @@
     ],
     [
       "Sur Sangam - Music Generator",
-      "AI to generate Hindi lyrics, compose music, and suggest improvements with browser-based persistent storage.",
+      "Artificial intelligence application to generate Hindi lyrics, compose thematic music, and suggest creative improvements with browser-based persistent storage.",
       "https://github.com/somyacodes07/sur_sangam",
       "https://sur-sangam.vercel.app/",
       null,
@@ -244,14 +257,14 @@
     "Contribute to meaningful, real-world tech projects"
   ],
   "strengths": [
-    "Creative thinking",
-    "Strong learning mindset",
-    "Logical problem-solving",
-    "Consistent self-improvement"
+    "Full-Stack Web Development & System Architecture",
+    "DevOps Automation & Cloud Infrastructure Reliability",
+    "AI/ML Model Optimization & Geospatial Analytics",
+    "Logical Problem Solving & Clean Code Standards"
   ],
   "certifications": [
     {
-      "name": "Python Certificate",
+      "name": "Python (Basic) Certificate",
       "issuer": "HackerRank",
       "date": "Mar 2026",
       "link": "https://www.hackerrank.com/certificates/iframe/9a1129b636e4",
@@ -280,7 +293,7 @@
       "period": "Mar 2026 - Jun 2026",
       "location": "New York, USA (Remote)",
       "icon": "/projects/experience/springer-logo.svg",
-      "description": "I played a key role in establishing robust CI/CD pipelines and optimizing cloud infrastructure. My work focused on automating deployment workflows, enhancing system monitoring, and ensuring high availability of critical services. I collaborated closely with development and operations teams to streamline release cycles and improve overall system reliability.",
+      "description": "Worked on CI/CD workflows, deployment automation, and infrastructure reliability improvements. Assisted in application deployment, monitoring, debugging, version control workflows, technical documentation, and cloud deployment practices.",
       "documents": [
         {
           "id": "springer-lor",
@@ -288,7 +301,7 @@
           "type": "LOR",
           "date": "Aug 30, 2025",
           "file": "/projects/experience/springer-lor.pdf",
-          "description": "Formal recommendation letter from MD of Springer Capital highlighting exceptional performance and contribution."
+          "description": "Formal recommendation letter from Managing Director of Springer Capital highlighting exceptional performance and backend engineering contribution."
         },
         {
           "id": "springer-completion",
@@ -296,7 +309,7 @@
           "type": "Completion Certificate",
           "date": "Aug 29, 2025",
           "file": "/projects/experience/springer-completion.pdf",
-          "description": "Official certificate confirming successful completion of 3-month DevOps internship."
+          "description": "Official certificate confirming successful completion of DevOps internship at Springer Capital."
         },
         {
           "id": "springer-thankyou",
@@ -304,7 +317,7 @@
           "type": "Thank You Letter",
           "date": "Aug 2025",
           "file": "/projects/experience/springer-thank.pdf",
-          "description": "Thank You letter to HR after completing internship."
+          "description": "Formal appreciation letter recognizing active contribution to the internship."
         },
         {
           "id": "springer-offer",
@@ -312,7 +325,7 @@
           "type": "Offer Letter",
           "date": "May 15, 2025",
           "file": "/projects/experience/springer-offer.pdf",
-          "description": "Original offer letter detailing internship scope, responsibilities, and mentorship structure."
+          "description": "Official offer letter detailing DevOps internship scope, cloud infrastructure responsibilities, and mentorship."
         }
       ]
     }

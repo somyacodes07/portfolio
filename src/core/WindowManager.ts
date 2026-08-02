@@ -115,11 +115,23 @@ export class WindowManager {
         win.className = "desktop-window";
         win.id = `window-${id}`;
 
-        if (width) win.style.width = `${width}px`;
-        if (height) win.style.height = `${height}px`;
+        const targetWidth = width || 700;
+        const targetHeight = height || 480;
 
-        win.style.left = `${100 + this.windows.size * 20}px`;
-        win.style.top = `${50 + this.windows.size * 20}px`;
+        const safeWidth = Math.min(targetWidth, Math.max(320, window.innerWidth - 20));
+        const safeHeight = Math.min(targetHeight, Math.max(280, window.innerHeight - 40));
+
+        win.style.width = `${safeWidth}px`;
+        win.style.height = `${safeHeight}px`;
+
+        const maxLeft = Math.max(10, window.innerWidth - safeWidth - 10);
+        const maxTop = Math.max(10, window.innerHeight - safeHeight - 10);
+
+        const calculatedLeft = 20 + (this.windows.size % 8) * 20;
+        const calculatedTop = 30 + (this.windows.size % 8) * 20;
+
+        win.style.left = `${Math.min(calculatedLeft, maxLeft)}px`;
+        win.style.top = `${Math.min(calculatedTop, maxTop)}px`;
 
         // Title bar
         const titleBar = document.createElement("div");

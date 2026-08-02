@@ -25,7 +25,7 @@ const createExperienceCommand = (args?: string[]): string[] => {
   const config = command as unknown as { experience?: CompanyExperience[] };
   const SPACE = "&nbsp;";
 
-  if (args && args.includes('--gui')) {
+  if (args && args.includes('--gui') && window.innerWidth > 600) {
     (window as any).openExperienceExplorer();
     return ["Opening Work Experience Explorer...", "<br>"];
   }
@@ -47,15 +47,17 @@ const createExperienceCommand = (args?: string[]): string[] => {
 
     let line = "";
     line += SPACE.repeat(2);
-    line += `<i class="fa-solid fa-folder-open" style="color: var(--banner, #58A6FF); margin-right: 6px;"></i>`;
-    line += `<span class='command clickable' role='button' tabindex='0' aria-label='Open ${company} folder' style='cursor: pointer;' onclick='window.openCompanyWindow("${companyId}")' onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.openCompanyWindow('${companyId}')}">${company}</span>`;
-    line += ` <span style="opacity: 0.75; font-size: 0.9em;">(${role})</span>`;
+    line += `<span class='command clickable' role='button' tabindex='0' aria-label='Open ${company}' style='cursor: pointer;' onclick='if(window.innerWidth>600){window.openCompanyWindow("${companyId}")}'>${company}</span>`;
+    line += ` - <span style="color: var(--prompt-user, #7EE787);">${role}</span>`;
     output.push(line);
 
-    line = "";
-    line += SPACE.repeat(4);
-    line += `<span style="color: var(--prompt-user, #7EE787); font-size: 0.9em;">${[period, location].filter(Boolean).join(' • ')}</span>`;
-    output.push(line);
+    const meta = [period, location].filter(Boolean).join(' • ');
+    if (meta) {
+      line = "";
+      line += SPACE.repeat(4);
+      line += `<span style="opacity: 0.75; font-size: 0.9em;">${meta}</span>`;
+      output.push(line);
+    }
 
     if (Array.isArray(exp.documents) && exp.documents.length > 0) {
       exp.documents.forEach((doc) => {
@@ -64,10 +66,8 @@ const createExperienceCommand = (args?: string[]): string[] => {
         const docFile = doc.file ?? '';
 
         line = "";
-        line += SPACE.repeat(6);
-        line += `<i class="fa-solid fa-file-pdf" style="color: #ff5555; margin-right: 6px;"></i>`;
-        line += `<a href="${docFile}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: var(--text);">${title}</a>`;
-        line += ` <span class="explorer-badge" style="font-size: 10px; margin-left: 6px;">${type}</span>`;
+        line += SPACE.repeat(4);
+        line += `<a href="${docFile}" target="_blank" rel="noopener noreferrer">${title}</a> (${type})`;
         output.push(line);
       });
     }

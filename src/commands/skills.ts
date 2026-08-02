@@ -103,7 +103,16 @@ export const getSkills = (): string[] => {
     const config = (window as any).config || command;
     if (!config.skills) return [];
 
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 600;
     const lines: string[] = ['<br>'];
+
+    if (isMobile) {
+        CATEGORIES.forEach((cat) => {
+            lines.push(...renderInline(config, cat));
+            lines.push('<br>');
+        });
+        return lines;
+    }
 
     // Pair 1: Languages | Web
     lines.push(...renderPair(config, CATEGORIES[0], CATEGORIES[1]));

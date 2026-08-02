@@ -189,7 +189,7 @@ export const setTheme = (colors: ThemeColors) => {
     // Folder Icon Color (matches banner/accent)
     root.style.setProperty('--folder-color', colors.banner);
 
-    // GitHub Contribution Graph – derive 4 intensity levels from theme's prompt.user
+    // GitHub Contribution Graph - derive 4 intensity levels from theme's prompt.user
     root.style.setProperty('--gh-1', hexToRgba(colors.prompt.user, 0.25));
     root.style.setProperty('--gh-2', hexToRgba(colors.prompt.user, 0.50));
     root.style.setProperty('--gh-3', hexToRgba(colors.prompt.user, 0.75));
