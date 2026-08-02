@@ -52,6 +52,7 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
   const lines: string[] = [];
   const SP = '&nbsp;';
   const BLOCK = '█';
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 600;
 
   // ── Header ──
   lines.push('<br>');
@@ -66,15 +67,17 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
   lines.push('<br>');
 
   // ── Weeks to render ──
-  const maxWeeks = Math.min(data.weeks.length, 52);
+  const maxWeeks = isMobile ? 18 : Math.min(data.weeks.length, 52);
   const weeksToShow = data.weeks.slice(-maxWeeks);
 
   // Each cell is rendered as a fixed-width inline-block to guarantee alignment.
   const cell = (content: string, cls?: string, title?: string) =>
     `<span class="gh-cell${cls ? ' ' + cls : ''}" ${title ? 'title="' + title + '"' : ''}>${content}</span>`;
 
+  // Start scrollable wrapper for graph grid
+  lines.push('<div style="overflow-x: auto; max-width: 100%; white-space: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 4px;">');
+
   // ── Month labels row ──
-  // Determine which week index each month first appears at
   const monthAtWeek: (string | null)[] = new Array(weeksToShow.length).fill(null);
   let lastMonth = -1;
   let lastLabelWeek = -10;
@@ -85,7 +88,6 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
       const month = new Date(firstDay.date).getMonth();
       if (month !== lastMonth) {
         if ((w - lastLabelWeek) >= 3) {
-          // Place label only if 3+ cells from last to avoid collisions
           monthAtWeek[w] = MONTH_NAMES[month];
           lastLabelWeek = w;
         }
@@ -94,7 +96,7 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
     }
   }
 
-  // Gutter = 4 cells wide (to fit "Mon" + padding)
+  // Gutter = 4 cells wide
   const GUTTER_CELLS = 4;
   let monthRow = '';
   for (let g = 0; g < GUTTER_CELLS; g++) monthRow += cell(SP);
@@ -102,9 +104,8 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
   for (let w = 0; w < weeksToShow.length; w++) {
     const label = monthAtWeek[w];
     if (label) {
-      // Month label spans 2 cells wide
       monthRow += cell(label, 'gh-cell-wide gh-graph-dim', undefined);
-      w++; // consumed 2 cells
+      w++;
       if (w >= weeksToShow.length) break;
     } else {
       monthRow += cell(SP);
@@ -116,7 +117,6 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
   for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
     let row = '';
 
-    // Day label - fixed width gutter (4 cells)
     const dayLabel = DAY_LABELS[dayOfWeek];
     if (dayLabel) {
       row += cell(SP);
@@ -126,7 +126,6 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
       for (let g = 0; g < GUTTER_CELLS; g++) row += cell(SP);
     }
 
-    // Contribution cells
     for (let w = 0; w < weeksToShow.length; w++) {
       const day = weeksToShow[w].contributionDays[dayOfWeek];
       if (day) {
@@ -154,22 +153,41 @@ function renderContributionGraph(data: GitHubContributionData): string[] {
   legendRow += `<span class="gh-graph-dim" style="font-size:0.82em; margin-left: 4px;">More</span>`;
   lines.push(legendRow);
 
+  // Close scrollable wrapper
+  lines.push('</div>');
+
   // ── Stats row ──
   lines.push('');
   const stats = computeStats(data);
-  lines.push(
-    `${SP.repeat(2)}<span class="gh-cell-4">▲</span> ` +
-    `<span class="gh-graph-text">Current streak:</span> ` +
-    `<span class="gh-cell-4" style="font-weight:600">${stats.currentStreak} days</span>` +
-    `${SP.repeat(4)}` +
-    `<span class="gh-graph-accent">●</span> ` +
-    `<span class="gh-graph-text">Longest streak:</span> ` +
-    `<span class="gh-graph-accent" style="font-weight:600">${stats.longestStreak} days</span>` +
-    `${SP.repeat(4)}` +
-    `<span class="gh-graph-warm">◆</span> ` +
-    `<span class="gh-graph-text">Best day:</span> ` +
-    `<span class="gh-graph-warm" style="font-weight:600">${stats.bestDay.count} contributions</span>`
-  );
+  if (isMobile) {
+    lines.push(
+      `${SP.repeat(2)}<span class="gh-cell-4">▲</span> ` +
+      `<span class="gh-graph-text">Streak:</span> ` +
+      `<span class="gh-cell-4" style="font-weight:600">${stats.currentStreak}d</span>` +
+      `${SP.repeat(2)}` +
+      `<span class="gh-graph-accent">●</span> ` +
+      `<span class="gh-graph-text">Longest:</span> ` +
+      `<span class="gh-graph-accent" style="font-weight:600">${stats.longestStreak}d</span>` +
+      `${SP.repeat(2)}` +
+      `<span class="gh-graph-warm">◆</span> ` +
+      `<span class="gh-graph-text">Best:</span> ` +
+      `<span class="gh-graph-warm" style="font-weight:600">${stats.bestDay.count}</span>`
+    );
+  } else {
+    lines.push(
+      `${SP.repeat(2)}<span class="gh-cell-4">▲</span> ` +
+      `<span class="gh-graph-text">Current streak:</span> ` +
+      `<span class="gh-cell-4" style="font-weight:600">${stats.currentStreak} days</span>` +
+      `${SP.repeat(4)}` +
+      `<span class="gh-graph-accent">●</span> ` +
+      `<span class="gh-graph-text">Longest streak:</span> ` +
+      `<span class="gh-graph-accent" style="font-weight:600">${stats.longestStreak} days</span>` +
+      `${SP.repeat(4)}` +
+      `<span class="gh-graph-warm">◆</span> ` +
+      `<span class="gh-graph-text">Best day:</span> ` +
+      `<span class="gh-graph-warm" style="font-weight:600">${stats.bestDay.count} contributions</span>`
+    );
+  }
 
   lines.push('<br>');
   return lines;

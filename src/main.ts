@@ -162,8 +162,9 @@ function writeLines(message: string[]) {
 
 function displayText(item: string, idx: number) {
   const renderLine = () => {
-    if (!mutWriteLines) return
+    if (!mutWriteLines) return;
     const p = document.createElement("p");
+    p.className = "cli-line-anim";
     p.innerHTML = item;
     mutWriteLines.parentNode!.insertBefore(p, mutWriteLines);
     scrollToBottom();
@@ -174,7 +175,7 @@ function displayText(item: string, idx: number) {
     return;
   }
 
-  setTimeout(renderLine, 40 * idx);
+  setTimeout(renderLine, 18 * idx);
 }
 
 function easterEggStyles() {

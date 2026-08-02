@@ -4,74 +4,40 @@ import { getCachedContributionLines } from './github';
 
 const createAboutBase = (): string[] => {
   const about: string[] = [];
-
-  const SPACE = "&nbsp;";
-
-  const EMAIL = "Email";
-  const GITHUB = "Github";
-  const LINKEDIN = "Linkedin";
-
-  const email = `<i class='fa-solid fa-envelope'></i> ${EMAIL}`;
-  const github = `<i class='fa-brands fa-github'></i> ${GITHUB}`;
-  const linkedin = `<i class='fa-brands fa-linkedin'></i> ${LINKEDIN}`;
-  let string = "";
+  const SP = "&nbsp;";
 
   about.push("<br>");
-  about.push(escapeHTML(command.aboutGreeting));
+  about.push(`<strong>${escapeHTML(command.aboutGreeting)}</strong>`);
   about.push("<br>");
 
-  // Professional Summary
-  about.push("Building modern web apps with React, Node.js, and AI integrations.");
-  about.push("<br>");
+  about.push("Building modern web apps with React, Next.js, Node.js, Python, and AI integrations.");
   about.push("I think about layout, interaction, and logic as parts of the same system.");
-  about.push("<br>"); 
-  about.push("I like having control from idea to implementation.");
-  about.push("<br>");
-  about.push("Most of my learning comes from building, experimenting, ");
-  about.push("and refining how things work together.");
+  about.push("Most of my learning comes from building, experimenting, and refining scalable applications.");
   about.push("<br>");
 
-  string += SPACE.repeat(2);
-  string += email;
-  string += SPACE.repeat(Math.max(0, 17 - EMAIL.length));
-  const safeEmailHref = sanitizeUrl(`mailto:${command.social.email}`, { allowRelative: false, allowMailto: true });
-  const safeEmailText = escapeHTML(command.social.email);
-  string += safeEmailHref
-    ? `<a target='_blank' rel='noopener noreferrer' href='${safeEmailHref}'>${safeEmailText}</a>`
-    : safeEmailText;
-  about.push(string);
+  const emailHref = sanitizeUrl(`mailto:${command.social.email}`, { allowRelative: false, allowMailto: true });
+  const emailText = escapeHTML(command.social.email);
 
-  string = '';
-  string += SPACE.repeat(2);
-  string += github;
-  string += SPACE.repeat(Math.max(0, 17 - GITHUB.length));
-  const safeGithub = sanitizeUrl(command.social.github, { allowRelative: false });
-  const safeGithubText = escapeHTML(command.social.github);
-  string += safeGithub
-    ? `<a target='_blank' rel='noopener noreferrer' href='${safeGithub}'>${safeGithubText}</a>`
-    : safeGithubText;
-  about.push(string);
+  const githubHref = sanitizeUrl(command.social.github, { allowRelative: false });
+  const githubText = escapeHTML(command.social.github);
 
-  string = '';
-  string += SPACE.repeat(2);
-  string += linkedin;
-  string += SPACE.repeat(Math.max(0, 17 - LINKEDIN.length));
-  const safeLinkedIn = sanitizeUrl(command.social.linkedin, { allowRelative: false });
-  const safeLinkedInText = escapeHTML(command.social.linkedin);
-  string += safeLinkedIn
-    ? `<a target='_blank' rel='noopener noreferrer' href='${safeLinkedIn}'>${safeLinkedInText}</a>`
-    : safeLinkedInText;
-  about.push(string);
+  const linkedinHref = sanitizeUrl(command.social.linkedin, { allowRelative: false });
+  const linkedinText = escapeHTML(command.social.linkedin);
+
+  if (emailHref) {
+    about.push(`${SP.repeat(2)}<span style="color:var(--banner);"><i class="fa-solid fa-envelope"></i> Email:</span> <a href="${emailHref}" style="color:var(--text); text-decoration:underline;">${emailText}</a>`);
+  }
+  if (githubHref) {
+    about.push(`${SP.repeat(2)}<span style="color:var(--banner);"><i class="fa-brands fa-github"></i> GitHub:</span> <a href="${githubHref}" target="_blank" rel="noopener noreferrer" style="color:var(--text); text-decoration:underline;">${githubText}</a>`);
+  }
+  if (linkedinHref) {
+    about.push(`${SP.repeat(2)}<span style="color:var(--banner);"><i class="fa-brands fa-linkedin"></i> LinkedIn:</span> <a href="${linkedinHref}" target="_blank" rel="noopener noreferrer" style="color:var(--text); text-decoration:underline;">${linkedinText}</a>`);
+  }
 
   about.push("<br>");
-  return about
-}
+  return about;
+};
 
-/**
- * Returns the full about output including the GitHub contribution graph.
- * Called dynamically (not cached at import time) so it picks up
- * the pre-fetched contribution data.
- */
 export const getAbout = (): string[] => {
   const about = createAboutBase();
   const graphLines = getCachedContributionLines();
@@ -79,4 +45,4 @@ export const getAbout = (): string[] => {
     about.push(...graphLines);
   }
   return about;
-}
+};
