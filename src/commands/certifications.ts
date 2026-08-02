@@ -11,7 +11,6 @@ type Certification = {
 
 const createCertifications = (): string[] => {
   const certifications: string[] = [];
-  const SPACE = "&nbsp;";
   const config = command as unknown as { certifications?: Certification[] };
 
   certifications.push("<br>");
@@ -28,27 +27,27 @@ const createCertifications = (): string[] => {
     const date = String(cert.date ?? "").trim();
     const safeDate = date ? escapeHTML(date) : "";
     const safeLink = sanitizeUrl(String(cert.link ?? ""), { allowRelative: false });
+    const image = cert.image ? sanitizeUrl(String(cert.image), { allowRelative: true }) : '';
 
-    let line = "";
-    line += SPACE.repeat(2);
-    line += `<span class='command clickable' role='button' tabindex='0' aria-label='Open certificate ${name}' style='cursor: pointer;' onclick='window.openCertificateWindow(${index})' onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.openCertificateWindow(${index})}">${name}</span>`;
-    certifications.push(line);
+    let block = `<div class="cli-block">`;
+    block += `<div class="cli-header"><span class="cli-title command clickable" role="button" tabindex="0" onclick="if(window.innerWidth>600){window.openCertificateWindow(${index})}else{if('${image}'){window.open('${image}','_blank')}}"><i class="fa-solid fa-award" style="margin-right:6px;"></i>${name}</span><span class="cli-subtitle">${issuer}${safeDate ? ' • ' + safeDate : ''}</span></div>`;
 
-    line = "";
-    line += SPACE.repeat(4);
-    line += safeDate ? `${issuer} - ${safeDate}` : issuer;
-    certifications.push(line);
-
-    if (safeLink) {
-      line = "";
-      line += SPACE.repeat(4);
-      line += `<a href='${safeLink}' target='_blank' rel='noopener noreferrer'>Verify online</a>`;
-      certifications.push(line);
+    if (safeLink || image) {
+      block += `<div class="cli-actions">`;
+      if (image) {
+        block += `<a class="cli-link" href="${image}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-certificate"></i> View Certificate</a>`;
+      }
+      if (safeLink) {
+        block += `<a class="cli-link" href="${safeLink}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-up-right-from-square"></i> Verify Online</a>`;
+      }
+      block += `</div>`;
     }
 
-    certifications.push("<br>");
+    block += `</div>`;
+    certifications.push(block);
   });
 
+  certifications.push("<br>");
   return certifications;
 };
 

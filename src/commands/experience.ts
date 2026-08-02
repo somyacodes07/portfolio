@@ -23,7 +23,6 @@ export type CompanyExperience = {
 const createExperienceCommand = (args?: string[]): string[] => {
   const output: string[] = [];
   const config = command as unknown as { experience?: CompanyExperience[] };
-  const SPACE = "&nbsp;";
 
   if (args && args.includes('--gui') && window.innerWidth > 600) {
     (window as any).openExperienceExplorer();
@@ -42,36 +41,38 @@ const createExperienceCommand = (args?: string[]): string[] => {
     const company = escapeHTML(String(exp.company ?? `Company ${cIdx + 1}`));
     const role = escapeHTML(String(exp.role ?? 'Software Engineer'));
     const period = escapeHTML(String(exp.period ?? ''));
+    const location = escapeHTML(String(exp.location ?? ''));
     const companyId = exp.id ?? `company-${cIdx}`;
+    const desc = exp.description ? escapeHTML(String(exp.description)) : '';
 
-    let line = "";
-    line += SPACE.repeat(2);
-    line += `<span class='command clickable' role='button' tabindex='0' aria-label='Open ${company}' style='cursor: pointer;' onclick='if(window.innerWidth>600){window.openCompanyWindow("${companyId}")}'>${company}</span>`;
-    line += ` - <span style="color: var(--prompt-user, #7EE787);">${role}</span>`;
-    output.push(line);
+    let block = `<div class="cli-block">`;
+    block += `<div class="cli-header"><span class="cli-title command clickable" role="button" tabindex="0" onclick="if(window.innerWidth>600){window.openCompanyWindow('${companyId}')}"><i class="fa-solid fa-building" style="margin-right:6px;"></i>${company}</span><span class="cli-subtitle">${role}</span></div>`;
 
-    if (period) {
-      line = "";
-      line += SPACE.repeat(4);
-      line += `<span style="opacity: 0.75; font-size: 0.9em;">${period}</span>`;
-      output.push(line);
+    const meta = [period, location].filter(Boolean).join(' • ');
+    if (meta) {
+      block += `<div style="font-size: 0.88em; opacity: 0.75; margin-bottom: 6px;">${meta}</div>`;
+    }
+
+    if (desc) {
+      block += `<div class="cli-desc">${desc}</div>`;
     }
 
     if (Array.isArray(exp.documents) && exp.documents.length > 0) {
+      block += `<div class="cli-actions">`;
       exp.documents.forEach((doc) => {
         const title = escapeHTML(String(doc.title ?? 'Document'));
+        const type = escapeHTML(String(doc.type ?? 'PDF'));
         const docFile = doc.file ?? '';
-
-        line = "";
-        line += SPACE.repeat(4);
-        line += `<a href="${docFile}" target="_blank" rel="noopener noreferrer">${title}</a>`;
-        output.push(line);
+        block += `<a class="cli-link" href="${docFile}" target="_blank" rel="noopener noreferrer"><i class="fa-regular fa-file-pdf"></i> ${title} <span class="explorer-badge" style="font-size:9.5px; margin-left:4px;">${type}</span></a>`;
       });
+      block += `</div>`;
     }
 
-    output.push("<br>");
+    block += `</div>`;
+    output.push(block);
   });
 
+  output.push("<br>");
   return output;
 };
 

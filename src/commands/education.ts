@@ -3,32 +3,25 @@ import { escapeHTML } from '../core/Utils';
 
 const createEducation = (): string[] => {
     const education: string[] = [];
-    const SPACE = "&nbsp;";
 
     education.push("<br>");
 
-    if (command.education) {
+    if (command.education && Array.isArray(command.education)) {
         command.education.forEach((edu: any) => {
-            let string = "";
-            string += SPACE.repeat(2);
-            string += `<span class='command'>${escapeHTML(String(edu.degree ?? ""))}</span>`;
-            education.push(string);
+            const degree = escapeHTML(String(edu.degree ?? "Degree"));
+            const institution = escapeHTML(String(edu.institution ?? "Institution"));
+            const period = escapeHTML(String(edu.period ?? ""));
 
-            string = "";
-            string += SPACE.repeat(4);
-            string += escapeHTML(String(edu.institution ?? ""));
-            education.push(string);
-
-            string = "";
-            string += SPACE.repeat(4);
-            string += escapeHTML(String(edu.period ?? ""));
-            education.push(string);
-
-            education.push("<br>");
+            let block = `<div class="cli-block">`;
+            block += `<div class="cli-header"><span class="cli-title"><i class="fa-solid fa-graduation-cap" style="margin-right:6px;"></i>${degree}</span><span class="cli-subtitle">${period}</span></div>`;
+            block += `<div class="cli-desc" style="margin-bottom: 0;">${institution}</div>`;
+            block += `</div>`;
+            education.push(block);
         });
     }
 
+    education.push("<br>");
     return education;
-}
+};
 
 export const EDUCATION = createEducation();
