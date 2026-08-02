@@ -170,7 +170,7 @@
     [
       "SentinelIQ",
       "Geospatial disaster monitoring platform built with FastAPI and Next.js 15. Features flood-risk analysis using Google Earth Engine satellite telemetry, NDWI calculations, and interactive MapLibre spatial visualizations.",
-      "https://github.com/somyacodes07/DDoS-PS6",
+      "https://github.com/somyacodes07/SentinelIQ",
       "Not Yet Deployed",
       null,
       [
