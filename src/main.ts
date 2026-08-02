@@ -18,6 +18,8 @@ import { InputManager } from './core/InputManager';
 import { CommandDispatcher } from './core/CommandDispatcher';
 import { ProjectViewer } from './ui/ProjectViewer';
 import { CertificateViewer } from './ui/CertificateViewer';
+import { ExperienceViewer } from './ui/ExperienceViewer';
+import { createExperienceCommand } from './commands/experience';
 
 // --- State ---
 let mutWriteLines = document.getElementById("write-lines");
@@ -53,6 +55,7 @@ const OPTIONAL_CONFIG = command as unknown as {
 const windowManager = new WindowManager();
 const projectViewer = new ProjectViewer(windowManager);
 const certificateViewer = new CertificateViewer(windowManager);
+const experienceViewer = new ExperienceViewer(windowManager);
 const dispatcher = new CommandDispatcher();
 
 // --- Globals for Legacy Support ---
@@ -60,6 +63,9 @@ const dispatcher = new CommandDispatcher();
 (window as any).openProjectExplorer = projectViewer.openProjectExplorer.bind(projectViewer);
 (window as any).openCertificateWindow = certificateViewer.openCertificateWindow.bind(certificateViewer);
 (window as any).openCertificateExplorer = certificateViewer.openCertificateExplorer.bind(certificateViewer);
+(window as any).openExperienceExplorer = experienceViewer.openExperienceExplorer.bind(experienceViewer);
+(window as any).openCompanyWindow = experienceViewer.openCompanyWindow.bind(experienceViewer);
+(window as any).openDocumentViewer = experienceViewer.openDocumentViewer.bind(experienceViewer);
 
 // --- Helper Functions ---
 
@@ -303,6 +309,36 @@ const registerCommands = () => {
     }
 
     writeLines(CERTIFICATIONS);
+  });
+
+  dispatcher.register("experience", (args) => {
+    if (bareMode) { writeLines(["No work experience found.", "<br>"]); return; }
+    if (window.innerWidth > 600 && !args.includes('--cli')) {
+      experienceViewer.openExperienceExplorer();
+      writeLines(["Opening Work Experience Explorer...", "<br>"]);
+      return;
+    }
+    writeLines(createExperienceCommand(args));
+  });
+
+  dispatcher.register("exp", (args) => {
+    if (bareMode) { writeLines(["No work experience found.", "<br>"]); return; }
+    if (window.innerWidth > 600 && !args.includes('--cli')) {
+      experienceViewer.openExperienceExplorer();
+      writeLines(["Opening Work Experience Explorer...", "<br>"]);
+      return;
+    }
+    writeLines(createExperienceCommand(args));
+  });
+
+  dispatcher.register("work", (args) => {
+    if (bareMode) { writeLines(["No work experience found.", "<br>"]); return; }
+    if (window.innerWidth > 600 && !args.includes('--cli')) {
+      experienceViewer.openExperienceExplorer();
+      writeLines(["Opening Work Experience Explorer...", "<br>"]);
+      return;
+    }
+    writeLines(createExperienceCommand(args));
   });
 
   dispatcher.register("skills", () => {

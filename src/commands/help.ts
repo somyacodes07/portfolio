@@ -21,6 +21,10 @@ const helpObj = {
       "View my work."
     ],
     [
+      "'experience'",
+      "Work experience & document folders."
+    ],
+    [
       "'resume'",
       "View my resume."
     ],

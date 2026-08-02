@@ -272,6 +272,50 @@
       "image": "/projects/certificates/freecodecamp-python.png"
     }
   ],
+  "experience": [
+    {
+      "id": "springer",
+      "company": "Springer Capital",
+      "role": "DevOps Intern",
+      "period": "Mar 2026 - Jun 2026",
+      "location": "New York, USA (Remote)",
+      "description": "I played a key role in establishing robust CI/CD pipelines and optimizing cloud infrastructure. My work focused on automating deployment workflows, enhancing system monitoring, and ensuring high availability of critical services. I collaborated closely with development and operations teams to streamline release cycles and improve overall system reliability.",
+      "documents": [
+        {
+          "id": "springer-lor",
+          "title": "Letter of Recommendation",
+          "type": "LOR",
+          "date": "Aug 30, 2025",
+          "file": "/projects/experience/springer-lor.pdf",
+          "description": "Formal recommendation letter from MD of Springer Capital highlighting exceptional performance and contribution."
+        },
+        {
+          "id": "springer-completion",
+          "title": "Internship Completion Certificate",
+          "type": "Completion Certificate",
+          "date": "Aug 29, 2025",
+          "file": "/projects/experience/springer-completion.pdf",
+          "description": "Official certificate confirming successful completion of 3-month DevOps internship."
+        },
+        {
+          "id": "springer-thankyou",
+          "title": "Thank You Letter",
+          "type": "Thank You Letter",
+          "date": "Aug 2025",
+          "file": "/projects/experience/springer-thank.pdf",
+          "description": "Thank You letter to HR after completing internship."
+        },
+        {
+          "id": "springer-offer",
+          "title": "Offer Letter",
+          "type": "Offer Letter",
+          "date": "May 15, 2025",
+          "file": "/projects/experience/springer-offer.pdf",
+          "description": "Original offer letter detailing internship scope, responsibilities, and mentorship structure."
+        }
+      ]
+    }
+  ],
   "colors": {
     "background": "#0D1117",
     "foreground": "#E6EDF3",
