@@ -17,6 +17,7 @@ export type CompanyExperience = {
     role: string;
     period: string;
     location?: string;
+    icon?: string;
     description?: string;
     documents: ExperienceDocument[];
 };
@@ -44,6 +45,7 @@ export class ExperienceViewer {
             role: exp.role || 'Team Member',
             period: exp.period || '',
             location: exp.location || '',
+            icon: exp.icon || '',
             description: exp.description || '',
             documents: Array.isArray(exp.documents)
                 ? exp.documents.map((doc, dIdx) => ({
@@ -96,13 +98,22 @@ export class ExperienceViewer {
             const iconShell = document.createElement('div');
             iconShell.className = 'company-folder-icon-wrapper';
 
-            const folderIcon = document.createElement('div');
-            folderIcon.className = 'explorer-icon company-folder-icon';
+            const safeIcon = exp.icon ? sanitizeUrl(exp.icon, { allowRelative: true }) : null;
+            if (safeIcon) {
+                const customIcon = document.createElement('img');
+                customIcon.className = 'company-folder-custom-icon';
+                customIcon.src = safeIcon;
+                customIcon.alt = `${exp.company} logo`;
+                iconShell.appendChild(customIcon);
+            } else {
+                const folderIcon = document.createElement('div');
+                folderIcon.className = 'explorer-icon company-folder-icon';
+                iconShell.appendChild(folderIcon);
+            }
 
             const badgeCount = document.createElement('span');
             badgeCount.className = 'folder-file-count';
             badgeCount.innerText = `${exp.documents.length}`;
-            iconShell.appendChild(folderIcon);
             iconShell.appendChild(badgeCount);
 
             // Folder Details Body

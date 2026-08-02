@@ -279,6 +279,7 @@
       "role": "DevOps Intern",
       "period": "Mar 2026 - Jun 2026",
       "location": "New York, USA (Remote)",
+      "icon": "/projects/experience/springer-logo.svg",
       "description": "I played a key role in establishing robust CI/CD pipelines and optimizing cloud infrastructure. My work focused on automating deployment workflows, enhancing system monitoring, and ensuring high availability of critical services. I collaborated closely with development and operations teams to streamline release cycles and improve overall system reliability.",
       "documents": [
         {

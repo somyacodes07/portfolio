@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <!-- Reusable petal shape -->
+    <path id="petal" d="M 100,88 C 95,70 70,70 70,45 C 70,25 83,15 100,15 C 117,15 130,25 130,45 C 130,70 105,70 100,88 Z" />
+  </defs>
+
+  <!-- Top Petal -->
+  <use href="#petal" fill="#43823b" />
+
+  <!-- Right Petal -->
+  <use href="#petal" fill="#2d6e1e" transform="rotate(90 100 100)" />
+
+  <!-- Bottom Petal -->
+  <use href="#petal" fill="#548f38" transform="rotate(180 100 100)" />
+
+  <!-- Left Petal -->
+  <use href="#petal" fill="#9ecc24" transform="rotate(270 100 100)" />
+</svg>
