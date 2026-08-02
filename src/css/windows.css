@@ -14,7 +14,7 @@
 
     /* Terminal Glass Aesthetic */
     background:
-        radial-gradient(circle at top left, rgba(88, 166, 255, 0.05), transparent 40%),
+        radial-gradient(circle at top left, var(--explorer-hover-bg, rgba(88, 166, 255, 0.05)), transparent 40%),
         var(--win-bg, rgba(13, 17, 23, 0.96));
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -103,20 +103,20 @@
     border-radius: 0;
     text-decoration: none;
     transition: all 0.15s ease;
-    background: rgba(88, 166, 255, 0.08);
+    background: var(--explorer-hover-bg, rgba(88, 166, 255, 0.08));
     color: var(--banner, #58A6FF);
-    border: 1px dashed rgba(88, 166, 255, 0.4);
+    border: 1px dashed var(--explorer-hover-border, rgba(88, 166, 255, 0.4));
     cursor: pointer;
     line-height: 1;
 }
 
 .window-title-action:hover {
     background: var(--banner, #58A6FF);
-    color: #0d1117;
+    color: var(--bg, #0d1117);
     border-style: solid;
     border-color: var(--banner, #58A6FF);
     transform: translateY(-1px);
-    box-shadow: 0 2px 10px rgba(88, 166, 255, 0.3);
+    box-shadow: 0 2px 10px var(--explorer-hover-glow, rgba(88, 166, 255, 0.3));
 }
 
 .window-title-action i {

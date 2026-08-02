@@ -128,7 +128,7 @@
     color: var(--text);
     text-align: left;
     background:
-        linear-gradient(135deg, rgba(88, 166, 255, 0.03) 0%, rgba(0, 0, 0, 0) 100%),
+        linear-gradient(135deg, var(--explorer-hover-bg, rgba(88, 166, 255, 0.03)) 0%, rgba(0, 0, 0, 0) 100%),
         rgba(255, 255, 255, 0.015);
     border: 1px solid var(--panel-border-soft, rgba(255, 255, 255, 0.08));
     border-top: 3px solid var(--banner, #58A6FF);
@@ -137,11 +137,11 @@
 
 .explorer-item:hover {
     background:
-        linear-gradient(135deg, rgba(88, 166, 255, 0.1) 0%, rgba(88, 166, 255, 0.02) 100%),
+        linear-gradient(135deg, var(--explorer-hover-bg, rgba(88, 166, 255, 0.1)) 0%, rgba(0, 0, 0, 0) 100%),
         rgba(255, 255, 255, 0.03);
     border-color: var(--banner, #58A6FF);
     box-shadow:
-        0 6px 22px rgba(88, 166, 255, 0.16),
+        0 6px 22px var(--explorer-hover-glow, rgba(88, 166, 255, 0.16)),
         0 0 0 1px var(--banner, #58A6FF);
     transform: translateY(-2px);
 }
@@ -257,7 +257,7 @@
 }
 
 .explorer-action-btn:hover {
-    background: rgba(88, 166, 255, 0.12);
+    background: var(--explorer-hover-bg, rgba(88, 166, 255, 0.12));
     border: 1px solid var(--folder-color, #58A6FF);
     color: var(--folder-color, #58A6FF);
     transform: translateY(-1px);
@@ -272,7 +272,7 @@
 
 .explorer-action-btn.live:hover {
     border-color: var(--prompt-user, #7EE787);
-    color: #0d1117;
+    color: var(--bg, #0d1117);
     background: var(--prompt-user, #7EE787);
     opacity: 1;
 }
@@ -504,7 +504,7 @@
     flex-direction: column;
     gap: 12px;
     background:
-        linear-gradient(135deg, rgba(88, 166, 255, 0.04) 0%, rgba(0, 0, 0, 0) 100%),
+        linear-gradient(135deg, var(--explorer-hover-bg, rgba(88, 166, 255, 0.04)) 0%, rgba(0, 0, 0, 0) 100%),
         rgba(255, 255, 255, 0.02);
     border: 1px solid var(--panel-border-soft, rgba(255, 255, 255, 0.08));
     border-top: 3px solid var(--banner, #58A6FF);
@@ -513,7 +513,7 @@
 .company-folder-card:hover {
     border-color: var(--banner, #58A6FF);
     box-shadow:
-        0 4px 20px rgba(88, 166, 255, 0.15),
+        0 4px 20px var(--explorer-hover-glow, rgba(88, 166, 255, 0.15)),
         0 0 0 1px var(--banner, #58A6FF);
     transform: translateY(-2px);
 }
@@ -545,7 +545,7 @@
 
 .company-folder-card:hover .company-folder-custom-icon {
     transform: scale(1.08);
-    filter: drop-shadow(0 4px 12px rgba(158, 204, 36, 0.4));
+    filter: drop-shadow(0 4px 12px var(--explorer-hover-glow, rgba(158, 204, 36, 0.4)));
 }
 
 .folder-file-count {
