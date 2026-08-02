@@ -578,7 +578,7 @@ a:focus-visible {
 }
 
 /* Mobile Responsive */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   body {
     padding-top: max(10px, env(safe-area-inset-top));
     padding-right: max(10px, env(safe-area-inset-right));
@@ -641,51 +641,45 @@ a:focus-visible {
     max-width: none;
   }
 
-  /* Sidebar Mobile Overrides - Smooth Horizontal Touch Bar */
+  /* Sidebar Mobile Overrides - Balanced 3-Row Grid */
   #sidebar {
-    width: 100%;
-    border-left: none;
-    border-top: 1px solid var(--panel-border-soft, rgba(255, 255, 255, 0.12));
-    padding: 10px 12px max(10px, env(safe-area-inset-bottom));
-    height: auto;
-    background: var(--win-bg, var(--bg));
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 8px;
-    position: sticky;
-    bottom: 0;
-    z-index: 12;
+    width: 100% !important;
+    border-left: none !important;
+    border-top: 1px solid var(--panel-border-soft, rgba(255, 255, 255, 0.12)) !important;
+    padding: 8px 10px max(8px, env(safe-area-inset-bottom)) !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    background: var(--win-bg, var(--bg)) !important;
+    box-sizing: border-box !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 6px !important;
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 12 !important;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  #sidebar::-webkit-scrollbar {
-    display: none;
   }
 
   #sidebar>.sidebar-spacer {
-    display: none;
+    display: none !important;
   }
 
   .action-btn {
-    flex: 0 0 auto;
-    scroll-snap-align: start;
-    white-space: nowrap;
-    padding: 8px 14px;
-    font-size: 11px;
-    font-weight: 700;
-    min-height: 42px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    letter-spacing: 0.06em;
-    border-radius: 4px;
+    width: 100% !important;
+    padding: 6px 2px !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    letter-spacing: 0.04em !important;
+    border-radius: 4px !important;
+    box-sizing: border-box !important;
     touch-action: manipulation;
     transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
   }
@@ -697,18 +691,22 @@ a:focus-visible {
     color: var(--banner, #58A6FF);
   }
 
+  /* Span Theme button and Clear button across 2 columns each on Row 3 */
+  .action-btn[data-cmd="theme-random"] {
+    grid-column: span 2 !important;
+  }
+
   .small-btn {
-    flex: 0 0 auto;
-    width: 42px;
-    min-width: 42px;
-    height: 42px;
-    min-height: 42px;
-    padding: 0;
-    margin: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
+    grid-column: span 2 !important;
+    width: 100% !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 4px !important;
   }
 
   #password-input {

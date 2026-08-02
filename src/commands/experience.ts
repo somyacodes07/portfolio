@@ -42,7 +42,6 @@ const createExperienceCommand = (args?: string[]): string[] => {
     const company = escapeHTML(String(exp.company ?? `Company ${cIdx + 1}`));
     const role = escapeHTML(String(exp.role ?? 'Software Engineer'));
     const period = escapeHTML(String(exp.period ?? ''));
-    const location = escapeHTML(String(exp.location ?? ''));
     const companyId = exp.id ?? `company-${cIdx}`;
 
     let line = "";
@@ -51,23 +50,21 @@ const createExperienceCommand = (args?: string[]): string[] => {
     line += ` - <span style="color: var(--prompt-user, #7EE787);">${role}</span>`;
     output.push(line);
 
-    const meta = [period, location].filter(Boolean).join(' • ');
-    if (meta) {
+    if (period) {
       line = "";
       line += SPACE.repeat(4);
-      line += `<span style="opacity: 0.75; font-size: 0.9em;">${meta}</span>`;
+      line += `<span style="opacity: 0.75; font-size: 0.9em;">${period}</span>`;
       output.push(line);
     }
 
     if (Array.isArray(exp.documents) && exp.documents.length > 0) {
       exp.documents.forEach((doc) => {
         const title = escapeHTML(String(doc.title ?? 'Document'));
-        const type = escapeHTML(String(doc.type ?? 'PDF'));
         const docFile = doc.file ?? '';
 
         line = "";
         line += SPACE.repeat(4);
-        line += `<a href="${docFile}" target="_blank" rel="noopener noreferrer">${title}</a> (${type})`;
+        line += `<a href="${docFile}" target="_blank" rel="noopener noreferrer">${title}</a>`;
         output.push(line);
       });
     }
