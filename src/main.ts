@@ -20,6 +20,7 @@ import { ProjectViewer } from './ui/ProjectViewer';
 import { CertificateViewer } from './ui/CertificateViewer';
 import { ExperienceViewer } from './ui/ExperienceViewer';
 import { createExperienceCommand } from './commands/experience';
+import { inject } from '@vercel/analytics';
 
 // --- State ---
 let mutWriteLines = document.getElementById("write-lines");
@@ -759,3 +760,6 @@ document.addEventListener('mouseout', (e) => {
   if (!tag) return;
   skillTooltip.style.display = 'none';
 });
+
+// --- Vercel Web Analytics ---
+inject();
