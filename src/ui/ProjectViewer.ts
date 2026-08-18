@@ -316,8 +316,6 @@ export class ProjectViewer {
                 : undefined;
             const meta = this.normalizeProjectMeta(rawMeta, description);
 
-            const hasVideo = !!video || (screenshotList && screenshotList.some((s) => !!parseYouTubeId(s) || s.toLowerCase().endsWith('.mp4')));
-
             const item = document.createElement('div');
             item.className = 'explorer-item';
             item.tabIndex = 0;

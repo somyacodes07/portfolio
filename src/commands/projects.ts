@@ -1,5 +1,5 @@
 import command from '../../config.json';
-import { escapeHTML, sanitizeUrl, parseYouTubeId } from '../core/Utils';
+import { escapeHTML, sanitizeUrl } from '../core/Utils';
 
 const isHttpUrl = (value: string) => /^https?:\/\//i.test(value);
 
