@@ -161,7 +161,7 @@ export const setTheme = (colors: ThemeColors) => {
     root.style.setProperty('--border', colors.border.color);
     root.style.setProperty('--banner', colors.banner);
     root.style.setProperty('--bar-title-color', barTitleColor);
-    root.style.setProperty('--win-bg', hexToRgba(colors.background, 0.95));
+    root.style.setProperty('--win-bg', hexToRgba(colors.background, 0.45));
     root.style.setProperty('--win-border', colors.border.color);
     root.style.setProperty('--win-title-color', hexToRgba(colors.foreground, 0.9));
     root.style.setProperty('--win-scrollbar-thumb', colors.border.color);

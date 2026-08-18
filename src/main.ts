@@ -793,11 +793,20 @@ const pixelBlastBgContainer = document.getElementById('pixel-blast-bg');
 if (pixelBlastBgContainer) {
   const pixelBlast = new PixelBlast(pixelBlastBgContainer, {
     colors: getPixelColorsFromTheme(builtInThemes.default),
-    pixelSize: 6,
-    patternScale: 2.5,
+    pixelSize: 4,
+    patternScale: 2.0,
+    patternDensity: 1.0,
+    pixelSizeJitter: 0.0,
+    enableRipples: true,
+    rippleSpeed: 0.4,
+    rippleThickness: 0.12,
+    rippleIntensityScale: 1.5,
+    liquid: false,
+    liquidStrength: 0.12,
+    liquidRadius: 1.2,
+    liquidWobbleSpeed: 5.0,
     speed: 0.5,
     edgeFade: 0.25,
-    ripples: true,
   });
 
   // Dynamically update pixel palette whenever theme changes

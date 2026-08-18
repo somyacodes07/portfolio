@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "js-yaml": "^4.1.0",
+    "postprocessing": "^6.39.4",
     "three": "^0.185.1"
   }
 }

@@ -120,9 +120,9 @@ main {
   border: 2px solid var(--border);
   border-radius: 6px;
   overflow: hidden;
-  background: var(--win-bg, rgba(13, 17, 23, 0.85));
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: var(--win-bg, rgba(13, 17, 23, 0.45));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 0, 0, 0.2);
   transition: border-color 0.3s ease, background 0.3s ease;
 }

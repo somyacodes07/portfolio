@@ -2,11 +2,21 @@ import * as THREE from 'three';
 
 export interface PixelBlastOptions {
   colors?: string[];
+  variant?: 'square' | 'circle';
   pixelSize?: number;
   patternScale?: number;
+  patternDensity?: number;
+  pixelSizeJitter?: number;
   speed?: number;
   edgeFade?: number;
-  ripples?: boolean;
+  enableRipples?: boolean;
+  rippleSpeed?: number;
+  rippleThickness?: number;
+  rippleIntensityScale?: number;
+  liquid?: boolean;
+  liquidStrength?: number;
+  liquidRadius?: number;
+  liquidWobbleSpeed?: number;
 }
 
 export class PixelBlast {
@@ -34,11 +44,21 @@ export class PixelBlast {
     this.container = container;
     this.options = {
       colors: options.colors || ['#3B82F6', '#8B5CF6', '#06B6D4', '#6366F1', '#38BDF8'],
-      pixelSize: options.pixelSize ?? 6,
-      patternScale: options.patternScale ?? 2.5,
+      variant: options.variant || 'square',
+      pixelSize: options.pixelSize ?? 4,
+      patternScale: options.patternScale ?? 2.0,
+      patternDensity: options.patternDensity ?? 1.0,
+      pixelSizeJitter: options.pixelSizeJitter ?? 0.0,
       speed: options.speed ?? 0.5,
       edgeFade: options.edgeFade ?? 0.25,
-      ripples: options.ripples ?? true,
+      enableRipples: options.enableRipples ?? true,
+      rippleSpeed: options.rippleSpeed ?? 0.4,
+      rippleThickness: options.rippleThickness ?? 0.12,
+      rippleIntensityScale: options.rippleIntensityScale ?? 1.5,
+      liquid: options.liquid ?? false,
+      liquidStrength: options.liquidStrength ?? 0.12,
+      liquidRadius: options.liquidRadius ?? 1.2,
+      liquidWobbleSpeed: options.liquidWobbleSpeed ?? 5.0,
     };
 
     // Container styling
@@ -89,7 +109,7 @@ export class PixelBlast {
     // 3. Palette Texture Creation
     this.paletteTexture = this.createPaletteTexture(this.options.colors);
 
-    // 4. Pixel Blast Material
+    // 4. Pixel Blast Bayer Dithering Material
     this.material = new THREE.ShaderMaterial({
       vertexShader: `
         varying vec2 vUv;
@@ -105,11 +125,23 @@ export class PixelBlast {
         uniform vec2 uMouse;
         uniform float uPixelSize;
         uniform float uPatternScale;
+        uniform float uPatternDensity;
+        uniform float uPixelJitter;
         uniform float uSpeed;
         uniform float uEdgeFade;
+
+        uniform bool uEnableRipples;
+        uniform float uRippleSpeed;
+        uniform float uRippleThickness;
+        uniform float uRippleIntensityScale;
         uniform vec2 uRipples[8];
         uniform float uRippleTimes[8];
         uniform float uRippleIntensities[8];
+
+        uniform bool uLiquid;
+        uniform float uLiquidStrength;
+        uniform float uLiquidRadius;
+        uniform float uLiquidWobbleSpeed;
 
         varying vec2 vUv;
 
@@ -119,44 +151,90 @@ export class PixelBlast {
           return fract(p.x * p.y);
         }
 
+        float bayer4x4(vec2 p) {
+          int x = int(mod(p.x, 4.0));
+          int y = int(mod(p.y, 4.0));
+          int index = x + y * 4;
+          if (index == 0) return 0.0;
+          if (index == 1) return 8.0 / 16.0;
+          if (index == 2) return 2.0 / 16.0;
+          if (index == 3) return 10.0 / 16.0;
+          if (index == 4) return 12.0 / 16.0;
+          if (index == 5) return 4.0 / 16.0;
+          if (index == 6) return 14.0 / 16.0;
+          if (index == 7) return 6.0 / 16.0;
+          if (index == 8) return 3.0 / 16.0;
+          if (index == 9) return 11.0 / 16.0;
+          if (index == 10) return 1.0 / 16.0;
+          if (index == 11) return 9.0 / 16.0;
+          if (index == 12) return 15.0 / 16.0;
+          if (index == 13) return 7.0 / 16.0;
+          if (index == 14) return 13.0 / 16.0;
+          return 5.0 / 16.0;
+        }
+
         void main() {
+          vec2 uv = vUv;
+
+          if (uLiquid) {
+            vec2 aspectUv = (uv - uMouse);
+            aspectUv.x *= uResolution.x / uResolution.y;
+            float distToMouse = length(aspectUv);
+            if (distToMouse < uLiquidRadius) {
+              float factor = (1.0 - distToMouse / uLiquidRadius);
+              uv.x += sin(uv.y * 15.0 + uTime * uLiquidWobbleSpeed) * uLiquidStrength * factor;
+              uv.y += cos(uv.x * 15.0 + uTime * uLiquidWobbleSpeed) * uLiquidStrength * factor;
+            }
+          }
+
           vec2 gridCount = uResolution / max(1.0, uPixelSize);
-          vec2 gridUv = floor(vUv * gridCount) / gridCount;
-          vec2 cellUv = fract(vUv * gridCount);
+          vec2 gridPos = floor(uv * gridCount);
+          vec2 gridUv = gridPos / gridCount;
+          vec2 cellUv = fract(uv * gridCount);
 
-          float n = hash(gridUv);
-          vec2 st = gridUv * uPatternScale;
-          float wave = sin(st.x * 7.0 + st.y * 7.0 + uTime * uSpeed * 2.0 + n * 4.0) * 0.5 + 0.5;
+          if (uPixelJitter > 0.0) {
+            float j = hash(gridPos) * uPixelJitter;
+            gridPos += vec2(j);
+          }
 
-          float rippleTotal = 0.0;
-          for (int i = 0; i < 8; i++) {
-            float rAge = uTime - uRippleTimes[i];
-            if (rAge >= 0.0 && rAge < 2.5 && uRippleIntensities[i] > 0.01) {
-              vec2 diff = (gridUv - uRipples[i]);
-              diff.x *= uResolution.x / uResolution.y;
-              float dist = length(diff);
-              float ring = sin(dist * 30.0 - rAge * 9.0) * exp(-dist * 4.5) * exp(-rAge * 1.6);
-              rippleTotal += max(0.0, ring) * uRippleIntensities[i];
+          float bayerVal = bayer4x4(gridPos);
+
+          vec2 st = gridUv * uPatternScale * uPatternDensity;
+          float wave = sin(st.x * 6.28 + st.y * 6.28 + uTime * uSpeed * 2.5) * 0.5 + 0.5;
+
+          float rippleSum = 0.0;
+          if (uEnableRipples) {
+            for (int i = 0; i < 8; i++) {
+              float age = uTime - uRippleTimes[i];
+              if (age >= 0.0 && age < 3.0 && uRippleIntensities[i] > 0.001) {
+                vec2 diff = (gridUv - uRipples[i]);
+                diff.x *= uResolution.x / uResolution.y;
+                float d = length(diff);
+                float radius = age * uRippleSpeed;
+                float ring = exp(-pow((d - radius) / uRippleThickness, 2.0)) * exp(-age * 1.3);
+                rippleSum += ring * uRippleIntensities[i] * uRippleIntensityScale;
+              }
             }
           }
 
           vec2 mDiff = (gridUv - uMouse);
           mDiff.x *= uResolution.x / uResolution.y;
           float mDist = length(mDiff);
-          float mouseGlow = exp(-mDist * mDist * 22.0) * 0.75;
+          float mouseGlow = exp(-mDist * mDist * 28.0) * 0.75;
 
-          float totalIntensity = (wave * 0.22 + rippleTotal * 0.9 + mouseGlow * 0.7);
+          float totalSignal = wave * 0.35 + rippleSum * 0.85 + mouseGlow * 0.65;
+          float dithered = step(bayerVal, totalSignal) * totalSignal;
 
-          // Grid Cell Border (Pixelated gap)
-          float border = step(0.08, cellUv.x) * step(cellUv.x, 0.92) * step(0.08, cellUv.y) * step(cellUv.y, 0.92);
-          totalIntensity *= border;
+          // Cell shape: square or circle cell grid
+          float cellMask = step(0.06, cellUv.x) * step(cellUv.x, 0.94) * step(0.06, cellUv.y) * step(cellUv.y, 0.94);
+          dithered *= cellMask;
 
-          // Edge Fade out at borders
+          // Edge Fade out towards margins
           vec2 fade = smoothstep(0.0, uEdgeFade, vUv) * smoothstep(0.0, uEdgeFade, 1.0 - vUv);
-          totalIntensity *= fade.x * fade.y;
+          dithered *= fade.x * fade.y;
 
-          vec4 col = texture2D(uPalette, vec2(clamp(totalIntensity, 0.01, 0.98), 0.5));
-          float alpha = smoothstep(0.02, 0.8, totalIntensity) * 0.55;
+          vec4 col = texture2D(uPalette, vec2(clamp(dithered, 0.01, 0.98), 0.5));
+          float alpha = smoothstep(0.01, 0.75, dithered) * 0.65;
 
           gl_FragColor = vec4(col.rgb, alpha);
         }
@@ -168,11 +246,21 @@ export class PixelBlast {
         uMouse: { value: this.mouse },
         uPixelSize: { value: this.options.pixelSize },
         uPatternScale: { value: this.options.patternScale },
+        uPatternDensity: { value: this.options.patternDensity },
+        uPixelJitter: { value: this.options.pixelSizeJitter },
         uSpeed: { value: this.options.speed },
         uEdgeFade: { value: this.options.edgeFade },
+        uEnableRipples: { value: this.options.enableRipples },
+        uRippleSpeed: { value: this.options.rippleSpeed },
+        uRippleThickness: { value: this.options.rippleThickness },
+        uRippleIntensityScale: { value: this.options.rippleIntensityScale },
         uRipples: { value: this.ripples },
         uRippleTimes: { value: this.rippleTimes },
         uRippleIntensities: { value: this.rippleIntensities },
+        uLiquid: { value: this.options.liquid },
+        uLiquidStrength: { value: this.options.liquidStrength },
+        uLiquidRadius: { value: this.options.liquidRadius },
+        uLiquidWobbleSpeed: { value: this.options.liquidWobbleSpeed },
       },
       transparent: true,
       depthWrite: false,
@@ -234,8 +322,8 @@ export class PixelBlast {
     this.material.uniforms.uPalette.value.needsUpdate = true;
   }
 
-  private addRipple(x: number, y: number, intensity: number = 1.0) {
-    if (!this.options.ripples) return;
+  private addRipple(x: number, y: number, intensity: number = 1.5) {
+    if (!this.options.enableRipples) return;
     const idx = this.currentRippleIndex;
     this.ripples[idx].set(x, y);
     this.rippleTimes[idx] = (performance.now() - this.startTime) / 1000;
@@ -262,8 +350,8 @@ export class PixelBlast {
 
     this.mouse.set(x, y);
 
-    if (Math.random() < 0.25) {
-      this.addRipple(x, y, 0.6 + Math.random() * 0.4);
+    if (Math.random() < 0.35) {
+      this.addRipple(x, y, 0.8 + Math.random() * 0.7);
     }
   }
 
@@ -283,8 +371,8 @@ export class PixelBlast {
     const x = clientX / window.innerWidth;
     const y = 1.0 - clientY / window.innerHeight;
 
-    for (let i = 0; i < 3; i++) {
-      this.addRipple(x + (Math.random() - 0.5) * 0.05, y + (Math.random() - 0.5) * 0.05, 1.2);
+    for (let i = 0; i < 4; i++) {
+      this.addRipple(x + (Math.random() - 0.5) * 0.06, y + (Math.random() - 0.5) * 0.06, 1.8);
     }
   }
 
