@@ -1,5 +1,5 @@
 import { WindowManager, WindowAction } from '../core/WindowManager';
-import { sanitizeUrl } from '../core/Utils';
+import { sanitizeUrl, parseYouTubeId, getYouTubeEmbedUrl } from '../core/Utils';
 import command from '../../config.json';
 
 interface ProjectMeta {
@@ -46,17 +46,27 @@ export class ProjectViewer {
             return;
         }
 
-        const mediaItems: { type: 'video' | 'image'; src: string }[] = [];
+        const mediaItems: { type: 'youtube' | 'video' | 'image'; src: string; youtubeId?: string }[] = [];
 
         if (videoUrl) {
-            const safeVideo = sanitizeUrl(videoUrl, { allowRelative: true });
-            if (safeVideo) {
-                mediaItems.push({ type: 'video', src: safeVideo });
+            const ytId = parseYouTubeId(videoUrl);
+            if (ytId) {
+                mediaItems.push({ type: 'youtube', src: getYouTubeEmbedUrl(ytId), youtubeId: ytId });
+            } else {
+                const safeVideo = sanitizeUrl(videoUrl, { allowRelative: true });
+                if (safeVideo) {
+                    mediaItems.push({ type: 'video', src: safeVideo });
+                }
             }
         }
 
         if (screenshots && Array.isArray(screenshots)) {
             screenshots.forEach((src) => {
+                const ytId = parseYouTubeId(String(src));
+                if (ytId) {
+                    mediaItems.push({ type: 'youtube', src: getYouTubeEmbedUrl(ytId), youtubeId: ytId });
+                    return;
+                }
                 const safeSrc = sanitizeUrl(String(src), { allowRelative: true });
                 if (!safeSrc) return;
                 const isVideo = src.toLowerCase().endsWith('.mp4') || src.toLowerCase().endsWith('.webm');
@@ -85,7 +95,16 @@ export class ProjectViewer {
 
         mediaItems.forEach((item, index) => {
             let element: HTMLElement;
-            if (item.type === 'video') {
+            if (item.type === 'youtube') {
+                const iframe = document.createElement('iframe');
+                iframe.src = item.src;
+                iframe.className = 'gallery-slide gallery-youtube';
+                iframe.title = `${title} Video Demo`;
+                iframe.setAttribute('frameborder', '0');
+                iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; webshare');
+                iframe.setAttribute('allowfullscreen', 'true');
+                element = iframe;
+            } else if (item.type === 'video') {
                 const video = document.createElement('video');
                 video.src = item.src;
                 video.className = 'gallery-slide';
@@ -122,6 +141,12 @@ export class ProjectViewer {
                     slide.classList.remove('active');
                     if (slide instanceof HTMLVideoElement) {
                         slide.pause();
+                    } else if (slide instanceof HTMLIFrameElement && slide.classList.contains('gallery-youtube')) {
+                        try {
+                            slide.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                        } catch {
+                            // Cross-origin message safety catch
+                        }
                     }
                 }
             });
@@ -291,6 +316,8 @@ export class ProjectViewer {
                 : undefined;
             const meta = this.normalizeProjectMeta(rawMeta, description);
 
+            const hasVideo = !!video || (screenshotList && screenshotList.some((s) => !!parseYouTubeId(s) || s.toLowerCase().endsWith('.mp4')));
+
             const item = document.createElement('div');
             item.className = 'explorer-item';
             item.tabIndex = 0;
@@ -357,6 +384,13 @@ export class ProjectViewer {
             badges.appendChild(yearBadge);
             badges.appendChild(statusBadge);
 
+            if (hasVideo) {
+                const videoBadge = document.createElement('span');
+                videoBadge.className = 'explorer-badge status-video';
+                videoBadge.innerHTML = '<i class="fa-brands fa-youtube"></i> Video';
+                badges.appendChild(videoBadge);
+            }
+
             item.appendChild(img);
             item.appendChild(label);
             item.appendChild(descriptionNode);
@@ -388,3 +422,4 @@ export class ProjectViewer {
         this.windowManager.open('project-explorer', 'Project Explorer', container, { width: 960, height: 660 });
     }
 }
+
