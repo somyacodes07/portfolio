@@ -57,7 +57,7 @@ export const builtInThemes: Record<string, ThemeColors> = {
     nord: {
         background: "#242933",
         foreground: "#E5E9F0",
-        banner: "#0F6FA8",
+        banner: "#88C0D0",
         border: { visible: true, color: "#566074" },
         prompt: { default: "#A3B1C9", user: "#A3BE8C", host: "#88C0D0", input: "#ECEFF4" },
         link: { text: "#81A1C1", highlightColor: "#3B4252", highlightText: "#ECEFF4" },
