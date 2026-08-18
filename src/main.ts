@@ -151,7 +151,7 @@ const applyWallpaperFromConfig = () => {
 
   const escapedWallpaper = safeWallpaper.replace(/"/g, '\\"');
   root.style.setProperty('--wallpaper-image', `url("${escapedWallpaper}")`);
-  root.style.setProperty('--wallpaper-opacity', '0.25');
+  root.style.setProperty('--wallpaper-opacity', '0.35');
 }
 
 function writeLines(message: string[]) {
