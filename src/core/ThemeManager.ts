@@ -161,7 +161,7 @@ export const setTheme = (colors: ThemeColors) => {
     root.style.setProperty('--border', colors.border.color);
     root.style.setProperty('--banner', colors.banner);
     root.style.setProperty('--bar-title-color', barTitleColor);
-    root.style.setProperty('--win-bg', hexToRgba(colors.background, 0.95));
+    root.style.setProperty('--win-bg', hexToRgba(colors.background, 0.75));
     root.style.setProperty('--win-border', colors.border.color);
     root.style.setProperty('--win-title-color', hexToRgba(colors.foreground, 0.9));
     root.style.setProperty('--win-scrollbar-thumb', colors.border.color);
@@ -194,7 +194,23 @@ export const setTheme = (colors: ThemeColors) => {
     root.style.setProperty('--gh-2', hexToRgba(colors.prompt.user, 0.50));
     root.style.setProperty('--gh-3', hexToRgba(colors.prompt.user, 0.75));
     root.style.setProperty('--gh-4', colors.prompt.user);
+
+    // Notify listeners
+    themeChangeListeners.forEach((listener) => {
+        try {
+            listener(colors);
+        } catch (e) {
+            console.error('Theme change listener error:', e);
+        }
+    });
 }
+
+type ThemeChangeListener = (colors: ThemeColors) => void;
+const themeChangeListeners: ThemeChangeListener[] = [];
+
+export const onThemeChange = (listener: ThemeChangeListener) => {
+    themeChangeListeners.push(listener);
+};
 
 // Initial set
 setTheme(builtInThemes.default);

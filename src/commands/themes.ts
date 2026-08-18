@@ -46,13 +46,13 @@ export const builtInThemes: Record<string, ThemeColors> = {
         commands: { textColor: "#ffb86c" }
     },
     gruvbox: {
-        background: "#1f1b16",
-        foreground: "#f2e5bc",
+        background: "#1d2021",
+        foreground: "#fbf1c7",
         banner: "#fabd2f",
-        border: { visible: true, color: "#5a4b3b" },
-        prompt: { default: "#bda98b", user: "#fb6f52", host: "#8ec07c", input: "#f2e5bc" },
-        link: { text: "#83a598", highlightColor: "#4a3f34", highlightText: "#fff1c1" },
-        commands: { textColor: "#d3869b" }
+        border: { visible: true, color: "#3c3836" },
+        prompt: { default: "#a89984", user: "#b8bb26", host: "#8ec07c", input: "#fbf1c7" },
+        link: { text: "#83a598", highlightColor: "#3c3836", highlightText: "#fbf1c7" },
+        commands: { textColor: "#fe8019" }
     },
     nord: {
         background: "#242933",

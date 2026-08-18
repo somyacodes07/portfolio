@@ -10,8 +10,8 @@ import { createProject } from "./commands/projects";
 import { EDUCATION } from "./commands/education";
 import { CERTIFICATIONS } from "./commands/certifications";
 import { prefetchContributions } from "./commands/github";
-import { setTheme } from "./core/ThemeManager";
-import { builtInThemes, THEME_HELP } from "./commands/themes";
+import { setTheme, onThemeChange } from "./core/ThemeManager";
+import { builtInThemes, ThemeColors, THEME_HELP } from "./commands/themes";
 import { getSkills } from "./commands/skills";
 import { WindowManager } from './core/WindowManager';
 import { InputManager } from './core/InputManager';
@@ -20,6 +20,7 @@ import { ProjectViewer } from './ui/ProjectViewer';
 import { CertificateViewer } from './ui/CertificateViewer';
 import { ExperienceViewer } from './ui/ExperienceViewer';
 import { createExperienceCommand } from './commands/experience';
+import { Dither } from './ui/Dither';
 
 // --- State ---
 let mutWriteLines = document.getElementById("write-lines");
@@ -788,3 +789,27 @@ document.addEventListener('mouseout', (e) => {
   if (!tag) return;
   skillTooltip.style.display = 'none';
 });
+
+// Helper to derive background particle colors from active theme
+const getPixelColorsFromTheme = (theme: ThemeColors): string => theme.banner;
+
+// ── Initialize React Bits Dither WebGL Background ──
+const pixelBlastBgContainer = document.getElementById('pixel-blast-bg');
+if (pixelBlastBgContainer) {
+  const dither = new Dither(pixelBlastBgContainer, {
+    waveSpeed: 0.05,
+    waveFrequency: 3.0,
+    waveAmplitude: 0.3,
+    waveColor: getPixelColorsFromTheme(builtInThemes.default),
+    colorNum: 4,
+    pixelSize: 3,
+    disableAnimation: false,
+    enableMouseInteraction: false,
+  });
+
+  // Dynamically update dither color whenever theme changes
+  onThemeChange((themeColors) => {
+    dither.setColors(getPixelColorsFromTheme(themeColors));
+  });
+}
+
