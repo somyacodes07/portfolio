@@ -80,7 +80,7 @@ body {
   z-index: -2;
   pointer-events: none;
   overflow: hidden;
-  background-color: var(--bg, #0D1117);
+  background-color: #06080E;
   transition: background-color 0.4s ease;
 }
 
@@ -120,9 +120,9 @@ main {
   border: 2px solid var(--border);
   border-radius: 6px;
   overflow: hidden;
-  background: var(--win-bg, rgba(13, 17, 23, 0.45));
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: var(--win-bg, rgba(13, 17, 23, 0.35));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 0, 0, 0.2);
   transition: border-color 0.3s ease, background 0.3s ease;
 }

@@ -222,19 +222,19 @@ export class PixelBlast {
           float mDist = length(mDiff);
           float mouseGlow = exp(-mDist * mDist * 28.0) * 0.75;
 
-          float totalSignal = wave * 0.35 + rippleSum * 0.85 + mouseGlow * 0.65;
-          float dithered = step(bayerVal, totalSignal) * totalSignal;
+          float totalSignal = wave * 0.45 + rippleSum * 1.2 + mouseGlow * 0.85;
+          float dithered = step(bayerVal * 0.65, totalSignal) * (totalSignal + 0.2);
 
           // Cell shape: square or circle cell grid
-          float cellMask = step(0.06, cellUv.x) * step(cellUv.x, 0.94) * step(0.06, cellUv.y) * step(cellUv.y, 0.94);
+          float cellMask = step(0.05, cellUv.x) * step(cellUv.x, 0.95) * step(0.05, cellUv.y) * step(cellUv.y, 0.95);
           dithered *= cellMask;
 
           // Edge Fade out towards margins
           vec2 fade = smoothstep(0.0, uEdgeFade, vUv) * smoothstep(0.0, uEdgeFade, 1.0 - vUv);
           dithered *= fade.x * fade.y;
 
-          vec4 col = texture2D(uPalette, vec2(clamp(dithered, 0.01, 0.98), 0.5));
-          float alpha = smoothstep(0.01, 0.75, dithered) * 0.65;
+          vec4 col = texture2D(uPalette, vec2(clamp(dithered, 0.05, 0.98), 0.5));
+          float alpha = smoothstep(0.01, 0.6, dithered) * 0.92;
 
           gl_FragColor = vec4(col.rgb, alpha);
         }
