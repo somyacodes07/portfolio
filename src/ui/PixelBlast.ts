@@ -360,6 +360,7 @@ export class PixelBlast {
   private isRunning: boolean = false;
   private animationFrameId: number | null = null;
   private resizeObserver?: ResizeObserver;
+  private onVisibilityChange?: () => void;
 
   private options: Required<PixelBlastOptions>;
 
@@ -505,6 +506,15 @@ export class PixelBlast {
     window.addEventListener('pointerdown', this.onPointerDown, { passive: true });
     window.addEventListener('pointermove', this.onPointerMove, { passive: true });
 
+    this.onVisibilityChange = () => {
+      if (document.hidden) {
+        this.stop();
+      } else {
+        this.start();
+      }
+    };
+    document.addEventListener('visibilitychange', this.onVisibilityChange);
+
     this.start();
   }
 
@@ -603,6 +613,10 @@ export class PixelBlast {
 
   public destroy() {
     this.stop();
+
+    if (this.onVisibilityChange) {
+      document.removeEventListener('visibilitychange', this.onVisibilityChange);
+    }
 
     window.removeEventListener('pointerdown', this.onPointerDown);
     window.removeEventListener('pointermove', this.onPointerMove);
