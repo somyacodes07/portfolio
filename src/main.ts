@@ -780,19 +780,14 @@ document.addEventListener('mouseout', (e) => {
 });
 
 // Helper to derive background particle colors from active theme
-const getPixelColorsFromTheme = (theme: ThemeColors): string[] => [
-  theme.banner,
-  theme.prompt.user,
-  theme.prompt.host,
-  theme.commands.textColor,
-  theme.link.text,
-];
+const getPixelColorsFromTheme = (theme: ThemeColors): string => theme.banner;
 
 // ── Initialize React Bits Pixel Blast WebGL Background ──
 const pixelBlastBgContainer = document.getElementById('pixel-blast-bg');
 if (pixelBlastBgContainer) {
   const pixelBlast = new PixelBlast(pixelBlastBgContainer, {
-    colors: getPixelColorsFromTheme(builtInThemes.default),
+    variant: 'square',
+    color: getPixelColorsFromTheme(builtInThemes.default),
     pixelSize: 4,
     patternScale: 2.0,
     patternDensity: 1.0,
