@@ -50,11 +50,11 @@ export class LiquidEther {
   constructor(container: HTMLElement, options: LiquidEtherOptions = {}) {
     this.container = container;
     this.options = {
-      colors: options.colors || ['#5227FF', '#FF9FFC', '#B497CF'],
-      mouseForce: options.mouseForce ?? 20,
-      cursorSize: options.cursorSize ?? 100,
+      colors: options.colors || ['#3B82F6', '#8B5CF6', '#06B6D4', '#6366F1', '#38BDF8'],
+      mouseForce: options.mouseForce ?? 14,
+      cursorSize: options.cursorSize ?? 140,
       autoDemo: options.autoDemo ?? true,
-      autoSpeed: options.autoSpeed ?? 0.5,
+      autoSpeed: options.autoSpeed ?? 0.35,
       resolution: options.resolution ?? 0.5,
     };
 
@@ -148,7 +148,7 @@ export class LiquidEther {
       }
     `;
 
-    // Advection Shader
+    // Advection Shader - using faster dissipation (0.92) for elegant fluid dissipation
     this.advectMaterial = new THREE.ShaderMaterial({
       vertexShader: baseVertexShader,
       fragmentShader: `
@@ -168,7 +168,7 @@ export class LiquidEther {
         uSource: { value: null },
         uTexelSize: { value: this.texelSize },
         uDt: { value: 0.016 },
-        uDissipation: { value: 0.98 },
+        uDissipation: { value: 0.92 },
       },
       depthWrite: false,
       depthTest: false,
@@ -281,7 +281,7 @@ export class LiquidEther {
       depthTest: false,
     });
 
-    // Output Display Shader
+    // Output Display Shader - tuned opacity and soft glow blending
     this.displayMaterial = new THREE.ShaderMaterial({
       vertexShader: baseVertexShader,
       fragmentShader: `
@@ -292,7 +292,7 @@ export class LiquidEther {
           vec4 d = texture2D(uDensity, vUv);
           float intensity = length(d.rgb);
           vec4 col = texture2D(uPalette, vec2(clamp(intensity, 0.0, 0.99), 0.5));
-          float alpha = smoothstep(0.01, 0.8, intensity) * 0.85;
+          float alpha = smoothstep(0.02, 0.85, intensity) * 0.42;
           gl_FragColor = vec4(col.rgb, alpha);
         }
       `,
@@ -316,8 +316,9 @@ export class LiquidEther {
     window.addEventListener('mousedown', this.onPointerDown, { passive: true });
     window.addEventListener('touchstart', this.onPointerDown, { passive: true });
 
-    // Initial Splash
-    this.splat(0.5, 0.5, 2.0, 1.0, new THREE.Vector3(0.5, 0.2, 0.9));
+    // Initial Splash (subtle ambient start)
+    const c = new THREE.Color(this.options.colors[0]);
+    this.splat(0.5, 0.5, 0.8, 0.4, new THREE.Vector3(c.r, c.g, c.b));
 
     this.start();
   }
@@ -411,7 +412,7 @@ export class LiquidEther {
     if (this.mouseVel.lengthSq() > 0.000001) {
       const colIndex = Math.floor(Math.random() * this.options.colors.length);
       const c = new THREE.Color(this.options.colors[colIndex]);
-      this.splat(x, y, this.mouseVel.x * 20, this.mouseVel.y * 20, new THREE.Vector3(c.r, c.g, c.b));
+      this.splat(x, y, this.mouseVel.x * 12, this.mouseVel.y * 12, new THREE.Vector3(c.r * 0.8, c.g * 0.8, c.b * 0.8));
     }
   }
 
@@ -430,9 +431,9 @@ export class LiquidEther {
 
     const x = clientX / window.innerWidth;
     const y = 1.0 - clientY / window.innerHeight;
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 4; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const speed = 0.5 + Math.random() * 1.5;
+      const speed = 0.3 + Math.random() * 0.8;
       const c = new THREE.Color(this.options.colors[i % this.options.colors.length]);
       this.splat(x, y, Math.cos(angle) * speed, Math.sin(angle) * speed, new THREE.Vector3(c.r, c.g, c.b));
     }
@@ -468,29 +469,29 @@ export class LiquidEther {
       const dt = Math.min((now - lastTime) / 1000, 0.033);
       lastTime = now;
 
-      // Ambient Auto Demo pulse if idle
-      if (this.options.autoDemo && now - this.lastMoveTime > 1500) {
+      // Gentle ambient floating motion when idle
+      if (this.options.autoDemo && now - this.lastMoveTime > 1200) {
         const time = now * 0.001 * this.options.autoSpeed;
-        const ax = 0.5 + Math.sin(time * 0.7) * 0.35;
-        const ay = 0.5 + Math.cos(time * 0.9) * 0.35;
-        const dx = Math.cos(time * 2.1) * 0.15;
-        const dy = Math.sin(time * 1.8) * 0.15;
-        const c = new THREE.Color(this.options.colors[Math.floor(now * 0.001) % this.options.colors.length]);
-        this.splat(ax, ay, dx, dy, new THREE.Vector3(c.r, c.g, c.b));
+        const ax = 0.5 + Math.sin(time * 0.5) * 0.4;
+        const ay = 0.5 + Math.cos(time * 0.6) * 0.4;
+        const dx = Math.cos(time * 1.5) * 0.08;
+        const dy = Math.sin(time * 1.3) * 0.08;
+        const c = new THREE.Color(this.options.colors[Math.floor(now * 0.0005) % this.options.colors.length]);
+        this.splat(ax, ay, dx, dy, new THREE.Vector3(c.r * 0.5, c.g * 0.5, c.b * 0.5));
       }
 
-      // 1. Advect Velocity
+      // 1. Advect Velocity (0.92 dissipation for natural decay)
       this.advectMaterial.uniforms.uVelocity.value = this.velocity.read.texture;
       this.advectMaterial.uniforms.uSource.value = this.velocity.read.texture;
       this.advectMaterial.uniforms.uDt.value = dt;
-      this.advectMaterial.uniforms.uDissipation.value = 0.97;
+      this.advectMaterial.uniforms.uDissipation.value = 0.92;
       this.renderPass(this.velocity.write, this.advectMaterial);
       this.swap(this.velocity);
 
-      // 2. Advect Density / Color
+      // 2. Advect Density / Color (0.93 dissipation)
       this.advectMaterial.uniforms.uVelocity.value = this.velocity.read.texture;
       this.advectMaterial.uniforms.uSource.value = this.density.read.texture;
-      this.advectMaterial.uniforms.uDissipation.value = 0.98;
+      this.advectMaterial.uniforms.uDissipation.value = 0.93;
       this.renderPass(this.density.write, this.advectMaterial);
       this.swap(this.density);
 
@@ -500,7 +501,7 @@ export class LiquidEther {
 
       // 4. Pressure Jacobi Iterations
       this.pressureMaterial.uniforms.uDivergence.value = this.divergence.texture;
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 18; i++) {
         this.pressureMaterial.uniforms.uPressure.value = this.pressure.read.texture;
         this.renderPass(this.pressure.write, this.pressureMaterial);
         this.swap(this.pressure);

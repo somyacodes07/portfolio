@@ -771,10 +771,11 @@ document.addEventListener('mouseout', (e) => {
 const liquidEtherBgContainer = document.getElementById('liquid-ether-bg');
 if (liquidEtherBgContainer) {
   new LiquidEther(liquidEtherBgContainer, {
-    colors: ['#5227FF', '#FF9FFC', '#B497CF'],
-    mouseForce: 20,
-    cursorSize: 100,
+    colors: ['#3B82F6', '#8B5CF6', '#06B6D4', '#6366F1', '#38BDF8'],
+    mouseForce: 14,
+    cursorSize: 140,
     autoDemo: true,
+    autoSpeed: 0.35,
     resolution: 0.5,
   });
 }

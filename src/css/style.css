@@ -80,20 +80,17 @@ body {
   z-index: -2;
   pointer-events: none;
   overflow: hidden;
+  background: radial-gradient(circle at 50% 40%, #0D1322 0%, #06080F 100%);
 }
 
-/* Background Wallpaper */
+/* Background Wallpaper (Disabled so vector image doesn't clash with dynamic ether) */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: -1;
-  background-image: var(--wallpaper-image);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  filter: blur(3px);
-  opacity: var(--wallpaper-opacity);
+  background-image: none;
+  opacity: 0;
   pointer-events: none;
 }
 
@@ -120,8 +117,12 @@ main {
   box-sizing: border-box;
   height: 100%;
   border: 2px solid var(--border);
-  border-radius: 2px;
+  border-radius: 6px;
   overflow: hidden;
+  background: rgba(13, 17, 23, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(59, 130, 246, 0.12);
 }
 
 p {
