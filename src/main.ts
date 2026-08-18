@@ -652,6 +652,12 @@ const initEventListeners = () => {
   });
 
   window.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key.toLowerCase() === 'l') {
+      e.preventDefault();
+      dispatcher.dispatch('clear');
+      return;
+    }
+
     const target = e.target as HTMLElement | null;
     const trigger = target?.closest('.clickable') as HTMLElement | null;
     if (!trigger) return;
