@@ -71,6 +71,17 @@ body {
   background-color: transparent;
 }
 
+/* Liquid Ether Background Canvas */
+#liquid-ether-bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
 /* Background Wallpaper */
 body::before {
   content: "";

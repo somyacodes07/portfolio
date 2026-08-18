@@ -20,6 +20,7 @@ import { ProjectViewer } from './ui/ProjectViewer';
 import { CertificateViewer } from './ui/CertificateViewer';
 import { ExperienceViewer } from './ui/ExperienceViewer';
 import { createExperienceCommand } from './commands/experience';
+import { LiquidEther } from './ui/LiquidEther';
 
 // --- State ---
 let mutWriteLines = document.getElementById("write-lines");
@@ -765,3 +766,16 @@ document.addEventListener('mouseout', (e) => {
   if (!tag) return;
   skillTooltip.style.display = 'none';
 });
+
+// ── Initialize Liquid Ether WebGL Background ──
+const liquidEtherBgContainer = document.getElementById('liquid-ether-bg');
+if (liquidEtherBgContainer) {
+  new LiquidEther(liquidEtherBgContainer, {
+    colors: ['#5227FF', '#FF9FFC', '#B497CF'],
+    mouseForce: 20,
+    cursorSize: 100,
+    autoDemo: true,
+    resolution: 0.5,
+  });
+}
+
