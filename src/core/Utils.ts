@@ -57,3 +57,22 @@ export function hexToRgba(hex: string, alpha: number): string {
     }
     return 'rgba(13, 17, 23, ' + alpha + ')'; // Default fallback
 }
+
+export function parseYouTubeId(input: string): string | null {
+    if (!input || typeof input !== 'string') return null;
+    const str = input.trim();
+    if (/^[a-zA-Z0-9_-]{11}$/.test(str)) {
+        return str;
+    }
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = str.match(regExp);
+    if (match && match[2].length === 11) {
+        return match[2];
+    }
+    return null;
+}
+
+export function getYouTubeEmbedUrl(videoId: string): string {
+    return `https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1&rel=0`;
+}
+

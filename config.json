@@ -150,9 +150,8 @@
       "Browser-based algorithm visualization platform for JavaScript and C++ with execution replay, variable tracing, recursive call stack inspection, WebAssembly compilation.",
       "https://github.com/somyacodes07/AlgoViz-copy",
       "https://algoviz.somyacodes.in/",
-      null,
+      "https://youtu.be/LjM9c_LxcpQ",
       [
-        "/projects/algoviz.mp4",
         "/projects/algoviz-cpp.png",
         "/projects/algoviz-js.png"
       ],
@@ -172,9 +171,8 @@
       "Geospatial disaster monitoring platform built with FastAPI and Next.js 15. Features flood-risk analysis using Google Earth Engine satellite telemetry, NDWI calculations, and interactive MapLibre spatial visualizations.",
       "https://github.com/somyacodes07/SentinelIQ",
       "Not Yet Deployed",
-      null,
+      "https://youtu.be/iokaxdhKqoA",
       [
-        "/projects/sentinel.mp4",
         "/projects/sentinel-dashboard.png"
       ],
       {
@@ -195,7 +193,6 @@
       null,
       null,
       [
-        "/projects/music-vis.mp4",
         "/projects/music-vis-1.png",
         "/projects/music-vis-2.png"
       ],
@@ -215,9 +212,8 @@
       "Experimental Augmented Reality applications built with OpenCV and Python, featuring real-time vision tracking and mouse-based digital interactions.",
       "https://github.com/somyacodes07/AR_Kite",
       null,
-      null,
+      "https://youtube.com/shorts/1GYJi8bw2jY?feature=share",
       [
-        "/projects/ar-kit-2.mp4",
         "/projects/ar-kit-1.png"
       ],
       {
