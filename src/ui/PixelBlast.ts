@@ -217,12 +217,7 @@ export class PixelBlast {
             }
           }
 
-          vec2 mDiff = (gridUv - uMouse);
-          mDiff.x *= uResolution.x / uResolution.y;
-          float mDist = length(mDiff);
-          float mouseGlow = exp(-mDist * mDist * 28.0) * 0.75;
-
-          float totalSignal = wave * 0.45 + rippleSum * 1.2 + mouseGlow * 0.85;
+          float totalSignal = wave * 0.5 + rippleSum * 1.2;
           float dithered = step(bayerVal * 0.65, totalSignal) * (totalSignal + 0.2);
 
           // Cell shape: square or circle cell grid
