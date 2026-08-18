@@ -329,7 +329,7 @@
   "colors": {
     "background": "#0D1117",
     "foreground": "#E6EDF3",
-    "banner": "#58A6FF",
+    "banner": "#38BDF8",
     "border": {
       "visible": true,
       "color": "#30363D"
