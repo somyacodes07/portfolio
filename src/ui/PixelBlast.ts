@@ -554,9 +554,16 @@ export class PixelBlast {
   }
 
   private onPointerMove(e: PointerEvent) {
-    if (!this.touch) return;
     const { fx, fy, w, h } = this.mapToPixels(e);
-    this.touch.addTouch({ x: fx / w, y: fy / h });
+    if (this.touch) {
+      this.touch.addTouch({ x: fx / w, y: fy / h });
+    }
+    if (this.options.enableRipples && Math.random() < 0.2) {
+      const ix = this.clickIx;
+      this.uniforms.uClickPos.value[ix].set(fx, fy);
+      this.uniforms.uClickTimes.value[ix] = this.uniforms.uTime.value;
+      this.clickIx = (ix + 1) % MAX_CLICKS;
+    }
   }
 
   public start() {
