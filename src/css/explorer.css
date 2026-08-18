@@ -38,6 +38,12 @@
     display: none;
 }
 
+.gallery-slide.gallery-youtube {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
 .gallery-slide.active {
     display: block;
     animation: fadeIn 0.3s ease;
@@ -293,6 +299,12 @@
 .explorer-badge.status-archived {
     border-color: rgba(139, 148, 158, 0.42);
     color: rgba(139, 148, 158, 1);
+}
+
+.explorer-badge.status-video {
+    border-color: rgba(255, 60, 60, 0.6);
+    color: #FF6B6B;
+    background: rgba(255, 0, 0, 0.08);
 }
 
 .certificate-card {
