@@ -525,6 +525,17 @@ export class LiquidEther {
     this.animationFrameId = requestAnimationFrame(loop);
   }
 
+  public setColors(colors: string[]) {
+    if (!colors || colors.length === 0) return;
+    this.options.colors = colors;
+    if (this.paletteTexture) {
+      this.paletteTexture.dispose();
+    }
+    this.paletteTexture = this.createPaletteTexture(colors);
+    this.displayMaterial.uniforms.uPalette.value = this.paletteTexture;
+    this.displayMaterial.uniforms.uPalette.value.needsUpdate = true;
+  }
+
   public stop() {
     this.isRunning = false;
     if (this.animationFrameId !== null) {

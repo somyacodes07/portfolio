@@ -194,7 +194,23 @@ export const setTheme = (colors: ThemeColors) => {
     root.style.setProperty('--gh-2', hexToRgba(colors.prompt.user, 0.50));
     root.style.setProperty('--gh-3', hexToRgba(colors.prompt.user, 0.75));
     root.style.setProperty('--gh-4', colors.prompt.user);
+
+    // Notify listeners
+    themeChangeListeners.forEach((listener) => {
+        try {
+            listener(colors);
+        } catch (e) {
+            console.error('Theme change listener error:', e);
+        }
+    });
 }
+
+type ThemeChangeListener = (colors: ThemeColors) => void;
+const themeChangeListeners: ThemeChangeListener[] = [];
+
+export const onThemeChange = (listener: ThemeChangeListener) => {
+    themeChangeListeners.push(listener);
+};
 
 // Initial set
 setTheme(builtInThemes.default);

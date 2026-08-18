@@ -10,8 +10,8 @@ import { createProject } from "./commands/projects";
 import { EDUCATION } from "./commands/education";
 import { CERTIFICATIONS } from "./commands/certifications";
 import { prefetchContributions } from "./commands/github";
-import { setTheme } from "./core/ThemeManager";
-import { builtInThemes, THEME_HELP } from "./commands/themes";
+import { setTheme, onThemeChange } from "./core/ThemeManager";
+import { builtInThemes, ThemeColors, THEME_HELP } from "./commands/themes";
 import { getSkills } from "./commands/skills";
 import { WindowManager } from './core/WindowManager';
 import { InputManager } from './core/InputManager';
@@ -767,16 +767,30 @@ document.addEventListener('mouseout', (e) => {
   skillTooltip.style.display = 'none';
 });
 
+// Helper to derive fluid colors from active theme
+const getFluidColorsFromTheme = (theme: ThemeColors): string[] => [
+  theme.banner,
+  theme.prompt.user,
+  theme.prompt.host,
+  theme.commands.textColor,
+  theme.link.text,
+];
+
 // ── Initialize Liquid Ether WebGL Background ──
 const liquidEtherBgContainer = document.getElementById('liquid-ether-bg');
 if (liquidEtherBgContainer) {
-  new LiquidEther(liquidEtherBgContainer, {
-    colors: ['#3B82F6', '#8B5CF6', '#06B6D4', '#6366F1', '#38BDF8'],
+  const liquidEther = new LiquidEther(liquidEtherBgContainer, {
+    colors: getFluidColorsFromTheme(builtInThemes.default),
     mouseForce: 14,
     cursorSize: 140,
     autoDemo: true,
     autoSpeed: 0.35,
     resolution: 0.5,
+  });
+
+  // Dynamically update fluid palette whenever theme changes
+  onThemeChange((themeColors) => {
+    liquidEther.setColors(getFluidColorsFromTheme(themeColors));
   });
 }
 
