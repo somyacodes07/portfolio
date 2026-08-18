@@ -24,10 +24,32 @@ export class WindowManager {
             document.body.appendChild(container);
         }
         this.container = container;
+
+        window.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                this.closeTopWindow();
+            }
+        });
+
+        window.addEventListener("resize", () => {
+            if (this.isMobile() && this.windows.size > 0) {
+                Array.from(this.windows.keys()).forEach((id) => this.close(id));
+            }
+        });
     }
 
     private isMobile(): boolean {
         return window.innerWidth <= 600;
+    }
+
+    public closeTopWindow(): boolean {
+        const top = this.getTopWindow();
+        if (top && top.id.startsWith("window-")) {
+            const id = top.id.replace("window-", "");
+            this.close(id);
+            return true;
+        }
+        return false;
     }
 
     public open(id: string, title: string, content: string | HTMLElement, options?: WindowOptions | number, height?: number): void {
@@ -136,6 +158,13 @@ export class WindowManager {
         // Title bar
         const titleBar = document.createElement("div");
         titleBar.className = "window-title-bar";
+        titleBar.title = "Double-click to maximize/restore";
+
+        titleBar.addEventListener("dblclick", (e) => {
+            const target = e.target as HTMLElement;
+            if (target.closest("button, a")) return;
+            win.classList.toggle("is-maximized");
+        });
 
         const titleGroup = document.createElement("div");
         titleGroup.className = "window-title-group";
