@@ -408,6 +408,17 @@ const registerCommands = () => {
     writeLines(createProject(args));
   });
 
+  dispatcher.register("experience", (args) => {
+    if (bareMode) { writeLines(["experience not found.", "<br>"]); return; }
+    const isDesktop = window.innerWidth > 600;
+
+    if (isDesktop && !args.includes('--gui')) {
+      args.push('--gui');
+    }
+
+    writeLines(createExperienceCommand(args));
+  });
+
   dispatcher.register("resume", () => {
     if (bareMode) { writeLines(["resume not found.", "<br>"]); return; }
 
