@@ -20,7 +20,7 @@ import { ProjectViewer } from './ui/ProjectViewer';
 import { CertificateViewer } from './ui/CertificateViewer';
 import { ExperienceViewer } from './ui/ExperienceViewer';
 import { createExperienceCommand } from './commands/experience';
-import { LiquidEther } from './ui/LiquidEther';
+import { PixelBlast } from './ui/PixelBlast';
 
 // --- State ---
 let mutWriteLines = document.getElementById("write-lines");
@@ -779,8 +779,8 @@ document.addEventListener('mouseout', (e) => {
   skillTooltip.style.display = 'none';
 });
 
-// Helper to derive fluid colors from active theme
-const getFluidColorsFromTheme = (theme: ThemeColors): string[] => [
+// Helper to derive background particle colors from active theme
+const getPixelColorsFromTheme = (theme: ThemeColors): string[] => [
   theme.banner,
   theme.prompt.user,
   theme.prompt.host,
@@ -788,21 +788,21 @@ const getFluidColorsFromTheme = (theme: ThemeColors): string[] => [
   theme.link.text,
 ];
 
-// ── Initialize Liquid Ether WebGL Background ──
-const liquidEtherBgContainer = document.getElementById('liquid-ether-bg');
-if (liquidEtherBgContainer) {
-  const liquidEther = new LiquidEther(liquidEtherBgContainer, {
-    colors: getFluidColorsFromTheme(builtInThemes.default),
-    mouseForce: 14,
-    cursorSize: 140,
-    autoDemo: true,
-    autoSpeed: 0.35,
-    resolution: 0.5,
+// ── Initialize React Bits Pixel Blast WebGL Background ──
+const pixelBlastBgContainer = document.getElementById('pixel-blast-bg');
+if (pixelBlastBgContainer) {
+  const pixelBlast = new PixelBlast(pixelBlastBgContainer, {
+    colors: getPixelColorsFromTheme(builtInThemes.default),
+    pixelSize: 6,
+    patternScale: 2.5,
+    speed: 0.5,
+    edgeFade: 0.25,
+    ripples: true,
   });
 
-  // Dynamically update fluid palette whenever theme changes
+  // Dynamically update pixel palette whenever theme changes
   onThemeChange((themeColors) => {
-    liquidEther.setColors(getFluidColorsFromTheme(themeColors));
+    pixelBlast.setColors(getPixelColorsFromTheme(themeColors));
   });
 }
 
