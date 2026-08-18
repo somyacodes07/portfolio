@@ -3,6 +3,7 @@ export interface WindowAction {
     link: string;
     icon?: string;
     className?: string;
+    download?: boolean | string;
 }
 
 export interface WindowOptions {
@@ -178,6 +179,13 @@ export class WindowManager {
                 const actionBtn = document.createElement("a");
                 actionBtn.href = action.link;
                 actionBtn.target = "_blank";
+                if (action.download) {
+                    if (typeof action.download === "string") {
+                        actionBtn.setAttribute("download", action.download);
+                    } else {
+                        actionBtn.setAttribute("download", "");
+                    }
+                }
                 actionBtn.className = `window-title-action ${action.className || ""}`;
                 actionBtn.innerHTML = `${action.icon ? `<i class="${action.icon}"></i> ` : ""}${action.label}`;
                 actionBtn.addEventListener("pointerdown", (e) => e.stopPropagation());

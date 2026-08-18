@@ -430,7 +430,19 @@ const registerCommands = () => {
 
         setTimeout(() => {
           const content = createResumeViewerContent(safeResumeUrl);
-          windowManager.open('resume', 'Resume.pdf', content, 600, 780);
+          windowManager.open('resume', 'Resume.pdf', content, {
+            width: 600,
+            height: 780,
+            actions: [
+              {
+                label: 'Download',
+                link: safeResumeUrl,
+                icon: 'fa-solid fa-download',
+                download: 'Somyajeet_Singh_Resume.pdf',
+                className: 'resume-download-btn'
+              }
+            ]
+          });
         }, 500);
       })
       .catch(() => {
