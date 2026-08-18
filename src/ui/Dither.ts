@@ -99,7 +99,7 @@ void main() {
     float effect = 1.0 - smoothstep(0.0, mouseRadius, dist);
     f -= 0.5 * effect;
   }
-  vec3 col = mix(vec3(0.0), waveColor, f);
+  vec3 col = mix(vec3(0.0), waveColor, f * 0.35);
   gl_FragColor = vec4(col, 1.0);
 }
 `;
@@ -173,6 +173,7 @@ export class Dither {
   private isRunning: boolean = false;
   private animationFrameId: number | null = null;
   private resizeObserver?: ResizeObserver;
+  private onVisibilityChange?: () => void;
 
   private options: Required<DitherOptions>;
 
@@ -188,12 +189,12 @@ export class Dither {
     }
 
     this.options = {
-      waveSpeed: options.waveSpeed ?? 0.05,
-      waveFrequency: options.waveFrequency ?? 3,
-      waveAmplitude: options.waveAmplitude ?? 0.3,
+      waveSpeed: options.waveSpeed ?? 0.04,
+      waveFrequency: options.waveFrequency ?? 2.5,
+      waveAmplitude: options.waveAmplitude ?? 0.15,
       waveColor: colorRGB,
       colorNum: options.colorNum ?? 4,
-      pixelSize: options.pixelSize ?? 2,
+      pixelSize: options.pixelSize ?? 3,
       disableAnimation: options.disableAnimation ?? false,
       enableMouseInteraction: options.enableMouseInteraction ?? false,
       mouseRadius: options.mouseRadius ?? 1,
@@ -217,7 +218,7 @@ export class Dither {
     });
     this.renderer.domElement.style.width = '100%';
     this.renderer.domElement.style.height = '100%';
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
     this.container.appendChild(this.renderer.domElement);
 
     // 2. Camera & Scene
@@ -261,6 +262,15 @@ export class Dither {
     this.resize();
     this.resizeObserver = new ResizeObserver(() => this.resize());
     this.resizeObserver.observe(this.container);
+
+    this.onVisibilityChange = () => {
+      if (document.hidden) {
+        this.stop();
+      } else {
+        this.start();
+      }
+    };
+    document.addEventListener('visibilitychange', this.onVisibilityChange);
 
     this.start();
   }
@@ -319,6 +329,10 @@ export class Dither {
 
   public destroy() {
     this.stop();
+
+    if (this.onVisibilityChange) {
+      document.removeEventListener('visibilitychange', this.onVisibilityChange);
+    }
 
     this.resizeObserver?.disconnect();
     this.mesh.geometry.dispose();
