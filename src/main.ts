@@ -20,7 +20,7 @@ import { ProjectViewer } from './ui/ProjectViewer';
 import { CertificateViewer } from './ui/CertificateViewer';
 import { ExperienceViewer } from './ui/ExperienceViewer';
 import { createExperienceCommand } from './commands/experience';
-import { PixelBlast } from './ui/PixelBlast';
+import { Dither } from './ui/Dither';
 
 // --- State ---
 let mutWriteLines = document.getElementById("write-lines");
@@ -793,31 +793,23 @@ document.addEventListener('mouseout', (e) => {
 // Helper to derive background particle colors from active theme
 const getPixelColorsFromTheme = (theme: ThemeColors): string => theme.banner;
 
-// ── Initialize React Bits Pixel Blast WebGL Background ──
+// ── Initialize React Bits Dither WebGL Background ──
 const pixelBlastBgContainer = document.getElementById('pixel-blast-bg');
 if (pixelBlastBgContainer) {
-  const pixelBlast = new PixelBlast(pixelBlastBgContainer, {
-    variant: 'square',
-    color: getPixelColorsFromTheme(builtInThemes.default),
-    pixelSize: 8,
-    patternScale: 3.5,
-    patternDensity: 1.2,
-    pixelSizeJitter: 0.25,
-    enableRipples: true,
-    rippleSpeed: 0.4,
-    rippleThickness: 0.14,
-    rippleIntensityScale: 1.6,
-    liquid: false,
-    liquidStrength: 0.12,
-    liquidRadius: 1.2,
-    liquidWobbleSpeed: 5.0,
-    speed: 0.6,
-    edgeFade: 0.25,
+  const dither = new Dither(pixelBlastBgContainer, {
+    waveSpeed: 0.05,
+    waveFrequency: 3.0,
+    waveAmplitude: 0.3,
+    waveColor: getPixelColorsFromTheme(builtInThemes.default),
+    colorNum: 4,
+    pixelSize: 3,
+    disableAnimation: false,
+    enableMouseInteraction: false,
   });
 
-  // Dynamically update pixel palette whenever theme changes
+  // Dynamically update dither color whenever theme changes
   onThemeChange((themeColors) => {
-    pixelBlast.setColors(getPixelColorsFromTheme(themeColors));
+    dither.setColors(getPixelColorsFromTheme(themeColors));
   });
 }
 
