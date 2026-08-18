@@ -28,8 +28,6 @@ const createProject = (args?: string[]): string[] => {
     const displayTitle = escapeHTML(rawTitle);
     const displayDesc = escapeHTML(rawDesc);
 
-    const hasVideo = !!rawVideoUrl || (rawScreenshots && rawScreenshots.some((s: string) => !!parseYouTubeId(s) || s.toLowerCase().endsWith('.mp4')));
-
     const dataAttrs = [
       `data-proj-idx="${idx}"`,
       `data-proj-title="${escapeHTML(rawTitle)}"`,
@@ -51,16 +49,11 @@ const createProject = (args?: string[]): string[] => {
       block += `<div class="cli-desc">${displayDesc}</div>`;
     }
 
-    if ((meta?.stack && Array.isArray(meta.stack) && meta.stack.length > 0) || hasVideo) {
+    if (meta?.stack && Array.isArray(meta.stack) && meta.stack.length > 0) {
       block += `<div class="cli-tags">`;
-      if (meta?.stack && Array.isArray(meta.stack)) {
-        meta.stack.forEach((tech: string) => {
-          block += `<span class="explorer-badge">${escapeHTML(tech)}</span>`;
-        });
-      }
-      if (hasVideo) {
-        block += `<span class="explorer-badge status-video"><i class="fa-brands fa-youtube"></i> Video Demo</span>`;
-      }
+      meta.stack.forEach((tech: string) => {
+        block += `<span class="explorer-badge">${escapeHTML(tech)}</span>`;
+      });
       block += `</div>`;
     }
 

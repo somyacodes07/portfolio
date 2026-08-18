@@ -384,13 +384,6 @@ export class ProjectViewer {
             badges.appendChild(yearBadge);
             badges.appendChild(statusBadge);
 
-            if (hasVideo) {
-                const videoBadge = document.createElement('span');
-                videoBadge.className = 'explorer-badge status-video';
-                videoBadge.innerHTML = '<i class="fa-brands fa-youtube"></i> Video';
-                badges.appendChild(videoBadge);
-            }
-
             item.appendChild(img);
             item.appendChild(label);
             item.appendChild(descriptionNode);
