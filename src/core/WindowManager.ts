@@ -147,14 +147,21 @@ export class WindowManager {
         win.style.width = `${safeWidth}px`;
         win.style.height = `${safeHeight}px`;
 
-        const maxLeft = Math.max(10, window.innerWidth - safeWidth - 10);
-        const maxTop = Math.max(10, window.innerHeight - safeHeight - 10);
+        const containerW = window.innerWidth;
+        const containerH = window.innerHeight;
 
-        const calculatedLeft = 20 + (this.windows.size % 8) * 20;
-        const calculatedTop = 30 + (this.windows.size % 8) * 20;
+        const maxLeft = Math.max(10, containerW - safeWidth - 10);
+        const maxTop = Math.max(10, containerH - safeHeight - 10);
 
-        win.style.left = `${Math.min(calculatedLeft, maxLeft)}px`;
-        win.style.top = `${Math.min(calculatedTop, maxTop)}px`;
+        const baseLeft = Math.max(20, Math.floor((containerW - safeWidth) * 0.52));
+        const baseTop = Math.max(20, Math.floor((containerH - safeHeight) * 0.40));
+        const offset = (this.windows.size % 5) * 22;
+
+        const finalLeft = Math.min(Math.max(20, baseLeft + offset), maxLeft);
+        const finalTop = Math.min(Math.max(20, baseTop + offset), maxTop);
+
+        win.style.left = `${finalLeft}px`;
+        win.style.top = `${finalTop}px`;
 
         // Title bar
         const titleBar = document.createElement("div");

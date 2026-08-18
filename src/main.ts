@@ -409,6 +409,17 @@ const registerCommands = () => {
     writeLines(createProject(args));
   });
 
+  dispatcher.register("experience", (args) => {
+    if (bareMode) { writeLines(["experience not found.", "<br>"]); return; }
+    const isDesktop = window.innerWidth > 600;
+
+    if (isDesktop && !args.includes('--gui')) {
+      args.push('--gui');
+    }
+
+    writeLines(createExperienceCommand(args));
+  });
+
   dispatcher.register("resume", () => {
     if (bareMode) { writeLines(["resume not found.", "<br>"]); return; }
 
@@ -788,19 +799,19 @@ if (pixelBlastBgContainer) {
   const pixelBlast = new PixelBlast(pixelBlastBgContainer, {
     variant: 'square',
     color: getPixelColorsFromTheme(builtInThemes.default),
-    pixelSize: 4,
-    patternScale: 2.0,
-    patternDensity: 1.0,
-    pixelSizeJitter: 0.0,
+    pixelSize: 8,
+    patternScale: 3.5,
+    patternDensity: 1.2,
+    pixelSizeJitter: 0.25,
     enableRipples: true,
     rippleSpeed: 0.4,
-    rippleThickness: 0.12,
-    rippleIntensityScale: 1.5,
+    rippleThickness: 0.14,
+    rippleIntensityScale: 1.6,
     liquid: false,
     liquidStrength: 0.12,
     liquidRadius: 1.2,
     liquidWobbleSpeed: 5.0,
-    speed: 0.5,
+    speed: 0.6,
     edgeFade: 0.25,
   });
 
