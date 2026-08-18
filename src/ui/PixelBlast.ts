@@ -553,17 +553,8 @@ export class PixelBlast {
     this.clickIx = (ix + 1) % MAX_CLICKS;
   }
 
-  private onPointerMove(e: PointerEvent) {
-    const { fx, fy, w, h } = this.mapToPixels(e);
-    if (this.touch) {
-      this.touch.addTouch({ x: fx / w, y: fy / h });
-    }
-    if (this.options.enableRipples && Math.random() < 0.2) {
-      const ix = this.clickIx;
-      this.uniforms.uClickPos.value[ix].set(fx, fy);
-      this.uniforms.uClickTimes.value[ix] = this.uniforms.uTime.value;
-      this.clickIx = (ix + 1) % MAX_CLICKS;
-    }
+  private onPointerMove(_e: PointerEvent) {
+    // Mouse hover following disabled - only click ripples active
   }
 
   public start() {
