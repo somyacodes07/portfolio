@@ -179,15 +179,25 @@ function displayText(item: string, idx: number) {
   setTimeout(renderLine, 18 * idx);
 }
 
+let activeBgInstance: { setColors: (color: string) => void } | null = null;
+
 function easterEggStyles() {
   const bars = document.getElementById("bars");
   const body = document.body;
   const main = document.getElementById("main");
   const span = document.getElementsByTagName("span");
 
-  if (!bars) return
-  bars.innerHTML = "";
-  bars.remove()
+  // Activate Black & White System Destroyed Glitch Animation
+  body.classList.add("system-destroyed");
+
+  if (activeBgInstance) {
+    activeBgInstance.setColors("#FFFFFF");
+  }
+
+  if (bars) {
+    bars.innerHTML = "";
+    bars.remove();
+  }
 
   if (main) main.style.border = "none";
 
@@ -807,9 +817,13 @@ if (pixelBlastBgContainer) {
     enableMouseInteraction: false,
   });
 
+  activeBgInstance = dither;
+
   // Dynamically update dither color whenever theme changes
   onThemeChange((themeColors) => {
-    dither.setColors(getPixelColorsFromTheme(themeColors));
+    if (!document.body.classList.contains('system-destroyed')) {
+      dither.setColors(getPixelColorsFromTheme(themeColors));
+    }
   });
 }
 
