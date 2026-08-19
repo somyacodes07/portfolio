@@ -235,7 +235,7 @@ function handlePasswordCheck() {
 
 const registerCommands = () => {
   dispatcher.register("help", () => {
-    if (bareMode) { writeLines(["maybe restarting your browser will fix this.", "<br>"]); return; }
+    if (bareMode) { writeLines(["help? You literally deleted the source code. Try 'repo' to recover or refresh your browser.", "<br>"]); return; }
     writeLines(HELP);
   });
 
@@ -270,7 +270,7 @@ const registerCommands = () => {
   });
 
   dispatcher.register("education", () => {
-    if (bareMode) { writeLines(["Stay in school.", "<br>"]); return; }
+    if (bareMode) { writeLines(["Education: Lesson 1 - Never run 'rm -rf src'. Class dismissed.", "<br>"]); return; }
     writeLines(EDUCATION);
   });
 
@@ -286,7 +286,7 @@ const registerCommands = () => {
   });
 
   dispatcher.register("certifications", () => {
-    if (bareMode) { writeLines(["No certifications in bare mode.", "<br>"]); return; }
+    if (bareMode) { writeLines(["Did you really Expect to see one.", "<br>"]); return; }
     if (window.innerWidth > 600) {
       certificateViewer.openCertificateExplorer();
       writeLines(["Opening certificate gallery...", "<br>"]);
@@ -297,7 +297,7 @@ const registerCommands = () => {
   });
 
   dispatcher.register("experience", (args) => {
-    if (bareMode) { writeLines(["No work experience found.", "<br>"]); return; }
+    if (bareMode) { writeLines(["Go, Get Some!", "<br>"]); return; }
     if (window.innerWidth > 600 && !args.includes('--cli')) {
       experienceViewer.openExperienceExplorer();
       writeLines(["Opening Work Experience Explorer...", "<br>"]);
@@ -307,7 +307,7 @@ const registerCommands = () => {
   });
 
   dispatcher.register("exp", (args) => {
-    if (bareMode) { writeLines(["No work experience found.", "<br>"]); return; }
+    if (bareMode) { writeLines(["Go, Get Some!", "<br>"]); return; }
     if (window.innerWidth > 600 && !args.includes('--cli')) {
       experienceViewer.openExperienceExplorer();
       writeLines(["Opening Work Experience Explorer...", "<br>"]);
@@ -317,7 +317,7 @@ const registerCommands = () => {
   });
 
   dispatcher.register("work", (args) => {
-    if (bareMode) { writeLines(["No work experience found.", "<br>"]); return; }
+    if (bareMode) { writeLines(["Go, Get Some!", "<br>"]); return; }
     if (window.innerWidth > 600 && !args.includes('--cli')) {
       experienceViewer.openExperienceExplorer();
       writeLines(["Opening Work Experience Explorer...", "<br>"]);
@@ -327,7 +327,7 @@ const registerCommands = () => {
   });
 
   dispatcher.register("skills", () => {
-    if (bareMode) { writeLines(["Skill issue.", "<br>"]); return; }
+    if (bareMode) { writeLines(["Serious skill issue.", "<br>"]); return; }
     writeLines(getSkills());
   });
 
@@ -530,7 +530,7 @@ const registerCommands = () => {
 
 // --- Input Manager Init ---
 
-const commandList = ["help", "about", "projects", "whoami", "education", "certificates", "certifications", "skills", "banner", "fetch", "clear", "resume", "linkedin", "github", "email", "ls", "sudo", "rm -rf", "repo", "theme"];
+const commandList = ["help", "about", "projects", "whoami", "education", "experience", "exp", "work", "certificates", "certifications", "skills", "banner", "fetch", "clear", "resume", "linkedin", "github", "email", "ls", "sudo", "rm -rf", "repo", "theme"];
 
 const inputManager = new InputManager(
   "user-input",
@@ -549,7 +549,7 @@ const inputManager = new InputManager(
         const handled = dispatcher.dispatch(cmd);
         if (!handled) {
           if (bareMode) {
-            writeLines(["type 'help'", "<br>"]);
+            writeLines([`Command '${escapeHTML(cmd)}' not found. You deleted /src, what did you expect?`, "<br>"]);
           } else {
             writeLines([`Command not found: ${escapeHTML(cmd)}`, "<br>", "Type <span class='command'>'help'</span> for a list of commands.", "<br>"]);
           }
@@ -641,7 +641,7 @@ const initEventListeners = () => {
         const screenshotsAttr = clickableTarget.getAttribute('data-proj-screenshots');
         const screenshots = screenshotsAttr ? JSON.parse(screenshotsAttr) : undefined;
         const liveLink = clickableTarget.getAttribute('data-proj-live') || undefined;
-        
+
         (window as any).openProjectWindow(title, url, video, screenshots, liveLink);
         return;
       }
@@ -669,19 +669,19 @@ const initEventListeners = () => {
     const trigger = target?.closest('.clickable') as HTMLElement | null;
     if (!trigger) return;
     if (e.key !== 'Enter' && e.key !== ' ') return;
-    
+
     e.preventDefault();
 
     if (trigger.classList.contains('proj-link')) {
-        const title = trigger.getAttribute('data-proj-title') || '';
-        const url = trigger.getAttribute('data-proj-url') || '';
-        const video = trigger.getAttribute('data-proj-video') || undefined;
-        const screenshotsAttr = trigger.getAttribute('data-proj-screenshots');
-        const screenshots = screenshotsAttr ? JSON.parse(screenshotsAttr) : undefined;
-        const liveLink = trigger.getAttribute('data-proj-live') || undefined;
-        
-        (window as any).openProjectWindow(title, url, video, screenshots, liveLink);
-        return;
+      const title = trigger.getAttribute('data-proj-title') || '';
+      const url = trigger.getAttribute('data-proj-url') || '';
+      const video = trigger.getAttribute('data-proj-video') || undefined;
+      const screenshotsAttr = trigger.getAttribute('data-proj-screenshots');
+      const screenshots = screenshotsAttr ? JSON.parse(screenshotsAttr) : undefined;
+      const liveLink = trigger.getAttribute('data-proj-live') || undefined;
+
+      (window as any).openProjectWindow(title, url, video, screenshots, liveLink);
+      return;
     }
 
     const cmd = trigger.getAttribute('data-command');
