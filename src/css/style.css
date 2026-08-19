@@ -160,8 +160,8 @@ body.system-destroyed main {
 }
 
 body.system-destroyed #pixel-blast-bg {
-  opacity: 0.85 !important;
-  filter: grayscale(100%) contrast(250%) brightness(120%);
+  opacity: 0.45 !important;
+  filter: grayscale(100%) contrast(200%) brightness(110%);
   background-color: #000000 !important;
 }
 
@@ -179,6 +179,14 @@ body.system-destroyed #password-field {
   background-color: transparent !important;
 }
 
+body.system-destroyed #terminal-layout,
+body.system-destroyed #terminal {
+  background: rgba(0, 0, 0, 0.45) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  border-radius: 4px;
+}
+
 body.system-destroyed span,
 body.system-destroyed .prompt,
 body.system-destroyed .prompt-user,
@@ -190,7 +198,15 @@ body.system-destroyed .command,
 body.system-destroyed .output {
   color: #FFFFFF !important;
   font-family: 'VT323', monospace !important;
-  text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+  font-size: 22px !important;
+  letter-spacing: 0.05em;
+  text-shadow: 
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000,
+     0 0 6px #000000,
+     0 0 12px rgba(0, 0, 0, 0.9) !important;
 }
 
 body.system-destroyed .cursor-block {
