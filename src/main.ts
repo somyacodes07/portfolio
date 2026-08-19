@@ -215,7 +215,7 @@ function easterEggStyles() {
 
   const userInput = document.getElementById("user-input");
   if (userInput) {
-    userInput.style.backgroundColor = "black";
+    userInput.style.backgroundColor = "transparent";
     userInput.style.color = "white";
     userInput.style.fontFamily = "VT323, monospace";
     userInput.style.fontSize = "20px";

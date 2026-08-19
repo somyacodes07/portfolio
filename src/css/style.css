@@ -169,6 +169,16 @@ body.system-destroyed #sidebar {
   display: none !important;
 }
 
+body.system-destroyed #input-line,
+body.system-destroyed #input-hidden,
+body.system-destroyed #container-input,
+body.system-destroyed #user-input,
+body.system-destroyed #password-input,
+body.system-destroyed #password-field {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
 body.system-destroyed span,
 body.system-destroyed .prompt,
 body.system-destroyed .prompt-user,
