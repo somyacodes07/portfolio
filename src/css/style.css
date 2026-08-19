@@ -130,7 +130,41 @@ main {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 0, 0, 0.2);
   transition: border-color 0.3s ease, background 0.3s ease;
 }
+/* Catastrophic Deletion (rm -rf src) Black & White Glitch Animation */
+body.system-destroyed {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  filter: grayscale(100%) contrast(160%) brightness(95%);
+  animation: bwSystemFlicker 0.12s infinite alternate;
+}
 
+body.system-destroyed main {
+  background: #000000 !important;
+  border-color: #FFFFFF !important;
+  box-shadow: none !important;
+}
+
+body.system-destroyed #pixel-blast-bg {
+  opacity: 0.65 !important;
+  filter: grayscale(100%) contrast(200%);
+  background-color: #000000 !important;
+}
+
+body.system-destroyed #sidebar {
+  display: none !important;
+}
+
+@keyframes bwSystemFlicker {
+  0% {
+    filter: grayscale(100%) contrast(150%) brightness(90%);
+  }
+  50% {
+    filter: grayscale(100%) contrast(210%) brightness(115%);
+  }
+  100% {
+    filter: grayscale(100%) contrast(170%) brightness(95%);
+  }
+}
 p {
   display: block;
   line-height: var(--terminal-line-height);
