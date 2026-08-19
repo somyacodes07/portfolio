@@ -79,6 +79,9 @@ const scrollToBottom = () => {
 const buildPromptMarkup = () => {
   const safeUser = escapeHTML(command.username);
   const safeHost = escapeHTML(command.hostname);
+  if (bareMode) {
+    return `<span class="prompt" style="color: #FFFFFF !important;"><span class="prompt-user" style="color: #FFFFFF !important;">${safeUser}</span>@<span class="prompt-host" style="color: #FFFFFF !important;">${safeHost}</span>:$ ~ </span>`;
+  }
   return `<span class="prompt"><span class="prompt-user">${safeUser}</span>@<span class="prompt-host">${safeHost}</span>:$ ~ </span>`;
 }
 
