@@ -147,26 +147,26 @@ input:active,
 
 /* Catastrophic Deletion (rm -rf src) Black & White Glitch Animation */
 body.system-destroyed {
-  background-color: #000000 !important;
-  color: #FFFFFF !important;
-  filter: grayscale(100%) contrast(160%) brightness(95%);
+  filter: grayscale(100%) contrast(150%) brightness(95%);
   animation: bwSystemFlicker 0.12s infinite alternate;
 }
 
+body.system-destroyed #bars {
+  filter: grayscale(100%) brightness(85%);
+}
+
 body.system-destroyed main {
-  background: #000000 !important;
-  border-color: #FFFFFF !important;
-  box-shadow: none !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
 }
 
 body.system-destroyed #pixel-blast-bg {
-  opacity: 0.45 !important;
-  filter: grayscale(100%) contrast(200%) brightness(110%);
-  background-color: #000000 !important;
+  opacity: 0.22 !important;
+  filter: grayscale(100%) brightness(75%) contrast(150%);
+  background-color: #06080E !important;
 }
 
 body.system-destroyed #sidebar {
-  display: none !important;
+  filter: grayscale(100%);
 }
 
 body.system-destroyed #input-line,
@@ -179,14 +179,6 @@ body.system-destroyed #password-field {
   background-color: transparent !important;
 }
 
-body.system-destroyed #terminal-layout,
-body.system-destroyed #terminal {
-  background: rgba(0, 0, 0, 0.45) !important;
-  backdrop-filter: blur(4px) !important;
-  -webkit-backdrop-filter: blur(4px) !important;
-  border-radius: 4px;
-}
-
 body.system-destroyed span,
 body.system-destroyed .prompt,
 body.system-destroyed .prompt-user,
@@ -197,16 +189,6 @@ body.system-destroyed div,
 body.system-destroyed .command,
 body.system-destroyed .output {
   color: #FFFFFF !important;
-  font-family: 'VT323', monospace !important;
-  font-size: 22px !important;
-  letter-spacing: 0.05em;
-  text-shadow: 
-    -1px -1px 0 #000,
-     1px -1px 0 #000,
-    -1px  1px 0 #000,
-     1px  1px 0 #000,
-     0 0 6px #000000,
-     0 0 12px rgba(0, 0, 0, 0.9) !important;
 }
 
 body.system-destroyed .cursor-block {
