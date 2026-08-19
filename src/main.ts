@@ -185,44 +185,14 @@ function displayText(item: string, idx: number) {
 let activeBgInstance: { setColors: (color: string) => void } | null = null;
 
 function easterEggStyles() {
-  const bars = document.getElementById("bars");
   const body = document.body;
-  const main = document.getElementById("main");
-  const span = document.getElementsByTagName("span");
 
   // Activate Black & White System Destroyed Glitch Animation
   body.classList.add("system-destroyed");
 
   if (activeBgInstance) {
-    activeBgInstance.setColors("#FFFFFF");
+    activeBgInstance.setColors("#888888");
   }
-
-  if (bars) {
-    bars.innerHTML = "";
-    bars.remove();
-  }
-
-  if (main) main.style.border = "none";
-
-  body.style.backgroundColor = "black";
-  body.style.fontFamily = "VT323, monospace";
-  body.style.fontSize = "20px";
-  body.style.color = "white";
-
-  for (let i = 0; i < span.length; i++) {
-    span[i].style.color = "white";
-  }
-
-  const userInput = document.getElementById("user-input");
-  if (userInput) {
-    userInput.style.backgroundColor = "transparent";
-    userInput.style.color = "white";
-    userInput.style.fontFamily = "VT323, monospace";
-    userInput.style.fontSize = "20px";
-  }
-  document.querySelectorAll<HTMLElement>(".prompt").forEach((promptNode) => {
-    promptNode.style.color = "white";
-  });
 }
 
 // --- Password Logic ---
