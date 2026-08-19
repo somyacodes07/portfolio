@@ -160,7 +160,7 @@ body.system-destroyed main {
 }
 
 body.system-destroyed #pixel-blast-bg {
-  opacity: 0.22 !important;
+  opacity: 0.14 !important;
   filter: grayscale(100%) brightness(75%) contrast(150%);
   background-color: #06080E !important;
 }

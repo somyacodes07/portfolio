@@ -191,7 +191,16 @@ function easterEggStyles() {
   body.classList.add("system-destroyed");
 
   if (activeBgInstance) {
-    activeBgInstance.setColors("#888888");
+    let flip = false;
+    activeBgInstance.setColors("#A0A0A0");
+
+    // White and gray subtle background flicker
+    setInterval(() => {
+      if (activeBgInstance && body.classList.contains("system-destroyed")) {
+        flip = !flip;
+        activeBgInstance.setColors(flip ? "#FFFFFF" : "#666666");
+      }
+    }, 180);
   }
 }
 
